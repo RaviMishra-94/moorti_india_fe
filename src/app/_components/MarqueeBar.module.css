@@ -1,0 +1,68 @@
+.marqueeBar {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow: hidden;
+  padding: 14px 0;
+  position: relative;
+}
+
+.marqueeBar::before,
+.marqueeBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marqueeBar::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-secondary), transparent);
+}
+
+.marqueeBar::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-secondary), transparent);
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: marqueeScroll 40s linear infinite;
+  will-change: transform;
+}
+
+.marqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+.marqueeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-6);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color var(--transition-base);
+}
+
+.marqueeItem:hover {
+  color: var(--text-secondary);
+}
+
+.marqueeDot {
+  color: var(--gold);
+  font-size: 0.6rem;
+}
+
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

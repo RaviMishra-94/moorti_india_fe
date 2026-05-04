@@ -1,0 +1,828 @@
+/* ============================================================
+   Moorti India — Admin Panel Design System
+   ============================================================ */
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #e8e0d5;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #111111;
+  border-right: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebarLogo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid #222;
+}
+
+.sidebarLogoTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #d4a05a;
+}
+
+.sidebarLogoSub {
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 2px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: 16px 0;
+}
+
+.navSection {
+  padding: 8px 20px 4px;
+  font-size: 0.65rem;
+  color: #444;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: #888;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.navLink:hover {
+  color: #e8e0d5;
+  background: rgba(212, 160, 90, 0.06);
+  border-left-color: rgba(212, 160, 90, 0.3);
+}
+
+.navLinkActive {
+  color: #d4a05a !important;
+  background: rgba(212, 160, 90, 0.1) !important;
+  border-left-color: #d4a05a !important;
+}
+
+.sidebarFooter {
+  padding: 16px 20px;
+  border-top: 1px solid #222;
+}
+
+.logoutBtn {
+  width: 100%;
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #666;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logoutBtn:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+  background: rgba(192, 57, 43, 0.05);
+}
+
+/* ── Main content ────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.topbar {
+  height: 60px;
+  background: #111;
+  border-bottom: 1px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbarTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.topbarBadge {
+  font-size: 0.72rem;
+  background: rgba(212, 160, 90, 0.15);
+  color: #d4a05a;
+  border: 1px solid rgba(212, 160, 90, 0.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.content {
+  padding: 28px;
+  flex: 1;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 20px 22px;
+  transition: border-color 0.2s;
+}
+
+.statCard:hover {
+  border-color: rgba(212, 160, 90, 0.3);
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #d4a05a;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.78rem;
+  color: #666;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Section headings ────────────────────────────────────────── */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ccc;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #d4a05a;
+  color: #0a0a0a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.btnPrimary:hover { background: #e0b06a; }
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  color: #888;
+  font-size: 0.82rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.btnSecondary:hover {
+  border-color: #555;
+  color: #ccc;
+}
+
+.btnDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: transparent;
+  color: #e74c3c;
+  font-size: 0.78rem;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btnDanger:hover {
+  background: rgba(231, 76, 60, 0.08);
+  border-color: #e74c3c;
+}
+
+/* Icon-only action button (edit / delete / save) */
+.btnIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  color: #666;
+  border: 1px solid #2a2a2a;
+  border-radius: 7px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.btnIcon:hover {
+  background: rgba(212, 160, 90, 0.08);
+  border-color: #d4a05a;
+  color: #d4a05a;
+}
+
+/* Override colour for danger icon (trash) */
+form:has(.btnIcon) .btnIcon:hover {
+  background: rgba(231, 76, 60, 0.08);
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+/* Danger icon button — always red (trash / delete) */
+.actionBtnDanger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.actionBtnDanger:hover {
+  background: rgba(231, 76, 60, 0.12);
+  border-color: #e74c3c;
+  color: #ff6b6b;
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #222;
+  color: #555;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #1a1a1a;
+  color: #bbb;
+  vertical-align: middle;
+}
+
+.table tr:hover td {
+  background: #141414;
+}
+
+.productThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #222;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badgeGold {
+  background: rgba(212, 160, 90, 0.15);
+  color: #d4a05a;
+  border: 1px solid rgba(212, 160, 90, 0.25);
+}
+
+.badgeGreen {
+  background: rgba(39, 174, 96, 0.12);
+  color: #27ae60;
+  border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+.tableActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ── Forms ───────────────────────────────────────────────────── */
+.formCard {
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 28px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.formGridFull {
+  grid-column: 1 / -1;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+  font-weight: 500;
+}
+
+.formInput,
+.formSelect,
+.formTextarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #e8e0d5;
+  font-size: 0.88rem;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus {
+  outline: none;
+  border-color: #d4a05a;
+}
+
+/* Hide number input spin buttons */
+.formInput[type="number"]::-webkit-inner-spin-button,
+.formInput[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.formInput[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.formSectionTitle {
+  font-size: 0.78rem;
+  color: #d4a05a;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 24px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #1e1e1e;
+  grid-column: 1 / -1;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}
+
+/* ── Upload zone ─────────────────────────────────────────────── */
+.uploadZone {
+  border: 2px dashed #2a2a2a;
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #0f0f0f;
+}
+
+.uploadZone:hover,
+.uploadZoneDragging {
+  border-color: #d4a05a;
+  background: rgba(212, 160, 90, 0.04);
+}
+
+.uploadZoneText {
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.uploadPreview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+/* ── Login page ──────────────────────────────────────────────── */
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212, 160, 90, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.04) 0%, transparent 50%);
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 400px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.loginLogo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.loginLogoTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #d4a05a;
+  letter-spacing: 0.02em;
+}
+
+.loginLogoSub {
+  font-size: 0.75rem;
+  color: #444;
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.loginError {
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: #e74c3c;
+  margin-bottom: 16px;
+}
+
+.loginSubmit {
+  width: 100%;
+  padding: 13px;
+  background: #d4a05a;
+  color: #0a0a0a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.15s;
+}
+
+.loginSubmit:hover { background: #e0b06a; }
+.loginSubmit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Quick action cards (dashboard) ──────────────────────────── */
+.quickGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.quickCard {
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 22px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.2s;
+}
+
+.quickCard:hover {
+  border-color: rgba(212, 160, 90, 0.4);
+  background: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.quickCardIcon {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.quickCardTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 4px;
+}
+
+.quickCardDesc {
+  font-size: 0.76rem;
+  color: #555;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .formGrid { grid-template-columns: 1fr; }
+}
+
+/* ── Toast Notifications ─────────────────────────────────────── */
+@keyframes toastSlideIn {
+  from { transform: translateX(110%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+@keyframes toastSlideOut {
+  from { transform: translateX(0);   opacity: 1; }
+  to   { transform: translateX(110%); opacity: 0; }
+}
+@keyframes toastProgressShrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+.toastContainer {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-width: 280px;
+  max-width: 380px;
+  border: 1px solid;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  animation: toastSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+.toastExiting {
+  animation: toastSlideOut 0.35s ease-in forwards;
+}
+
+.toast_success {
+  background: rgba(15, 30, 18, 0.95);
+  border-color: rgba(39, 174, 96, 0.4);
+  color: #2ecc71;
+}
+
+.toast_error {
+  background: rgba(30, 10, 10, 0.95);
+  border-color: rgba(231, 76, 60, 0.4);
+  color: #e74c3c;
+}
+
+.toast_info {
+  background: rgba(10, 15, 30, 0.95);
+  border-color: rgba(212, 160, 90, 0.4);
+  color: #d4a05a;
+}
+
+.toastIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.toastMessage {
+  flex: 1;
+  color: #ddd;
+  font-size: 0.83rem;
+  line-height: 1.4;
+}
+
+.toastClose {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.toastClose:hover { color: #aaa; }
+
+.toastProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border-radius: 0 0 10px 10px;
+  animation: toastProgressShrink 2.6s linear forwards;
+}
+
+.toastProgress_success { background: #27ae60; }
+.toastProgress_error   { background: #e74c3c; }
+.toastProgress_info    { background: #d4a05a; }
+
+/* ── Confirmation Modal ───────────────────────────────────────── */
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes modalCardIn {
+  from { opacity: 0; transform: scale(0.93) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalOverlayIn 0.2s ease forwards;
+}
+
+.modalCard {
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: modalCardIn 0.25s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+
+.modalIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.modalIconDanger {
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  color: #e74c3c;
+}
+
+.modalIconInfo {
+  background: rgba(212, 160, 90, 0.1);
+  border: 1px solid rgba(212, 160, 90, 0.25);
+  color: #d4a05a;
+}
+
+.modalTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e8e0d5;
+  text-align: center;
+  margin: 0;
+}
+
+.modalMessage {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Solid danger button for modal confirm */
+.btnDangerSolid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btnDangerSolid:hover:not(:disabled) { background: #c0392b; }
+.btnDangerSolid:disabled { opacity: 0.6; cursor: not-allowed; }
+.btnSecondary:disabled   { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Spinner ─────────────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+

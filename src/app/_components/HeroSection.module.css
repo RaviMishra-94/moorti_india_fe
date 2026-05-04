@@ -1,0 +1,276 @@
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  max-height: 900px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.overlayGradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to right,
+      rgba(253, 248, 240, 0.97) 0%,
+      rgba(248, 236, 218, 0.88) 30%,
+      rgba(245, 228, 205, 0.45) 58%,
+      rgba(240, 220, 190, 0.05) 100%);
+}
+
+.overlayPattern {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: radial-gradient(circle at 20% 60%, rgba(200, 82, 28, 0.06) 0%, transparent 50%);
+}
+
+/* Divine glow orb — pulsates behind the statue */
+.divineGlow {
+  position: absolute;
+  /* sits roughly behind the Ganesh figure — right-center */
+  top: 5%;
+  right: 22%;
+  width: 55vw;
+  height: 90%;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+      rgba(255, 210, 120, 0.55) 0%,
+      rgba(220, 140, 60, 0.32) 30%,
+      rgba(200, 82, 28, 0.14) 55%,
+      transparent 75%);
+  animation: divinePulse 4s ease-in-out infinite;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+
+/* Soft shimmer sweep */
+.divineShimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg,
+      transparent 30%,
+      rgba(255, 220, 140, 0.08) 48%,
+      rgba(255, 240, 180, 0.15) 52%,
+      transparent 70%);
+  background-size: 200% 100%;
+  animation: divineShimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 3;
+  padding-bottom: var(--space-16);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.heroContent.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heroInner {
+  max-width: 760px;
+}
+
+.heroLabel {
+  color: var(--gold);
+  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+}
+
+.heroTitleLine1 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.heroTitleLine2 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dim) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+}
+
+.heroSubtitle {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--space-8);
+  font-weight: 400;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+.heroCtas {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+  flex-wrap: wrap;
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.65s both;
+}
+
+.heroStats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heroStatValue {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.heroStatLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.heroStatDivider {
+  width: 1px;
+  height: 40px;
+  background: var(--border-subtle);
+}
+
+/* Scroll Hint */
+.scrollHint {
+  position: absolute;
+  bottom: var(--space-8);
+  right: var(--space-8);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.scrollLine {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes divinePulse {
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes divineRaysPulse {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(50%, -50%) scale(0.97);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(50%, -50%) scale(1.03);
+  }
+}
+
+@keyframes divineRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes divineShimmer {
+  0% {
+    background-position: 200% 0;
+    opacity: 0.4;
+  }
+
+  50% {
+    background-position: -50% 0;
+    opacity: 1;
+  }
+
+  100% {
+    background-position: 200% 0;
+    opacity: 0.4;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    align-items: center;
+  }
+
+  .heroContent {
+    padding-bottom: var(--space-24);
+  }
+
+  .heroCtas {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .heroCtas .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .scrollHint {
+    display: none;
+  }
+
+  .heroStats {
+    gap: var(--space-4);
+  }
+}

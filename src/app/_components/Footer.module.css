@@ -1,0 +1,236 @@
+.footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Newsletter */
+.newsletter {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-6) 0;
+}
+
+.newsletterInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.newsletterText {
+  flex: 1;
+}
+
+.newsletterText h3 {
+  margin-top: var(--space-2);
+  color: var(--text-primary);
+}
+
+.newsletterForm {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.newsletterInput {
+  width: 280px !important;
+}
+
+/* Main Footer */
+.footerMain {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-8);
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.4fr;
+  gap: var(--space-12);
+}
+
+/* Brand */
+.footerLogo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--space-6);
+}
+
+.footerLogo span {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  transition: color var(--transition-base);
+}
+
+.footerLogo:hover span {
+  color: var(--gold);
+}
+
+.footerLogo small {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.footerDesc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--space-5);
+}
+
+.certifications {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.cert {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.socialLinks {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.socialLink {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+}
+
+.socialLink:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* Columns */
+.footerCol {}
+
+.footerColTitle {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: var(--space-5);
+}
+
+.footerLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.footerLink {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color var(--transition-base);
+}
+
+.footerLink:hover {
+  color: var(--text-primary);
+}
+
+.footerContactItem {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.contactIcon {
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+  filter: grayscale(0.5);
+}
+
+/* Bottom Bar */
+.footerBottom {
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-5) 0;
+}
+
+.footerBottomInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.copyright {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.legalLinks {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.legalLink {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: color var(--transition-base);
+}
+
+.legalLink:hover {
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footerGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footerBrand {
+    grid-column: 1 / -1;
+  }
+  .newsletterInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .newsletterInput {
+    width: 240px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+  .footerBrand {
+    grid-column: 1;
+  }
+  .newsletterForm {
+    flex-direction: column;
+    width: 100%;
+  }
+  .newsletterInput {
+    width: 100% !important;
+  }
+  .footerBottomInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

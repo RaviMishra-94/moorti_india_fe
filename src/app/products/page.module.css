@@ -1,0 +1,143 @@
+.page {
+  min-height: 80vh;
+}
+
+/* Header */
+.header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-16) 0 var(--space-12);
+  text-align: center;
+}
+
+.headerDesc {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: var(--space-5);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* Card */
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card);
+}
+
+.cardImg {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cardImg img {
+  transition: transform var(--transition-luxury);
+}
+
+.card:hover .cardImg img {
+  transform: scale(1.06);
+}
+
+.cardTag {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 2;
+  background: var(--gold);
+  color: var(--text-inverse);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,11,9,0.5) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.cardContent {
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.cardMaterial {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.cardDesc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.cardLink {
+  font-size: 0.78rem;
+  color: var(--gold);
+  margin-top: var(--space-2);
+}
+
+/* Bottom CTA */
+.ctaSection {
+  padding: var(--space-16) 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ctaBox {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

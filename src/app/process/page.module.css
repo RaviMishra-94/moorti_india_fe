@@ -1,0 +1,160 @@
+.page { min-height: 80vh; }
+
+.hero {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBg { position: absolute; inset: 0; }
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(253, 248, 240, 0.96) 0%,
+    rgba(248, 236, 218, 0.82) 35%,
+    rgba(245, 228, 205, 0.40) 60%,
+    rgba(240, 220, 190, 0.04) 100%
+  );
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding-bottom: var(--space-12);
+}
+
+/* Steps Grid */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  position: relative;
+}
+
+.stepCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.stepCard:hover {
+  border-color: var(--border-medium);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-gold);
+}
+
+.stepCard__number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 200;
+  color: var(--border-medium);
+  line-height: 1;
+}
+
+.stepCard__icon {
+  font-size: 1.3rem;
+  color: var(--gold);
+}
+
+.stepCard__title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.stepCard__desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+/* Artisan Section */
+.artisanSection {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.artisanLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.artisanImg {
+  position: relative;
+  height: 520px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+/* Materials */
+.materialsSection {
+  background: var(--bg-primary);
+}
+
+.materialsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.materialCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  transition: all var(--transition-base);
+}
+
+.materialCard:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-gold);
+}
+
+.materialIcon {
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-bottom: var(--space-4);
+}
+
+.materialName {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.materialDesc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .stepsGrid { grid-template-columns: 1fr 1fr; }
+  .artisanLayout { grid-template-columns: 1fr; }
+  .artisanImg { height: 360px; }
+  .materialsGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .stepsGrid { grid-template-columns: 1fr; }
+}

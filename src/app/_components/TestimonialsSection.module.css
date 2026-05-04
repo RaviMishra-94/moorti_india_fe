@@ -1,0 +1,185 @@
+.section {
+  background: var(--bg-primary);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.carouselContainer {
+  margin-bottom: var(--space-16);
+  position: relative;
+  width: 100%;
+}
+
+.carouselScroll {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-4);
+  scrollbar-width: thin;
+}
+
+/* Card */
+.card {
+  min-width: 380px;
+  max-width: 450px;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.card:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-4px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.quoteIcon {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--gold);
+  opacity: 0.3;
+  margin-top: -8px;
+}
+
+.quote {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--space-4);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--gold-glow);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.details {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* Trust Badges */
+.trustBadges {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-12);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: var(--space-6);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.badgeIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  filter: grayscale(0.2);
+}
+
+.badgeTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.badgeSubtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.badgeDivider {
+  width: 1px;
+  height: 40px;
+  background: var(--border-subtle);
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .trustBadges {
+    flex-direction: column;
+    text-align: center;
+  }
+  .badgeDivider {
+    width: 40px;
+    height: 1px;
+  }
+}
