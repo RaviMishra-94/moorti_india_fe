@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../../admin.module.css';
 import { useToast } from '../../../ToastProvider';
+import { saveClientStoryAction } from '../actions';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -43,29 +44,13 @@ export default function ClientStoryForm({ initialData = null }: { initialData?: 
     setLoading(true);
 
     try {
-      const url = isEdit 
-        ? `${API_URL}/api/client-stories/${initialData.id}` 
-        : `${API_URL}/api/client-stories`;
-      
-      const method = isEdit ? 'PATCH' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (res.ok) {
-        showToast(`Story ${isEdit ? 'updated' : 'created'} successfully`, 'success');
-        router.push('/admin/client-stories');
-        router.refresh();
-      } else {
-        const error = await res.json();
-        showToast(error.detail || 'Failed to save', 'error');
-      }
-    } catch (err) {
+      await saveClientStoryAction(formData, isEdit ? initialData.id : undefined);
+      showToast(`Story ${isEdit ? 'updated' : 'created'} successfully`, 'success');
+      router.push('/admin/client-stories');
+      router.refresh();
+    } catch (err: any) {
       console.error(err);
-      showToast('An error occurred', 'error');
+      showToast(err.message || 'An error occurred', 'error');
     } finally {
       setLoading(false);
     }

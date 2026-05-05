@@ -8,6 +8,7 @@ import styles from '../../admin.module.css';
 import { IconPlus, IconEdit, IconTrash } from '../../icons';
 import { useToast } from '../../ToastProvider';
 import ConfirmModal from '../../ConfirmModal';
+import { deleteClientStoryAction, reorderClientStoriesAction } from './actions';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -47,15 +48,9 @@ export default function ClientStoriesAdminPage() {
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return;
     try {
-      const res = await fetch(`${API_URL}/api/client-stories/${deleteTarget.id}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        showToast(`"${deleteTarget.name}" deleted successfully.`, 'success');
-        setStories(stories.filter((s) => s.id !== deleteTarget.id));
-      } else {
-        showToast('Failed to delete story.', 'error');
-      }
+      await deleteClientStoryAction(deleteTarget.id);
+      showToast(`"${deleteTarget.name}" deleted successfully.`, 'success');
+      setStories(stories.filter((s) => s.id !== deleteTarget.id));
     } catch (err) {
       console.error(err);
       showToast('Error deleting story.', 'error');
@@ -82,11 +77,7 @@ export default function ClientStoriesAdminPage() {
     }));
 
     try {
-      await fetch(`${API_URL}/api/client-stories/reorder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      await reorderClientStoriesAction(payload);
       showToast('Story order saved!', 'success');
     } catch (err) {
       console.error('Failed to save order', err);
