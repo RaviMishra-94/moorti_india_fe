@@ -52,6 +52,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -89,6 +90,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
+        setAudioBlob(blob);
         chunksRef.current = [];
       };
 
@@ -115,6 +117,32 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
     const phone = socialLinks.whatsapp.split('/').pop() || "919958476169"; 
     const message = `Hi, I am interested in ${product.name} (${product.slug}). Could you please guide me?`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleShareAudio = async () => {
+    if (!audioBlob || !audioUrl) return;
+    
+    try {
+      const file = new File([audioBlob], `Requirement-${product.slug}.webm`, { type: 'audio/webm' });
+      
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: `Requirement for ${product.name}`,
+          text: `Hi, please find my audio requirement for ${product.name}.`,
+          files: [file]
+        });
+      } else {
+        const a = document.createElement('a');
+        a.href = audioUrl;
+        a.download = `Requirement-${product.slug}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        alert("Audio downloaded. You can now attach and share this file via WhatsApp.");
+      }
+    } catch (err) {
+      console.error("Error sharing audio", err);
+    }
   };
 
   return (
@@ -247,8 +275,13 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
               {audioUrl && (
                 <div className={styles.audioPlayer}>
                   <audio src={audioUrl} controls className={styles.audioControl} />
-                  <button onClick={() => setAudioUrl(null)} className={styles.clearAudioBtn}>Reset</button>
-                  <p className={styles.audioNotice}>*Audio is ready. Please share this file via WhatsApp or email.</p>
+                  <div className={styles.audioActions}>
+                    <button onClick={handleShareAudio} className={styles.shareAudioBtn}>
+                      <WhatsappIcon /> Send / Download Audio
+                    </button>
+                    <button onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className={styles.clearAudioBtn}>Reset</button>
+                  </div>
+                  <p className={styles.audioNotice}>*If sharing is not supported on your device, the audio will be downloaded for you to share manually.</p>
                 </div>
               )}
             </div>
