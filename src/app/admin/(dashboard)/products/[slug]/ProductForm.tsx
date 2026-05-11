@@ -75,7 +75,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const [applyingBg, setApplyingBg] = useState(false);
   const [uploadingCustomBg, setUploadingCustomBg] = useState(false);
   const customBgInputRef = useRef<HTMLInputElement>(null);
-  const [customBgOptions, setCustomBgOptions] = useState<{ url: string; label: string }[]>([]);
+  const [customBgOptions, setCustomBgOptions] = useState<{ url: string; label: string; filename: string }[]>([]);
 
   const [availableTags, setAvailableTags] = useState<string[]>([
     'Bestseller', 'New Arrival', 'Temple Grade', 'Premium', 'Limited Edition', 'Customizable'
@@ -324,7 +324,8 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
       setBgSelectorTarget(prev => prev ? { ...prev, imgUrl: newUrl } : null);
       // Add to custom bg grid
       const label = file.name.replace(/\.[^.]+$/, '') || 'Custom';
-      setCustomBgOptions(prev => [...prev.filter(b => b.url !== bg_url), { url: bg_url, label }]);
+      const filename = bg_url.split('/').pop() || '';
+      setCustomBgOptions(prev => [...prev.filter(b => b.url !== bg_url), { url: bg_url, label, filename }]);
       showToast('Custom background applied!', 'success');
     } catch (e) {
       showToast(`Custom BG failed: ${e instanceof Error ? e.message : e}`, 'error');
