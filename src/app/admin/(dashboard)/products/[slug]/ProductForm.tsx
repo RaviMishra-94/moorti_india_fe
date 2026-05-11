@@ -13,6 +13,8 @@ interface ProductFormData {
   category_slug: string;
   image: string;
   images: string[];
+  fg_image: string;
+  fg_images: string[];
   god_name: string;
   height: string;
   base_width_depth: string;
@@ -38,6 +40,13 @@ interface ProductFormData {
   image_alt_text: string;
 }
 
+interface BgOption {
+  key: string;
+  label: string;
+  preview_url: string;
+  available: boolean;
+}
+
 interface Props {
   initialData?: Partial<ProductFormData>;
   isNew: boolean;
@@ -58,6 +67,12 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const fileInputRef = useRef<HTMLInputElement>(null);
   const multiFileInputRef = useRef<HTMLInputElement>(null);
   const [enhancedMappings, setEnhancedMappings] = useState<Record<string, string>>({});
+  // fg URL mapping: enhanced_url -> fg_url
+  const [fgMappings, setFgMappings] = useState<Record<string, string>>({});
+  // BG selector state
+  const [bgSelectorTarget, setBgSelectorTarget] = useState<{ imgUrl: string; fgUrl: string } | null>(null);
+  const [bgOptions, setBgOptions] = useState<BgOption[]>([]);
+  const [applyingBg, setApplyingBg] = useState(false);
 
   const [availableTags, setAvailableTags] = useState<string[]>([
     'Bestseller', 'New Arrival', 'Temple Grade', 'Premium', 'Limited Edition', 'Customizable'
@@ -72,6 +87,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
 
   const defaultForm: ProductFormData = {
     slug: '', name: '', category: '', category_slug: '', image: '', images: [],
+    fg_image: '', fg_images: [],
     god_name: '', height: '', base_width_depth: '', weight: '',
     material: '', painting: '', shipping_info: '', product_care: '',
     why_choose_us: '', description: '', short_desc: '', tag: '',
@@ -88,6 +104,8 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           if (k === 'use_default_seo') return [k, true];
           if (k === 'testimonial_stars') return [k, 5];
           if (k === 'images') return [k, []];
+          if (k === 'fg_images') return [k, []];
+          if (k === 'fg_image') return [k, ''];
           if (k.startsWith('is_')) return [k, false];
           return [k, ''];
         }
@@ -177,12 +195,24 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           [data.url]: data.enhanced_url 
         }));
       }
+      // Store fg_url mapping for BG selector
+      if (data.fg_url && data.enhanced_url) {
+        setFgMappings(prev => ({ ...prev, [data.enhanced_url]: data.fg_url }));
+      }
       
       setForm(prev => {
         if (!prev.image) {
-          return { ...prev, image: imageUrlToAdd };
+          return {
+            ...prev,
+            image: imageUrlToAdd,
+            fg_image: data.fg_url || prev.fg_image,
+          };
         } else {
-          return { ...prev, images: [...(prev.images || []), imageUrlToAdd] };
+          return {
+            ...prev,
+            images: [...(prev.images || []), imageUrlToAdd],
+            fg_images: data.fg_url ? [...(prev.fg_images || []), data.fg_url] : prev.fg_images,
+          };
         }
       });
       showToast('Image uploaded successfully.', 'success');
@@ -234,7 +264,52 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     });
   };
 
-  // ── Submit ────────────────────────────────────────────────────
+  // ── Background Selector ───────────────────────────────────────
+  const openBgSelector = async (imgUrl: string) => {
+    const fgUrl = fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : null)
+      || (form.fg_images || [])[((form.images || []).indexOf(imgUrl))];
+    if (!fgUrl) {
+      showToast('No foreground PNG available for this image. Re-upload to enable BG swap.', 'error');
+      return;
+    }
+    setBgSelectorTarget({ imgUrl, fgUrl });
+    if (bgOptions.length === 0) {
+      const res = await fetch(`${apiUrl}/api/uploads/backgrounds`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setBgOptions(await res.json());
+    }
+  };
+
+  const applyBg = async (bgKey: string) => {
+    if (!bgSelectorTarget) return;
+    setApplyingBg(true);
+    try {
+      const res = await fetch(`${apiUrl}/api/uploads/apply-bg`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ fg_url: bgSelectorTarget.fgUrl, bg_key: bgKey }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const newUrl = data.enhanced_url;
+      const oldUrl = bgSelectorTarget.imgUrl;
+      setForm(prev => ({
+        ...prev,
+        image: prev.image === oldUrl ? newUrl : prev.image,
+        images: (prev.images || []).map(u => u === oldUrl ? newUrl : u),
+      }));
+      // Update fg mapping for the new URL too
+      setFgMappings(prev => ({ ...prev, [newUrl]: bgSelectorTarget.fgUrl }));
+      setBgSelectorTarget(null);
+      showToast('Background applied!', 'success');
+    } catch (e) {
+      showToast(`Failed to apply background: ${e instanceof Error ? e.message : e}`, 'error');
+    } finally {
+      setApplyingBg(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -387,6 +462,47 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           {/* ── Product Images ──────────────────────────────────── */}
           <div className={`${styles.formGridFull}`}>
             <div className={styles.formSectionTitle} style={{ margin: '0 0 12px' }}>Product Images</div>
+
+            {/* Background Selector Panel */}
+            {bgSelectorTarget && (
+              <div style={{ background: '#1a1511', border: '1px solid #d4a05a', borderRadius: 10, padding: 20, marginBottom: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#d4a05a' }}>🎨 Choose Background</div>
+                  <button type="button" onClick={() => setBgSelectorTarget(null)}
+                    style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer', fontSize: '1.1rem' }}>✕</button>
+                </div>
+                {applyingBg && (
+                  <div style={{ color: '#d4a05a', fontSize: '0.85rem', marginBottom: 12, fontWeight: 'bold' }}>⏳ Applying background…</div>
+                )}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 10 }}>
+                  {bgOptions.filter(b => b.available).map(bg => (
+                    <button
+                      key={bg.key}
+                      type="button"
+                      disabled={applyingBg}
+                      onClick={() => applyBg(bg.key)}
+                      style={{
+                        padding: 0, border: '2px solid transparent', borderRadius: 8,
+                        overflow: 'hidden', cursor: applyingBg ? 'not-allowed' : 'pointer',
+                        background: 'none', opacity: applyingBg ? 0.5 : 1,
+                        transition: 'border-color 0.15s',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = '#d4a05a')}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
+                      title={bg.label}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`${apiUrl}${bg.preview_url}`}
+                        alt={bg.label}
+                        style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block' }}
+                      />
+                      <div style={{ fontSize: '0.65rem', color: '#ccc', padding: '4px 2px', textAlign: 'center', lineHeight: 1.2 }}>{bg.label}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             
             {(() => {
               const allImages = [form.image, ...(form.images || [])].filter(Boolean);
@@ -395,28 +511,23 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, marginBottom: 20 }}>
                   {allImages.map((imgUrl, idx) => {
                     const isMain = imgUrl === form.image;
+                    const hasFg = !!(fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : null)
+                      || (form.fg_images || [])[(form.images || []).indexOf(imgUrl)]);
                     return (
                       <div key={idx} style={{ position: 'relative', border: isMain ? '2px solid #d4a05a' : '1px solid #333', borderRadius: 8, overflow: 'hidden', aspectRatio: '1' }}>
                         <Image src={imgUrl.startsWith('/') || imgUrl.startsWith('http') ? imgUrl : `/images/${imgUrl}`} alt={`Gallery ${idx}`} fill style={{ objectFit: 'cover' }} />
-                        
+
                         {/* Remove Button */}
                         <button type="button" onClick={() => removeImage(imgUrl)}
                           style={{ position: 'absolute', top: 6, right: 6, background: 'rgba(0,0,0,0.7)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '12px' }}>
                           ✕
                         </button>
 
-                        {/* AI Background Toggle Button */}
-                        {enhancedMappings[imgUrl] && (
-                          <button type="button" onClick={() => {
-                            const pairedUrl = enhancedMappings[imgUrl];
-                            setForm(prev => {
-                              const newImage = prev.image === imgUrl ? pairedUrl : prev.image;
-                              const newImages = (prev.images || []).map(img => img === imgUrl ? pairedUrl : img);
-                              return { ...prev, image: newImage, images: newImages };
-                            });
-                          }}
-                            style={{ position: 'absolute', bottom: 35, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#fff', border: '1px solid #d4a05a', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.7rem', whiteSpace: 'nowrap' }}>
-                            ✨ Toggle BG
+                        {/* Change BG Button */}
+                        {hasFg && (
+                          <button type="button" onClick={() => openBgSelector(imgUrl)}
+                            style={{ position: 'absolute', bottom: 35, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.85)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.68rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
+                            🎨 Change BG
                           </button>
                         )}
 

@@ -15,10 +15,10 @@ export default function NavigationWrapper({
   const isAdmin = pathname?.startsWith('/admin');
 
   return (
-    <>
+    <div style={{ display: 'contents' }}>
       {!isAdmin && navbar}
       <main>{children}</main>
       {!isAdmin && footer}
-    </>
+    </div>
   );
 }

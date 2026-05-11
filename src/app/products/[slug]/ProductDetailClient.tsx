@@ -322,13 +322,11 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
             style={{ cursor: isZooming ? 'zoom-in' : 'default', width: '100%' }}
           >
             <div className={styles.imageZoomWrapper} style={zoomStyle}>
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={brokenImages[displayImages[mainImageIdx]] ? FALLBACK_IMAGE : (displayImages[mainImageIdx] || FALLBACK_IMAGE)}
                 alt={product.imageAltText ? `${product.imageAltText} View` : `${product.name} View`}
-                width={800}
-                height={800}
-                style={{ width: '100%', height: 'auto', objectFit: 'contain', ...zoomStyle }}
-                priority
+                style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'contain', ...zoomStyle }}
                 onError={() => handleImageError(displayImages[mainImageIdx])}
               />
             </div>
@@ -337,15 +335,18 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
                 <ZoomIcon /> Roll over image to magnify
               </div>
             )}
-            {!isZooming && (
-              <button 
-                onClick={handleDownloadImage} 
-                className={styles.imageDownloadBtn} 
-                title="Download Image"
-              >
-                <DownloadIcon />
-              </button>
-            )}
+            {/* Download button: always visible, stops propagation so it doesn't trigger zoom */}
+            <button
+              onClick={handleDownloadImage}
+              onMouseEnter={e => e.stopPropagation()}
+              onMouseLeave={e => e.stopPropagation()}
+              onMouseMove={e => e.stopPropagation()}
+              className={styles.imageDownloadBtn}
+              title="Download Image"
+              style={{ cursor: 'pointer' }}
+            >
+              <DownloadIcon />
+            </button>
           </div>
 
           {/* Thumbnail Carousel */}
