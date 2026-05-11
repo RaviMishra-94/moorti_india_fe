@@ -27,7 +27,7 @@ export default function HeroSection() {
           fill
           priority
           quality={90}
-          style={{ objectFit: 'cover', objectPosition: 'center top' }}
+          style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
         />
       </div>
 
