@@ -418,8 +418,8 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
           {product.keyFeatures && product.keyFeatures.length > 0 && (
             <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {product.keyFeatures.map((feat, idx) => (
-                <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '0.88rem', color: '#ddd', lineHeight: 1.5 }}>
-                  <span style={{ color: 'var(--gold, #d4a05a)', fontWeight: 'bold', flexShrink: 0, marginTop: 1 }}>•</span>
+                <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '0.88rem', color: 'var(--text-primary, #2a1f0e)', lineHeight: 1.5 }}>
+                  <span style={{ color: 'var(--gold, #b07d2e)', fontWeight: 'bold', flexShrink: 0, marginTop: 1 }}>•</span>
                   <span>{feat}</span>
                 </li>
               ))}
