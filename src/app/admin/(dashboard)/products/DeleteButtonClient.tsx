@@ -11,11 +11,13 @@ export default function DeleteButtonClient({
   action,
   id,
   entityType = 'Item',
+  onSuccess,
 }: {
   name: string;
   action: () => Promise<void>;
   id: string;
   entityType?: string;
+  onSuccess?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const { showToast } = useToast();
@@ -25,6 +27,7 @@ export default function DeleteButtonClient({
       await action();
       setOpen(false);
       showToast(`"${name}" deleted successfully.`, 'success');
+      if (onSuccess) onSuccess();
     } catch {
       setOpen(false);
       showToast('Failed to delete. Please try again.', 'error');

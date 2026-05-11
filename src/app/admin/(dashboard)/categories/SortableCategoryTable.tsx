@@ -160,6 +160,9 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
                           <DeleteButtonClient
                             name={cat.name}
                             action={deleteCategoryAction.bind(null, cat.slug)}
+                            onSuccess={() => {
+                              setCategories(prev => prev.filter(item => item.slug !== cat.slug));
+                            }}
                             id={`delete-category-${cat.slug}`}
                             entityType="Category"
                           />

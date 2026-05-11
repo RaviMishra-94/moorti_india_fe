@@ -181,6 +181,9 @@ export default function SortableProductTable({ initialProducts, apiUrl, token }:
                           <DeleteButtonClient
                             name={p.name}
                             action={deleteProductAction.bind(null, p.slug)}
+                            onSuccess={() => {
+                              setProducts(prev => prev.filter(item => item.slug !== p.slug));
+                            }}
                             id={`delete-product-${p.slug}`}
                             entityType="Product"
                           />
