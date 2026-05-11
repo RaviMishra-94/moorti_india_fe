@@ -266,12 +266,9 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
 
   // ── Background Selector ───────────────────────────────────────
   const openBgSelector = async (imgUrl: string) => {
-    const fgUrl = fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : null)
-      || (form.fg_images || [])[((form.images || []).indexOf(imgUrl))];
-    if (!fgUrl) {
-      showToast('No foreground PNG available for this image. Re-upload to enable BG swap.', 'error');
-      return;
-    }
+    const fgUrl = fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : '')
+      || (form.fg_images || [])[(form.images || []).indexOf(imgUrl)] || '';
+    if (!fgUrl) return; // no fg PNG — button shouldn't have been visible anyway
     setBgSelectorTarget({ imgUrl, fgUrl });
     if (bgOptions.length === 0) {
       const res = await fetch(`${apiUrl}/api/uploads/backgrounds`, {
@@ -299,10 +296,17 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
         image: prev.image === oldUrl ? newUrl : prev.image,
         images: (prev.images || []).map(u => u === oldUrl ? newUrl : u),
       }));
-      // Update fg mapping for the new URL too
+      // Carry the fg mapping to the new URL
       setFgMappings(prev => ({ ...prev, [newUrl]: bgSelectorTarget.fgUrl }));
-      setBgSelectorTarget(null);
-      showToast('Background applied!', 'success');
+      // Carry the original-photo mapping to the new URL so "Use Original Photo" keeps working
+      // regardless of how many BG swaps happen without saving
+      const originalUrl = enhancedMappings[oldUrl];
+      if (originalUrl) {
+        setEnhancedMappings(prev => ({ ...prev, [newUrl]: originalUrl }));
+      }
+      // Keep the selector open so the admin can try other backgrounds — just update the target URL
+      setBgSelectorTarget(prev => prev ? { ...prev, imgUrl: newUrl } : null);
+      showToast('Background applied! Pick another or close the panel.', 'success');
     } catch (e) {
       showToast(`Failed to apply background: ${e instanceof Error ? e.message : e}`, 'error');
     } finally {
@@ -461,7 +465,10 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
 
           {/* ── Product Images ──────────────────────────────────── */}
           <div className={`${styles.formGridFull}`}>
-            <div className={styles.formSectionTitle} style={{ margin: '0 0 12px' }}>Product Images</div>
+            <div className={styles.formSectionTitle} style={{ margin: '0 0 6px' }}>Product Images</div>
+            <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+              💡 Background can be changed anytime — even after saving — using the <strong style={{ color: '#d4a05a' }}>🎨 Change BG</strong> button on each image.
+            </div>
 
             {/* Background Selector Panel */}
             {bgSelectorTarget && (
@@ -474,6 +481,9 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
                 {applyingBg && (
                   <div style={{ color: '#d4a05a', fontSize: '0.85rem', marginBottom: 12, fontWeight: 'bold' }}>⏳ Applying background…</div>
                 )}
+
+                {/* ── BG Options ───────────────────────────── */}
+                <div style={{ fontSize: '0.72rem', color: '#888', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Backgrounds</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 10 }}>
                   {bgOptions.filter(b => b.available).map(bg => (
                     <button
@@ -501,46 +511,80 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
                     </button>
                   ))}
                 </div>
+
+                {/* ── Restore Original ─── below BG photos ─── */}
+                {enhancedMappings[bgSelectorTarget.imgUrl] && (
+                  <div style={{ marginTop: 16, borderTop: '1px solid #333', paddingTop: 14 }}>
+                    <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: 10 }}>
+                      Or restore the original photo without any AI background:
+                    </div>
+                    <button
+                      type="button"
+                      disabled={applyingBg}
+                      onClick={() => {
+                        const originalUrl = enhancedMappings[bgSelectorTarget.imgUrl];
+                        const oldUrl = bgSelectorTarget.imgUrl;
+                        setForm(prev => ({
+                          ...prev,
+                          image: prev.image === oldUrl ? originalUrl : prev.image,
+                          images: (prev.images || []).map(u => u === oldUrl ? originalUrl : u),
+                        }));
+                        setBgSelectorTarget(null);
+                        showToast('Restored to original photo.', 'success');
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8,
+                        background: 'rgba(255,255,255,0.06)', border: '1px solid #555',
+                        color: '#ccc', borderRadius: 7, padding: '8px 14px',
+                        cursor: applyingBg ? 'not-allowed' : 'pointer', fontSize: '0.8rem', fontWeight: 'bold',
+                        transition: 'border-color 0.15s',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = '#aaa')}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = '#555')}
+                    >
+                      ↩ Use Original Photo (no AI background)
+                    </button>
+                  </div>
+                )}
               </div>
             )}
+
+
             
             {(() => {
               const allImages = [form.image, ...(form.images || [])].filter(Boolean);
               if (allImages.length === 0) return null;
               return (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, marginBottom: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16, marginBottom: 20 }}>
                   {allImages.map((imgUrl, idx) => {
                     const isMain = imgUrl === form.image;
-                    const hasFg = !!(fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : null)
-                      || (form.fg_images || [])[(form.images || []).indexOf(imgUrl)]);
                     return (
-                      <div key={idx} style={{ position: 'relative', border: isMain ? '2px solid #d4a05a' : '1px solid #333', borderRadius: 8, overflow: 'hidden', aspectRatio: '1' }}>
-                        <Image src={imgUrl.startsWith('/') || imgUrl.startsWith('http') ? imgUrl : `/images/${imgUrl}`} alt={`Gallery ${idx}`} fill style={{ objectFit: 'cover' }} />
+                      <div key={idx} style={{ position: 'relative', border: isMain ? '2px solid #d4a05a' : '1px solid #333', borderRadius: 10, overflow: 'hidden', background: '#111' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={imgUrl.startsWith('/') || imgUrl.startsWith('http') ? imgUrl : `/images/${imgUrl}`} alt={`Gallery ${idx}`} style={{ width: '100%', height: 'auto', display: 'block', maxHeight: 340, objectFit: 'contain', background: '#111' }} />
 
                         {/* Remove Button */}
                         <button type="button" onClick={() => removeImage(imgUrl)}
-                          style={{ position: 'absolute', top: 6, right: 6, background: 'rgba(0,0,0,0.7)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '12px' }}>
+                          style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(0,0,0,0.75)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '13px' }}>
                           ✕
                         </button>
 
-                        {/* Change BG Button */}
-                        {hasFg && (
-                          <button type="button" onClick={() => openBgSelector(imgUrl)}
-                            style={{ position: 'absolute', bottom: 35, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.85)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.68rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
-                            🎨 Change BG
-                          </button>
-                        )}
+                        {/* Change BG — always visible for newly processed images */}
+                        <button type="button" onClick={() => openBgSelector(imgUrl)}
+                          style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.85)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.75rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
+                          🎨 Change BG
+                        </button>
 
                         {/* Set Main Button */}
                         {!isMain && (
                           <button type="button" onClick={() => setAsMainImage(imgUrl)}
-                            style={{ position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.7rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
+                            style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '5px', padding: '5px 12px', cursor: 'pointer', fontSize: '0.75rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
                             Set as Main
                           </button>
                         )}
                         {isMain && (
-                          <div style={{ position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)', background: '#d4a05a', color: '#000', borderRadius: '4px', padding: '4px 8px', fontSize: '0.7rem', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
-                            Main Photo
+                          <div style={{ position: 'absolute', bottom: 8, left: '50%', transform: 'translateX(-50%)', background: '#d4a05a', color: '#000', borderRadius: '5px', padding: '5px 12px', fontSize: '0.75rem', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                            ★ Main Photo
                           </div>
                         )}
                       </div>
@@ -555,17 +599,41 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
               onDragOver={(e) => { e.preventDefault(); setIsDraggingMulti(true); }}
               onDragLeave={() => setIsDraggingMulti(false)}
               onDrop={handleDrop}
-              onClick={() => multiFileInputRef.current?.click()}
-              style={{ padding: '28px', minHeight: 'auto' }}
+              onClick={() => { if (!uploadingImage) { setBgSelectorTarget(null); multiFileInputRef.current?.click(); } }}
+              style={{ padding: '28px', minHeight: 'auto', cursor: uploadingImage ? 'default' : 'pointer' }}
             >
-              <div style={{ fontSize: '2rem', marginBottom: 8 }}>📸</div>
-              <div className={styles.uploadZoneText} style={{ fontSize: '0.9rem' }}>
-                Drag & drop images here, or <span style={{ color: '#d4a05a', fontWeight: 'bold' }}>click to browse</span>
-              </div>
-              <div className={styles.uploadZoneText} style={{ marginTop: 6, fontSize: '0.75rem', color: '#666' }}>
-                JPEG, PNG, WebP, HEIC — max 10 MB per image
-              </div>
-              {uploadingImage && <div style={{ marginTop: 12, color: '#d4a05a', fontSize: '0.85rem', fontWeight: 'bold' }}>Uploading & Enhancing Background (takes a few seconds)...</div>}
+              {uploadingImage ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                  {/* Spinner */}
+                  <div style={{
+                    width: 44, height: 44,
+                    border: '4px solid rgba(212,160,90,0.2)',
+                    borderTopColor: '#d4a05a',
+                    borderRadius: '50%',
+                    animation: 'spin 0.9s linear infinite',
+                  }} />
+                  <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ color: '#d4a05a', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: 6 }}>
+                      🤖 AI is processing your image…
+                    </div>
+                    <div style={{ color: '#888', fontSize: '0.78rem', lineHeight: 1.5 }}>
+                      We run background removal &amp; enhancement using AI.<br />
+                      This takes 20–40 seconds — please don&apos;t close this tab.
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div style={{ fontSize: '2rem', marginBottom: 8 }}>📸</div>
+                  <div className={styles.uploadZoneText} style={{ fontSize: '0.9rem' }}>
+                    Drag &amp; drop images here, or <span style={{ color: '#d4a05a', fontWeight: 'bold' }}>click to browse</span>
+                  </div>
+                  <div className={styles.uploadZoneText} style={{ marginTop: 6, fontSize: '0.75rem', color: '#666' }}>
+                    JPEG, PNG, WebP, HEIC — max 10 MB per image
+                  </div>
+                </>
+              )}
             </div>
             <input ref={multiFileInputRef} type="file" accept="image/*,.heic,.heif" multiple style={{ display: 'none' }}
               onChange={handleFilePick} id="prod-images-file" />
@@ -592,7 +660,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           </div>
 
           {/* ── Idol Details ──────────────────────────────────── */}
-          <div className={styles.formSectionTitle}>Idol Details</div>
+          <div className={styles.formSectionTitle}>Idol Details <span style={{ fontWeight: 400, opacity: 0.55, fontSize: '0.8em' }}>(Specifications — not shown on product page yet)</span></div>
 
           <div>
             <label className={styles.formLabel} htmlFor="prod-god-name">God Name</label>
