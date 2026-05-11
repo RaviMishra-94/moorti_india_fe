@@ -9,14 +9,16 @@ import { saveClientStoryAction } from '../actions';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-export default function ClientStoryForm({ initialData = null }: { initialData?: any }) {
+export default function ClientStoryForm({ initialData = null, token = '' }: { initialData?: any, token?: string }) {
   const router = useRouter();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const isEdit = !!initialData;
 
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
+    image: initialData?.image || '',
     location: initialData?.location || '',
     country: initialData?.country || '',
     statue: initialData?.statue || '',
@@ -37,6 +39,36 @@ export default function ClientStoryForm({ initialData = null }: { initialData?: 
     }
 
     setFormData(prev => ({ ...prev, [name]: finalValue }));
+  };
+
+  const uploadFile = async (file: File) => {
+    if (!token) {
+      showToast('No admin token found', 'error');
+      return;
+    }
+    setUploadingImage(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`${API_URL}/api/uploads/image`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+      }
+      const data = await res.json();
+      // data.url contains the uploaded image path
+      setFormData(prev => ({ ...prev, image: data.url }));
+      showToast('Image uploaded successfully', 'success');
+    } catch (err: any) {
+      console.error(err);
+      showToast(err.message || 'Image upload failed', 'error');
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,6 +105,44 @@ export default function ClientStoryForm({ initialData = null }: { initialData?: 
         <div className={styles.formGrid}>
           <div className={styles.formSectionTitle}>Client Details</div>
           
+          <div style={{ gridColumn: '1 / -1', marginBottom: 20 }}>
+            <label className={styles.formLabel}>Idol Image</label>
+            <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+              {formData.image && (
+                <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 8, overflow: 'hidden', border: '1px solid #333' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`${API_URL}${formData.image}`} alt="Idol" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
+                    style={{
+                      position: 'absolute', top: 4, right: 4,
+                      background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,255,255,0.15)',
+                      borderRadius: '50%', width: 22, height: 22,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      cursor: 'pointer', color: '#ff6b6b', fontSize: '11px',
+                    }}
+                    title="Remove image"
+                  >🗑</button>
+                </div>
+              )}
+              <div style={{ flex: 1 }}>
+                <input 
+                  type="file" 
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) uploadFile(file);
+                    e.target.value = '';
+                  }}
+                  disabled={uploadingImage}
+                  style={{ display: 'block', marginBottom: 8, color: '#ccc', fontSize: '0.9rem' }}
+                />
+                {uploadingImage && <div style={{ fontSize: '0.85rem', color: '#888' }}>Uploading...</div>}
+              </div>
+            </div>
+          </div>
+
           <div>
             <label className={styles.formLabel}>Client Name *</label>
             <input 

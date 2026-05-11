@@ -14,6 +14,8 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default async function TestimonialsSection() {
   const allStories = await getClientStories();
   const publishedStories = allStories.filter(s => s.is_published !== false); // fallback to true if undefined for legacy
@@ -53,6 +55,12 @@ export default async function TestimonialsSection() {
                     </div>
                   </div>
                 </div>
+                {t.image && (
+                  <div className={styles.cardImageContainer}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`${API_URL}${t.image}`} alt="Idol" className={styles.cardImage} />
+                  </div>
+                )}
               </div>
             ))}
           </DragCarousel>
