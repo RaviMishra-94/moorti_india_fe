@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import styles from '../../admin.module.css';
@@ -88,6 +89,7 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
         <thead>
           <tr>
             <th>Order</th>
+            <th>Image</th>
             <th>Name</th>
             <th>Slug</th>
             <th>Description</th>
@@ -97,7 +99,7 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
         </thead>
         <tbody>
           <tr>
-            <td colSpan={6} style={{ textAlign: 'center', color: '#444', padding: '40px' }}>
+            <td colSpan={7} style={{ textAlign: 'center', color: '#444', padding: '40px' }}>
               No categories found.
             </td>
           </tr>
@@ -112,6 +114,7 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
         <thead>
           <tr>
             <th style={{ width: 40 }}></th>
+            <th>Image</th>
             <th>Name</th>
             <th>Slug</th>
             <th>Description</th>
@@ -136,6 +139,15 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
                     >
                       <td {...provided.dragHandleProps} style={{ textAlign: 'center' }} title="Drag to reorder categories">
                         <IconDrag />
+                      </td>
+                      <td>
+                        <Image
+                          src={cat.image || '/images/placeholder.png'}
+                          alt={cat.name}
+                          width={44}
+                          height={44}
+                          className={styles.productThumb}
+                        />
                       </td>
                       <td style={{ color: '#ddd', fontWeight: 500 }}>{cat.name}</td>
                       <td style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: '#888' }}>
