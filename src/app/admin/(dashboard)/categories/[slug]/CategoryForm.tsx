@@ -34,7 +34,6 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [enhancedMappings, setEnhancedMappings] = useState<Record<string, string>>({});
@@ -51,8 +50,10 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
   const [uploadingCustomBg, setUploadingCustomBg] = useState(false);
   const customBgInputRef = useRef<HTMLInputElement>(null);
   const [customBgOptions, setCustomBgOptions] = useState<{ url: string; label: string; filename: string }[]>([]);
-  // fg URL mapping: enhanced_url -> fg_url
   const [fgMappings, setFgMappings] = useState<Record<string, string>>({});
+  // Per-image async job tracking: rawUrl -> jobId
+  const [pendingJobs, setPendingJobs] = useState<Record<string, string>>({});
+  const pollTimers = useRef<Record<string, ReturnType<typeof setInterval>>>({});
 
   // Auto-generate slug from name (only for new categories)
   useEffect(() => {
@@ -74,9 +75,53 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
     }));
   };
 
-  // ── Image upload ─────────────────────────────────────────────
+  // ── Cleanup polling timers on unmount ──────────────────────────────────
+  useEffect(() => {
+    const timers = pollTimers.current;
+    return () => { Object.values(timers).forEach(clearInterval); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Start polling for a raw-image AI job ────────────────────────────────
+  const startPolling = (rawUrl: string, jobId: string) => {
+    const timer = setInterval(async () => {
+      try {
+        const res = await fetch(`${apiUrl}/api/uploads/job/${jobId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const job = await res.json();
+        if (job.status === 'done') {
+          clearInterval(timer);
+          delete pollTimers.current[rawUrl];
+          setPendingJobs(prev => { const next = { ...prev }; delete next[rawUrl]; return next; });
+
+          const enhancedUrl = job.enhanced_url as string | null;
+          const fgUrl = job.fg_url as string | null;
+
+          if (enhancedUrl) {
+            setEnhancedMappings(prev => ({
+              ...prev,
+              [enhancedUrl]: rawUrl,
+              [rawUrl]: enhancedUrl,
+            }));
+            if (fgUrl) setFgMappings(prev => ({ ...prev, [enhancedUrl]: fgUrl }));
+            setForm(prev => ({
+              ...prev,
+              image: prev.image === rawUrl ? enhancedUrl : prev.image,
+              fg_image: prev.image === rawUrl ? (fgUrl || prev.fg_image) : prev.fg_image,
+            }));
+          }
+        }
+      } catch {
+        // network blip — keep polling
+      }
+    }, 4000);
+    pollTimers.current[rawUrl] = timer;
+  };
+
+  // ── Image upload (non-blocking) ──────────────────────────────────────────
   const uploadFile = async (file: File) => {
-    setUploadingImage(true);
     try {
       const fd = new FormData();
       fd.append('file', file);
@@ -90,33 +135,38 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
         throw new Error(msg);
       }
       const data = await res.json();
+      const rawUrl: string = data.url;
 
-      let imageUrlToAdd = data.url;
+      // Show the raw image immediately — no blocking
+      setForm(prev => ({ ...prev, image: rawUrl, fg_image: '' }));
+
+      // Gracefully handle if enhanced already present (future-proof)
       if (data.enhanced_url) {
-        imageUrlToAdd = data.enhanced_url;
-        setEnhancedMappings(prev => ({ 
-          ...prev, 
-          [data.enhanced_url]: data.url, 
-          [data.url]: data.enhanced_url 
+        setEnhancedMappings(prev => ({
+          ...prev,
+          [data.enhanced_url]: rawUrl,
+          [rawUrl]: data.enhanced_url,
+        }));
+        if (data.fg_url) setFgMappings(prev => ({ ...prev, [data.enhanced_url]: data.fg_url }));
+        setForm(prev => ({
+          ...prev,
+          image: data.enhanced_url,
+          fg_image: data.fg_url || prev.fg_image,
         }));
       }
 
-      if (data.fg_url && data.enhanced_url) {
-        setFgMappings(prev => ({ ...prev, [data.enhanced_url]: data.fg_url }));
+      // Kick off background polling
+      if (data.job_id) {
+        setPendingJobs(prev => ({ ...prev, [rawUrl]: data.job_id }));
+        startPolling(rawUrl, data.job_id);
       }
 
-      setForm(prev => ({ 
-        ...prev, 
-        image: imageUrlToAdd,
-        fg_image: data.fg_url || prev.fg_image
-      }));
-      showToast('Image uploaded successfully.', 'success');
+      showToast('Image uploaded! AI is enhancing it in the background…', 'success');
     } catch (err) {
       showToast(`Image upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
-    } finally {
-      setUploadingImage(false);
     }
   };
+
 
   // ── Background Selector ───────────────────────────────────────
   const openBgSelector = async (imgUrl: string) => {
@@ -353,9 +403,7 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
             >
-              {uploadingImage ? (
-                <div className={styles.uploadZoneText} style={{ color: '#d4a05a', fontWeight: 'bold' }}>Uploading & Enhancing Background (takes a few seconds)...</div>
-              ) : imagePreviewSrc ? (
+              {imagePreviewSrc ? (
                 <>
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     <Image src={imagePreviewSrc} alt="Preview" width={200} height={200}
@@ -380,12 +428,19 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
                     </div>
                   </div>
                   <div className={styles.uploadZoneText} style={{ marginTop: 8 }}>Click or drag to replace</div>
+                  {Object.keys(pendingJobs).length > 0 && (
+                    <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.72rem', color: '#d4a05a' }}>
+                      <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid rgba(212,160,90,0.3)', borderTopColor: '#d4a05a', animation: 'spin 0.9s linear infinite', flexShrink: 0 }} />
+                      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                      🤖 AI is enhancing your image in the background…
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
                   <div style={{ fontSize: '2rem', marginBottom: 8 }}>📸</div>
                   <div className={styles.uploadZoneText}>
-                    Drag & drop an image here, or <span style={{ color: '#d4a05a' }}>click to browse</span>
+                    Drag &amp; drop an image here, or <span style={{ color: '#d4a05a' }}>click to browse</span>
                   </div>
                   <div className={styles.uploadZoneText} style={{ marginTop: 4, fontSize: '0.72rem' }}>
                     JPEG, PNG, WebP, HEIC — max 10 MB

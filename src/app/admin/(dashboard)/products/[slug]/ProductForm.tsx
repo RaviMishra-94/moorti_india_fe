@@ -61,7 +61,6 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { showToast } = useToast();
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggingMulti, setIsDraggingMulti] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +75,10 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const [uploadingCustomBg, setUploadingCustomBg] = useState(false);
   const customBgInputRef = useRef<HTMLInputElement>(null);
   const [customBgOptions, setCustomBgOptions] = useState<{ url: string; label: string; filename: string }[]>([]);
+  // Per-image async job tracking: rawUrl -> jobId
+  const [pendingJobs, setPendingJobs] = useState<Record<string, string>>({});
+  // Polling interval refs so we can clear them on unmount
+  const pollTimers = useRef<Record<string, ReturnType<typeof setInterval>>>({});
 
   const [availableTags, setAvailableTags] = useState<string[]>([
     'Bestseller', 'New Arrival', 'Temple Grade', 'Premium', 'Limited Edition', 'Customizable'
@@ -172,9 +175,58 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     }
   };
 
-  // ── Image upload ─────────────────────────────────────────────
+  // ── Cleanup polling timers on unmount ─────────────────────────────────
+  useEffect(() => {
+    const timers = pollTimers.current;
+    return () => { Object.values(timers).forEach(clearInterval); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ── Start polling for a raw-image AI job ───────────────────────────────
+  const startPolling = (rawUrl: string, jobId: string) => {
+    const timer = setInterval(async () => {
+      try {
+        const res = await fetch(`${apiUrl}/api/uploads/job/${jobId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return;
+        const job = await res.json();
+        if (job.status === 'done') {
+          clearInterval(timer);
+          delete pollTimers.current[rawUrl];
+          setPendingJobs(prev => { const next = { ...prev }; delete next[rawUrl]; return next; });
+
+          const enhancedUrl = job.enhanced_url as string | null;
+          const fgUrl = job.fg_url as string | null;
+
+          if (enhancedUrl) {
+            setEnhancedMappings(prev => ({
+              ...prev,
+              [enhancedUrl]: rawUrl,
+              [rawUrl]: enhancedUrl,
+            }));
+            if (fgUrl) setFgMappings(prev => ({ ...prev, [enhancedUrl]: fgUrl }));
+            // Silently swap raw URL → enhanced URL everywhere in form
+            setForm(prev => ({
+              ...prev,
+              image: prev.image === rawUrl ? enhancedUrl : prev.image,
+              images: (prev.images || []).map(u => u === rawUrl ? enhancedUrl : u),
+              fg_image: prev.image === rawUrl ? (fgUrl || prev.fg_image) : prev.fg_image,
+              fg_images: (prev.fg_images || []).map((fg, i) =>
+                (prev.images || [])[i] === rawUrl ? (fgUrl || fg) : fg
+              ),
+            }));
+          }
+        }
+      } catch {
+        // network blip — keep polling silently
+      }
+    }, 4000);
+    pollTimers.current[rawUrl] = timer;
+  };
+
+  // ── Image upload (non-blocking) ─────────────────────────────────────────
   const uploadFile = async (file: File) => {
-    setUploadingImage(true);
     try {
       const fd = new FormData();
       fd.append('file', file);
@@ -188,43 +240,45 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
         throw new Error(msg);
       }
       const data = await res.json();
-      
-      let imageUrlToAdd = data.url;
-      if (data.enhanced_url) {
-        imageUrlToAdd = data.enhanced_url;
-        setEnhancedMappings(prev => ({ 
-          ...prev, 
-          [data.enhanced_url]: data.url, 
-          [data.url]: data.enhanced_url 
-        }));
-      }
-      // Store fg_url mapping for BG selector
-      if (data.fg_url && data.enhanced_url) {
-        setFgMappings(prev => ({ ...prev, [data.enhanced_url]: data.fg_url }));
-      }
-      
+      const rawUrl: string = data.url;
+
+      // Show the raw image immediately — no blocking
       setForm(prev => {
         if (!prev.image) {
-          return {
-            ...prev,
-            image: imageUrlToAdd,
-            fg_image: data.fg_url || prev.fg_image,
-          };
+          return { ...prev, image: rawUrl, fg_image: '' };
         } else {
-          return {
-            ...prev,
-            images: [...(prev.images || []), imageUrlToAdd],
-            fg_images: data.fg_url ? [...(prev.fg_images || []), data.fg_url] : prev.fg_images,
-          };
+          return { ...prev, images: [...(prev.images || []), rawUrl] };
         }
       });
-      showToast('Image uploaded successfully.', 'success');
+
+      // Gracefully handle if enhanced already present (future-proof)
+      if (data.enhanced_url) {
+        setEnhancedMappings(prev => ({
+          ...prev,
+          [data.enhanced_url]: rawUrl,
+          [rawUrl]: data.enhanced_url,
+        }));
+        if (data.fg_url) setFgMappings(prev => ({ ...prev, [data.enhanced_url]: data.fg_url }));
+        setForm(prev => ({
+          ...prev,
+          image: prev.image === rawUrl ? data.enhanced_url : prev.image,
+          images: (prev.images || []).map(u => u === rawUrl ? data.enhanced_url : u),
+          fg_image: data.fg_url || prev.fg_image,
+        }));
+      }
+
+      // Kick off background polling for AI processing
+      if (data.job_id) {
+        setPendingJobs(prev => ({ ...prev, [rawUrl]: data.job_id }));
+        startPolling(rawUrl, data.job_id);
+      }
+
+      showToast('Image uploaded! AI is enhancing it in the background…', 'success');
     } catch (err) {
       showToast(`Image upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
-    } finally {
-      setUploadingImage(false);
     }
   };
+
 
   const handleFilePick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -757,42 +811,25 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
               onDragOver={(e) => { e.preventDefault(); setIsDraggingMulti(true); }}
               onDragLeave={() => setIsDraggingMulti(false)}
               onDrop={handleDrop}
-              onClick={() => { if (!uploadingImage) { setBgSelectorTarget(null); multiFileInputRef.current?.click(); } }}
-              style={{ padding: '28px', minHeight: 'auto', cursor: uploadingImage ? 'default' : 'pointer' }}
+              onClick={() => { setBgSelectorTarget(null); multiFileInputRef.current?.click(); }}
+              style={{ padding: '28px', minHeight: 'auto', cursor: 'pointer' }}
             >
-              {uploadingImage ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-                  {/* Spinner */}
-                  <div style={{
-                    width: 44, height: 44,
-                    border: '4px solid rgba(212,160,90,0.2)',
-                    borderTopColor: '#d4a05a',
-                    borderRadius: '50%',
-                    animation: 'spin 0.9s linear infinite',
-                  }} />
+              <div style={{ fontSize: '2rem', marginBottom: 8 }}>📸</div>
+              <div className={styles.uploadZoneText} style={{ fontSize: '0.9rem' }}>
+                Drag &amp; drop images here, or <span style={{ color: '#d4a05a', fontWeight: 'bold' }}>click to browse</span>
+              </div>
+              <div className={styles.uploadZoneText} style={{ marginTop: 6, fontSize: '0.75rem', color: '#666' }}>
+                JPEG, PNG, WebP, HEIC — max 10 MB per image
+              </div>
+              {Object.keys(pendingJobs).length > 0 && (
+                <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.72rem', color: '#d4a05a' }}>
+                  <div style={{ width: 10, height: 10, borderRadius: '50%', border: '2px solid rgba(212,160,90,0.3)', borderTopColor: '#d4a05a', animation: 'spin 0.9s linear infinite' }} />
                   <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ color: '#d4a05a', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: 6 }}>
-                      🤖 AI is processing your image…
-                    </div>
-                    <div style={{ color: '#888', fontSize: '0.78rem', lineHeight: 1.5 }}>
-                      We run background removal &amp; enhancement using AI.<br />
-                      This takes 20–40 seconds — please don&apos;t close this tab.
-                    </div>
-                  </div>
+                  🤖 AI is enhancing {Object.keys(pendingJobs).length} image{Object.keys(pendingJobs).length > 1 ? 's' : ''} in the background…
                 </div>
-              ) : (
-                <>
-                  <div style={{ fontSize: '2rem', marginBottom: 8 }}>📸</div>
-                  <div className={styles.uploadZoneText} style={{ fontSize: '0.9rem' }}>
-                    Drag &amp; drop images here, or <span style={{ color: '#d4a05a', fontWeight: 'bold' }}>click to browse</span>
-                  </div>
-                  <div className={styles.uploadZoneText} style={{ marginTop: 6, fontSize: '0.75rem', color: '#666' }}>
-                    JPEG, PNG, WebP, HEIC — max 10 MB per image
-                  </div>
-                </>
               )}
             </div>
+
             <input ref={multiFileInputRef} type="file" accept="image/*,.heic,.heif" multiple style={{ display: 'none' }}
               onChange={handleFilePick} id="prod-images-file" />
 
