@@ -1,14 +1,14 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import Navbar from './_components/Navbar';
+import Footer from './_components/Footer';
 
 export default function NavigationWrapper({
-  navbar,
-  footer,
+  categories,
   children,
 }: {
-  navbar: React.ReactNode;
-  footer: React.ReactNode;
+  categories: { slug: string; name: string }[];
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -16,9 +16,9 @@ export default function NavigationWrapper({
 
   return (
     <div style={{ display: 'contents' }}>
-      {!isAdmin && navbar}
+      {!isAdmin && <Navbar categories={categories} />}
       <main>{children}</main>
-      {!isAdmin && footer}
+      {!isAdmin && <Footer categories={categories} />}
     </div>
   );
 }

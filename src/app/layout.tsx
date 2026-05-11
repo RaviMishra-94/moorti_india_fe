@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Navbar from './_components/Navbar';
-import Footer from './_components/Footer';
 import NavigationWrapper from './NavigationWrapper';
 import WhatsAppWidget from './_components/WhatsAppWidget';
 import Script from 'next/script';
@@ -163,7 +161,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
-        <NavigationWrapper navbar={<Navbar categories={categories} />} footer={<Footer categories={categories} />}>
+        <NavigationWrapper categories={categories}>
           {children}
         </NavigationWrapper>
         <WhatsAppWidget />
