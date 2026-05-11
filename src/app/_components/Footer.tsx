@@ -181,6 +181,19 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
                   </a>
                 </li>
               </ul>
+              
+              <div style={{ marginTop: '1.5rem', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
+                <iframe 
+                  width="100%" 
+                  height="160" 
+                  style={{ border: 0, display: 'block' }} 
+                  loading="lazy" 
+                  allowFullScreen={false}
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Moorti India Location Map"
+                  src="https://maps.google.com/maps?cid=11905363702504726374&output=embed">
+                </iframe>
+              </div>
             </div>
 
           </div>

@@ -1,5 +1,5 @@
 .container {
-  padding: var(--space-12) var(--space-6);
+  padding: var(--space-16) var(--space-6);
   max-width: var(--content-width);
   margin: 0 auto;
 }
@@ -7,8 +7,8 @@
 .productGrid {
   display: flex;
   flex-direction: row;
-  gap: var(--space-12);
-  margin-bottom: var(--space-16);
+  gap: 5rem;
+  margin-bottom: var(--space-20);
 }
 
 .leftCol {
@@ -84,15 +84,15 @@
   font-family: var(--font-display);
   font-size: 2.8rem;
   color: var(--text-primary);
-  line-height: 1.1;
-  margin-bottom: var(--space-4);
+  line-height: 1.15;
+  margin-bottom: var(--space-6);
 }
 
 .shortDesc {
   font-size: 1.1rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-6);
+  line-height: 1.8;
+  margin-bottom: var(--space-10);
 }
 
 .tagsContainer {
@@ -127,7 +127,7 @@
   padding: var(--space-4) var(--space-8);
   border-radius: 12px;
   border: 1px solid var(--border-medium);
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-16);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 }
 
@@ -172,9 +172,9 @@
 .decisionCtaBox {
   background: #fdf8f0;
   border: 1px solid var(--gold-dim);
-  padding: var(--space-6);
+  padding: var(--space-8);
   border-radius: var(--radius-md);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-12);
 }
 
 .decisionTitle {
@@ -354,7 +354,8 @@
   align-items: center;
   gap: var(--space-4);
   border-top: 1px solid var(--border-subtle);
-  padding-top: var(--space-6);
+  padding-top: var(--space-8);
+  margin-top: var(--space-8);
 }
 
 .socialLabel {
