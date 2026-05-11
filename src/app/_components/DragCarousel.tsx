@@ -77,7 +77,7 @@ export default function DragCarousel({
               width: `${arrowSize}px`,
               height: `${arrowSize}px`,
               borderRadius: '50%',
-              background: 'var(--bg-surface)',
+              background: 'rgba(255, 255, 255, 0.25)',
               border: '1px solid var(--border-medium)',
               color: 'var(--accent)',
               display: 'flex',
@@ -93,7 +93,7 @@ export default function DragCarousel({
                e.currentTarget.style.color = '#fff';
             }}
             onMouseLeave={e => {
-               e.currentTarget.style.background = 'var(--bg-surface)';
+               e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
                e.currentTarget.style.color = 'var(--accent)';
             }}
             aria-label="Previous slide"
@@ -111,7 +111,7 @@ export default function DragCarousel({
               width: `${arrowSize}px`,
               height: `${arrowSize}px`,
               borderRadius: '50%',
-              background: 'var(--bg-surface)',
+              background: 'rgba(255, 255, 255, 0.25)',
               border: '1px solid var(--border-medium)',
               color: 'var(--accent)',
               display: 'flex',
@@ -127,7 +127,7 @@ export default function DragCarousel({
                e.currentTarget.style.color = '#fff';
             }}
             onMouseLeave={e => {
-               e.currentTarget.style.background = 'var(--bg-surface)';
+               e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
                e.currentTarget.style.color = 'var(--accent)';
             }}
             aria-label="Next slide"

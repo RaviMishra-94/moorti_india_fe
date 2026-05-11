@@ -222,6 +222,14 @@
   .footerBrand {
     grid-column: 1;
   }
+  .footerCol:last-child {
+    grid-column: 1;
+  }
+  .footerLinksGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) var(--space-2);
+  }
   .newsletterForm {
     flex-direction: column;
     width: 100%;

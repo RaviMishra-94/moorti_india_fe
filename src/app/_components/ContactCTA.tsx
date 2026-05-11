@@ -56,7 +56,7 @@ export default function ContactCTA() {
               </button>
               <div className={styles.formNote}>
                 <span>✦</span>
-                <span>We typically respond within 24 hours. WhatsApp: <a href="https://wa.me/919958476169" style={{ color: 'var(--gold)' }}>+91 99584 76169</a></span>
+                <span>We typically respond within 24 hours.<br />WhatsApp: <a href="https://wa.me/919958476169" style={{ color: 'var(--gold)' }}>+91 99584 76169</a></span>
               </div>
             </div>
           </form>

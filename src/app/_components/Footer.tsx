@@ -118,7 +118,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
             {/* Collections */}
             <div className={styles.footerCol}>
               <h4 className={styles.footerColTitle}>Collections</h4>
-              <ul className={styles.footerLinks}>
+              <ul className={`${styles.footerLinks} ${styles.footerLinksGrid}`}>
                 {footerCategories.length > 0 ? (
                   footerCategories.map((cat) => (
                     <li key={cat.slug}>
@@ -142,7 +142,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
             {/* Company */}
             <div className={styles.footerCol}>
               <h4 className={styles.footerColTitle}>Company</h4>
-              <ul className={styles.footerLinks}>
+              <ul className={`${styles.footerLinks} ${styles.footerLinksGrid}`}>
                 <li><Link href="/about" className={styles.footerLink}>Our Story</Link></li>
                 <li><Link href="/process" className={styles.footerLink}>Craftsmanship</Link></li>
                 <li><Link href="/contact" className={styles.footerLink}>Contact Us</Link></li>

@@ -93,6 +93,7 @@ export interface GetProductsOptions {
   featured?: boolean;
   trending?: boolean;
   categorySlug?: string;
+  searchQuery?: string;
 }
 
 export async function getProducts(opts: GetProductsOptions = {}): Promise<Product[]> {
@@ -100,6 +101,7 @@ export async function getProducts(opts: GetProductsOptions = {}): Promise<Produc
   if (opts.featured !== undefined) params.set('featured', String(opts.featured));
   if (opts.trending !== undefined) params.set('trending', String(opts.trending));
   if (opts.categorySlug) params.set('category_slug', opts.categorySlug);
+  if (opts.searchQuery) params.set('search', opts.searchQuery);
 
   const query = params.toString();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,6 +114,15 @@ export async function getProducts(opts: GetProductsOptions = {}): Promise<Produc
   if (opts.featured !== undefined) products = products.filter(p => !!p.isFeatured === opts.featured);
   if (opts.trending !== undefined) products = products.filter(p => !!p.isTrending === opts.trending);
   if (opts.categorySlug) products = products.filter(p => p.categorySlug === opts.categorySlug);
+  if (opts.searchQuery) {
+    const q = opts.searchQuery.toLowerCase();
+    products = products.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.category.toLowerCase().includes(q) || 
+      (p.godName && p.godName.toLowerCase().includes(q)) || 
+      p.shortDesc.toLowerCase().includes(q)
+    );
+  }
   return products;
 }
 

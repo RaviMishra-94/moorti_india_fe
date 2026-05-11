@@ -43,42 +43,48 @@ export default function HeroSection() {
       {/* Content */}
       <div className={`container ${styles.heroContent}`} ref={textRef}>
         <div className={styles.heroInner}>
-          <div className={styles.heroLabel}>
-            <span className="label-sm">✦ &nbsp;Est. 1985 · Jaipur, Rajasthan&nbsp; ✦</span>
+          <div className={styles.heroTop}>
+            <div className={styles.heroLabel}>
+              <span className="label-sm">✦ &nbsp;Est. 1985 · Jaipur, Rajasthan&nbsp; ✦</span>
+            </div>
+
+            <h1 className={styles.heroTitle}>
+              <span className={styles.heroTitleLine1}>Bring Home Timeless</span>
+              <span className={styles.heroTitleLine2}>Divine Craftsmanship</span>
+            </h1>
           </div>
 
-          <h1 className={styles.heroTitle}>
-            <span className={styles.heroTitleLine1}>Bring Home Timeless</span>
-            <span className={styles.heroTitleLine2}>Divine Craftsmanship</span>
-          </h1>
-
-          <p className={styles.heroSubtitle} style={{ fontSize: '1.4rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-            Marble Idols That Elevate Your Space & Spirit
-          </p>
-          <p className={styles.heroSubtitle} style={{ fontSize: '1.1rem', opacity: 0.9, color: 'var(--text-secondary)' }}>
-            Handcrafted from premium marble by skilled artisans.<br />Designed for homes and sacred spaces.
-          </p>
-
-          <div className={styles.heroCtas}>
-            <Link href="/collections" className={`btn btn-primary btn-lg`} id="hero-explore-btn" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
-              Shop collection or explore idols
-            </Link>
+          <div className={styles.heroCenter}>
+            <p className={`${styles.heroSubtitle} ${styles.heroSubtitle1}`}>
+              Marble Idols That Elevate Your Space & Spirit
+            </p>
+            <p className={`${styles.heroSubtitle} ${styles.heroSubtitle2}`}>
+              Handcrafted from premium marble by skilled artisans. Designed for homes and sacred spaces.
+            </p>
           </div>
 
-          <div className={styles.heroStats}>
-            <div className={styles.heroStat}>
-              <span className={styles.heroStatValue}>40+</span>
-              <span className={styles.heroStatLabel}>Years of Craft</span>
+          <div className={styles.heroBottom}>
+            <div className={styles.heroCtas}>
+              <Link href="/collections" className={`btn btn-primary btn-lg ${styles.heroBtn}`} id="hero-explore-btn">
+                Explore Our Collections
+              </Link>
             </div>
-            <div className={styles.heroStatDivider} />
-            <div className={styles.heroStat}>
-              <span className={styles.heroStatValue}>50+</span>
-              <span className={styles.heroStatLabel}>Countries</span>
-            </div>
-            <div className={styles.heroStatDivider} />
-            <div className={styles.heroStat}>
-              <span className={styles.heroStatValue}>100%</span>
-              <span className={styles.heroStatLabel}>Handcrafted</span>
+
+            <div className={styles.heroStats}>
+              <div className={styles.heroStat}>
+                <span className={styles.heroStatValue}>40+</span>
+                <span className={styles.heroStatLabel}>Years of Craft</span>
+              </div>
+              <div className={styles.heroStatDivider} />
+              <div className={styles.heroStat}>
+                <span className={styles.heroStatValue}>50+</span>
+                <span className={styles.heroStatLabel}>Countries</span>
+              </div>
+              <div className={styles.heroStatDivider} />
+              <div className={styles.heroStat}>
+                <span className={styles.heroStatValue}>100%</span>
+                <span className={styles.heroStatLabel}>Handcrafted</span>
+              </div>
             </div>
           </div>
         </div>
