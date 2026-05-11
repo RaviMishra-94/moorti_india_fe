@@ -245,22 +245,101 @@
 }
 
 .audioBtnRecording {
+  background: #cc0000;
+  color: white;
+  border-color: #cc0000;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+}
+
+.recordingStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   background: #fff0f0;
-  border-color: #ffcccc;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid #ffcccc;
+  width: 100%;
+}
+
+.pulseWrapper {
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulseInner {
+  width: 100%;
+  height: 100%;
+  background: #cc0000;
+  border-radius: 50%;
+  animation: scalePulse 0.8s infinite alternate;
+}
+
+.pulsePaused {
+  animation: none;
+  opacity: 0.5;
+}
+
+@keyframes scalePulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+.recordingTimer {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
   color: #cc0000;
-  animation: pulse 1.5s infinite;
+  font-size: 1.1rem;
+  min-width: 45px;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(204, 0, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); }
+.recordingInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.audioPlayer {
+.recordingControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pauseBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #ffcccc;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cc0000;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pauseBtn:hover {
+  background: #fffafa;
+  border-color: #ff9999;
+}
+
+.audioPlayerContainer {
+  background: white;
+  border: 1px solid var(--gold-dim);
+  padding: 20px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(200, 82, 28, 0.05);
+  margin-top: 10px;
 }
 
 .audioControl {
@@ -268,48 +347,80 @@
   height: 40px;
 }
 
-.audioActions {
+.audioActionButtons {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
+  flex-direction: column;
+  gap: 12px;
 }
 
-.shareAudioBtn {
+.sendAudioBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
-  padding: 8px 12px;
-  background-color: #25D366;
-  border: 1px solid #25D366;
+  gap: 8px;
+  padding: 14px;
+  background: #25D366;
   color: white;
-  border-radius: 6px;
-  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.sendAudioBtn:hover:not(:disabled) {
+  background: #128C7E;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.sendAudioBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.audioSecondaryActions {
+  display: flex;
+  gap: 12px;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
   font-size: 0.9rem;
-}
-
-.shareAudioBtn:hover {
-  background-color: #128C7E;
-  border-color: #128C7E;
-}
-
-.clearAudioBtn {
-  font-size: 0.8rem;
-  color: #cc0000;
-  background: none;
-  border: none;
-  text-decoration: underline;
+  font-weight: 600;
   cursor: pointer;
+  flex: 1;
+  transition: all 0.2s;
+  color: var(--text-primary);
 }
 
-.audioNotice {
+.iconBtn:hover {
+  background: #f9f9f9;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.deleteBtn:hover {
+  color: #cc0000;
+  border-color: #ffcccc;
+  background: #fffafa;
+}
+
+.audioHelpText {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-style: italic;
+  margin: 0;
+  text-align: center;
 }
 
 .detailsHeader {
@@ -463,5 +574,77 @@
   .tabContent {
     padding: var(--space-4) 0;
     font-size: 1rem;
+  }
+}
+
+/* Toast Notifications */
+.toast {
+  position: fixed;
+  top: 100px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  max-width: 400px;
+  backdrop-filter: blur(12px);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toastSuccess {
+  background: rgba(46, 125, 50, 0.95);
+  color: white;
+  border-left: 4px solid #1b5e20;
+}
+
+.toastError {
+  background: rgba(183, 28, 28, 0.95);
+  color: white;
+  border-left: 4px solid #8b0000;
+}
+
+.toastContent {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.toastClose {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.toastClose:hover {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .toast {
+    top: auto;
+    bottom: 24px;
+    right: 20px;
+    left: 20px;
+    max-width: none;
+    animation: slideInUp 0.4s ease-out forwards;
+  }
+
+  @keyframes slideInUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 }

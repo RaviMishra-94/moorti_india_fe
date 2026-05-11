@@ -63,15 +63,26 @@ export default function EnquiriesTable({ initialData, apiUrl, token }: { initial
               </td>
               <td style={{ fontWeight: 500 }}>{enq.name}</td>
               <td>
-                <a href={`mailto:${enq.email}`} style={{ color: enq.is_resolved ? 'inherit' : 'var(--brand-gold)' }}>{enq.email}</a>
-                {enq.phone && <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 4 }}>{enq.phone}</div>}
+                {enq.email ? (
+                  <a href={`mailto:${enq.email}`} style={{ color: enq.is_resolved ? 'inherit' : 'var(--brand-gold)' }}>{enq.email}</a>
+                ) : '-'}
+                {enq.phone ? (
+                  <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 4 }}>{enq.phone}</div>
+                ) : (
+                  <div style={{ fontSize: '0.8rem', color: '#666', marginTop: 4 }}>-</div>
+                )}
               </td>
               <td>{enq.country}</td>
               <td>{enq.statue || '-'}</td>
               <td style={{ maxWidth: 300 }}>
-                <div style={{ maxHeight: '100px', overflowY: 'auto', fontSize: '0.85rem' }}>
+                <div style={{ maxHeight: '100px', overflowY: 'auto', fontSize: '0.85rem', marginBottom: enq.audio_url ? 8 : 0 }}>
                   {enq.message}
                 </div>
+                {enq.audio_url && (
+                  <div style={{ background: '#f5f5f5', borderRadius: '4px', padding: '4px' }}>
+                    <audio src={`${apiUrl}${enq.audio_url}`} controls style={{ height: 28, width: '100%', display: 'block' }} />
+                  </div>
+                )}
               </td>
               <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                 <button

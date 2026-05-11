@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import styles from './page.module.css';
 import DragCarousel from '../../_components/DragCarousel';
@@ -44,9 +43,44 @@ const DiamondIcon = () => (
   </svg>
 );
 
+const TrashIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
+const RefreshIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M23 4v6h-6"></path>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+  </svg>
+);
+
+const SendIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"></line>
+    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+  </svg>
+);
+
+const PauseIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <rect x="6" y="4" width="4" height="16"></rect>
+    <rect x="14" y="4" width="4" height="16"></rect>
+  </svg>
+);
+
+const PlayIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+  </svg>
+);
+
 interface Props {
   product: Product;
-  clientStories?: any[];
+  clientStories?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default function ProductDetailClient({ product, clientStories = [] }: Props) {
@@ -55,17 +89,29 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   const [isZooming, setIsZooming] = useState(false);
   const [mainImageIdx, setMainImageIdx] = useState(0);
 
-  // Audio recording state
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [statusMsg, setStatusMsg] = useState<{type: 'error' | 'success', text: string} | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
+
+  // Auto-clear notification
+  useEffect(() => {
+    if (statusMsg) {
+      const timer = setTimeout(() => setStatusMsg(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMsg]);
 
   // Get matching testimonial or default to the first one
   const fallbackTestimonial = { name: 'Moorti India Customer', text: 'Beautiful craftsmanship and fast delivery.', statue: 'Marble Statue' };
   const categoryTestimonial = clientStories.length > 0
-    ? (clientStories.find(t => t.statue && t.statue.toLowerCase().includes(product.category.toLowerCase().split(' ')[0])) || clientStories[0])
+    ? (clientStories.find((t: any) => t.statue && t.statue.toLowerCase().includes(product.category.toLowerCase().split(' ')[0])) || clientStories[0])
     : fallbackTestimonial;
 
   const displayImages = [product.image, ...(product.images || [])].filter(Boolean);
@@ -102,17 +148,62 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
 
       mediaRecorderRef.current.start();
       setIsRecording(true);
+      setIsPaused(false);
       setAudioUrl(null);
-    } catch (err) {
-      console.error("Error accessing microphone", err);
-      alert("Microphone access is required to record audio.");
+      setAudioBlob(null);
+      setRecordingSeconds(0);
+      chunksRef.current = [];
+    } catch (err: any) {
+      let errorMsg = "Microphone access is required to record audio.";
+      
+      if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        errorMsg = "No microphone found. Please connect a microphone and try again.";
+      } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        errorMsg = "Microphone permission denied. Please enable it in your browser settings.";
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        errorMsg = "Microphone is already in use by another application.";
+      }
+      
+      setStatusMsg({ type: 'error', text: errorMsg });
     }
+  };
+
+  useEffect(() => {
+    if (isRecording && !isPaused) {
+      timerRef.current = window.setInterval(() => {
+        setRecordingSeconds(prev => prev + 1);
+      }, 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isRecording, isPaused]);
+
+  const togglePause = () => {
+    if (!mediaRecorderRef.current) return;
+    
+    if (mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.pause();
+      setIsPaused(true);
+    } else if (mediaRecorderRef.current.state === 'paused') {
+      mediaRecorderRef.current.resume();
+      setIsPaused(false);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      setIsPaused(false);
       // Stop all tracks to release mic
       mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
     }
@@ -125,34 +216,51 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleShareAudio = async () => {
-    if (!audioBlob || !audioUrl) return;
+  const handleSendAudioEnquiry = async () => {
+    if (!audioBlob) return;
+    setIsUploading(true);
     
     try {
-      const file = new File([audioBlob], `Requirement-${product.slug}.webm`, { type: 'audio/webm' });
+      const formData = new FormData();
+      formData.append('file', audioBlob, `Requirement-${product.slug}.webm`);
+      formData.append('statue', product.name);
+      formData.append('message', `Audio requirement for ${product.name} (from Product Page)`);
       
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: `Requirement for ${product.name}`,
-          text: `Hi, please find my audio requirement for ${product.name}.`,
-          files: [file]
-        });
-      } else {
-        const a = document.createElement('a');
-        a.href = audioUrl;
-        a.download = `Requirement-${product.slug}.webm`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        alert("Audio downloaded. You can now attach and share this file via WhatsApp.");
-      }
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBase}/api/leads/audio-enquiry`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) throw new Error('Failed to upload audio enquiry');
+      
+      const data = await response.json();
+      const audioPublicUrl = `${apiBase}${data.audio_url}`;
+      
+      // Construct WhatsApp message
+      const phone = socialLinks.whatsapp.split('/').pop() || "919958476169";
+      const message = `Hi Moorti India, I have a requirement for ${product.name}.\n\nPlease listen to my audio requirement here: ${audioPublicUrl}`;
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+      
     } catch (err) {
-      console.error("Error sharing audio", err);
+      setStatusMsg({ type: 'error', text: "Failed to send audio. Please try again or contact us directly on WhatsApp." });
+    } finally {
+      setIsUploading(false);
     }
   };
 
   return (
     <div className={styles.container}>
+      
+      {/* Toast Notification */}
+      {statusMsg && (
+        <div className={`${styles.toast} ${statusMsg.type === 'error' ? styles.toastError : styles.toastSuccess}`}>
+          <div className={styles.toastContent}>
+            {statusMsg.type === 'error' ? '✕' : '✓'} {statusMsg.text}
+          </div>
+          <button className={styles.toastClose} onClick={() => setStatusMsg(null)}>×</button>
+        </div>
+      )}
       
       {/* Floating Banner */}
       <div className={styles.floatingBanner}>
@@ -238,7 +346,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
                 <div className={styles.stars}>
                   {'★'.repeat(starsCount)}{'☆'.repeat(5 - starsCount)}
                 </div>
-                <p className={styles.testimonialText}>"{text}"</p>
+                <p className={styles.testimonialText}>&quot;{text}&quot;</p>
                 <p className={styles.testimonialAuthor}>{author}</p>
               </div>
             );
@@ -266,31 +374,62 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
             </button>
             <p className={styles.noObligation}>No obligation. Just guidance.</p>
             
-            <div className={styles.audioRecordSection}>
-              <p className={styles.audioTitle}>Or describe your requirement using audio:</p>
-              {!isRecording && !audioUrl && (
-                <button onClick={startRecording} className={styles.audioBtn}>
-                  <AudioMicIcon /> Start Recording
-                </button>
-              )}
-              {isRecording && (
-                <button onClick={stopRecording} className={`${styles.audioBtn} ${styles.audioBtnRecording}`}>
-                  <AudioMicIcon /> Stop Recording
-                </button>
-              )}
-              {audioUrl && (
-                <div className={styles.audioPlayer}>
-                  <audio src={audioUrl} controls className={styles.audioControl} />
-                  <div className={styles.audioActions}>
-                    <button onClick={handleShareAudio} className={styles.shareAudioBtn}>
-                      <WhatsappIcon /> Send / Download Audio
-                    </button>
-                    <button onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className={styles.clearAudioBtn}>Reset</button>
+              <div className={styles.audioRecordSection}>
+                <p className={styles.audioTitle}>Or describe your requirement using audio:</p>
+                
+                {!isRecording && !audioUrl && (
+                  <button onClick={startRecording} className={styles.audioBtn}>
+                    <AudioMicIcon /> Start Recording
+                  </button>
+                )}
+                
+                {isRecording && (
+                  <div className={styles.recordingStatus}>
+                    <div className={styles.recordingInfo}>
+                      <div className={styles.pulseWrapper}>
+                        <div className={`${styles.pulseInner} ${isPaused ? styles.pulsePaused : ''}`} />
+                      </div>
+                      <span className={styles.recordingTimer}>{formatTime(recordingSeconds)}</span>
+                    </div>
+                    
+                    <div className={styles.recordingControls}>
+                      <button onClick={togglePause} className={styles.pauseBtn}>
+                        {isPaused ? <><PlayIcon /> Resume</> : <><PauseIcon /> Pause</>}
+                      </button>
+                      <button onClick={stopRecording} className={`${styles.audioBtn} ${styles.audioBtnRecording}`}>
+                        Stop
+                      </button>
+                    </div>
                   </div>
-                  <p className={styles.audioNotice}>*If sharing is not supported on your device, the audio will be downloaded for you to share manually.</p>
-                </div>
-              )}
-            </div>
+                )}
+                
+                {audioUrl && (
+                  <div className={styles.audioPlayerContainer}>
+                    <audio src={audioUrl} controls className={styles.audioControl} />
+                    
+                    <div className={styles.audioActionButtons}>
+                      <button 
+                        onClick={handleSendAudioEnquiry} 
+                        className={styles.sendAudioBtn}
+                        disabled={isUploading}
+                      >
+                        {isUploading ? 'Sending...' : <><SendIcon /> Send Requirement</>}
+                      </button>
+                      
+                      <div className={styles.audioSecondaryActions}>
+                        <button onClick={() => startRecording()} className={styles.iconBtn} title="Retake">
+                          <RefreshIcon /> Retake
+                        </button>
+                        <button onClick={() => { setAudioUrl(null); setAudioBlob(null); }} className={`${styles.iconBtn} ${styles.deleteBtn}`} title="Delete">
+                          <TrashIcon /> Delete
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <p className={styles.audioHelpText}>* This will be shared directly with us on WhatsApp.</p>
+                  </div>
+                )}
+              </div>
           </div>
 
           {false && (
