@@ -3,6 +3,7 @@ import './globals.css';
 import Navbar from './_components/Navbar';
 import Footer from './_components/Footer';
 import NavigationWrapper from './NavigationWrapper';
+import WhatsAppWidget from './_components/WhatsAppWidget';
 import Script from 'next/script';
 
 const BASE_URL = 'https://moortiindia.com.au';
@@ -165,6 +166,7 @@ export default async function RootLayout({
         <NavigationWrapper navbar={<Navbar categories={categories} />} footer={<Footer categories={categories} />}>
           {children}
         </NavigationWrapper>
+        <WhatsAppWidget />
       </body>
     </html>
   );
