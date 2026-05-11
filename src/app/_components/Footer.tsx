@@ -191,7 +191,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
                   allowFullScreen={false}
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Moorti India Location Map"
-                  src="https://maps.google.com/maps?cid=11905363702504726374&output=embed">
+                  src="https://maps.google.com/maps?cid=11905363702504726374&output=embed&t=k">
                 </iframe>
               </div>
             </div>

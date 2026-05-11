@@ -65,6 +65,14 @@ const SendIcon = () => (
   </svg>
 );
 
+const DownloadIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+);
+
 const PauseIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
     <rect x="6" y="4" width="4" height="16"></rect>
@@ -88,6 +96,17 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   const [zoomStyle, setZoomStyle] = useState({ transformOrigin: '50% 50%', transform: 'scale(1)' });
   const [isZooming, setIsZooming] = useState(false);
   const [mainImageIdx, setMainImageIdx] = useState(0);
+  const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
+
+  const FALLBACK_IMAGE = '/images/placeholder.png';
+  
+  const handleImageError = (imgUrl: string) => {
+    if (!imgUrl || imgUrl === FALLBACK_IMAGE) return;
+    setBrokenImages(prev => {
+      if (prev[imgUrl]) return prev;
+      return { ...prev, [imgUrl]: true };
+    });
+  };
 
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -127,6 +146,25 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   const handleMouseLeave = () => {
     setIsZooming(false);
     setZoomStyle({ transformOrigin: '50% 50%', transform: 'scale(1)' });
+  };
+
+  const handleDownloadImage = async () => {
+    const imageUrl = displayImages[mainImageIdx];
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${product.slug}-${mainImageIdx + 1}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      // Fallback to open in new tab if CORS prevents fetch
+      window.open(imageUrl, '_blank');
+    }
   };
 
   const startRecording = async () => {
@@ -285,12 +323,13 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
           >
             <div className={styles.imageZoomWrapper} style={zoomStyle}>
               <Image
-                src={displayImages[mainImageIdx]}
+                src={brokenImages[displayImages[mainImageIdx]] ? FALLBACK_IMAGE : (displayImages[mainImageIdx] || FALLBACK_IMAGE)}
                 alt={product.imageAltText ? `${product.imageAltText} View` : `${product.name} View`}
                 width={800}
                 height={800}
-                style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+                style={{ width: '100%', height: 'auto', objectFit: 'contain', ...zoomStyle }}
                 priority
+                onError={() => handleImageError(displayImages[mainImageIdx])}
               />
             </div>
             {!isZooming && (
@@ -298,16 +337,25 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
                 <ZoomIcon /> Roll over image to magnify
               </div>
             )}
+            {!isZooming && (
+              <button 
+                onClick={handleDownloadImage} 
+                className={styles.imageDownloadBtn} 
+                title="Download Image"
+              >
+                <DownloadIcon />
+              </button>
+            )}
           </div>
 
           {/* Thumbnail Carousel */}
           {displayImages.length > 1 && (
             <div style={{ paddingBottom: '12px' }}>
               <DragCarousel itemGap={12} showArrows={true} arrowSize={32}>
-                {displayImages.map((img, i) => (
+                {displayImages.map((img, idx) => (
                   <div 
-                    key={i} 
-                    onClick={() => setMainImageIdx(i)}
+                    key={idx} 
+                    onClick={() => setMainImageIdx(idx)}
                     style={{ 
                       flexShrink: 0, 
                       width: '100px', 
@@ -315,19 +363,20 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
                       borderRadius: '8px', 
                       overflow: 'hidden',
                       cursor: 'pointer',
-                      border: mainImageIdx === i ? '2px solid var(--accent)' : '2px solid transparent',
-                      opacity: mainImageIdx === i ? 1 : 0.6,
+                      border: mainImageIdx === idx ? '2px solid var(--accent)' : '2px solid transparent',
+                      opacity: mainImageIdx === idx ? 1 : 0.6,
                       transition: 'all 0.2s ease',
                       background: 'var(--bg-surface)'
                     }}
                   >
-                    <Image 
-                      src={img} 
-                      alt={`Thumbnail ${i+1}`} 
-                      width={100} 
-                      height={100} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    />
+                    <Image
+                  src={brokenImages[img] ? FALLBACK_IMAGE : (img || FALLBACK_IMAGE)}
+                  alt={`${product.name} thumbnail ${idx + 1}`}
+                  width={100}
+                  height={100}
+                  className={styles.thumbnailImage}
+                  onError={() => handleImageError(img)}
+                />
                   </div>
                 ))}
               </DragCarousel>
