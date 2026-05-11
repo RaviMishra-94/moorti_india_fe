@@ -1,8 +1,21 @@
 'use client';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import styles from './WhatsAppWidget.module.css';
 
 export default function WhatsAppWidget() {
-  const defaultMessage = encodeURIComponent("Hi Moorti India, I would like to know more about your marble statues.");
+  const pathname = usePathname();
+  const [pageUrl, setPageUrl] = useState('');
+
+  useEffect(() => {
+    setPageUrl(window.location.href);
+  }, [pathname]);
+
+  let text = "Hi Moorti India, I would like to know more about your marble statues.";
+  if (pageUrl) {
+    text += `\n\nI am currently looking at:\n${pageUrl}`;
+  }
+  const defaultMessage = encodeURIComponent(text);
   
   return (
     <a

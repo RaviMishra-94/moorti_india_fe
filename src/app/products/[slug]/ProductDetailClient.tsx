@@ -249,8 +249,8 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
 
   const handleWhatsappClick = () => {
     // Extract phone from socialLinks.whatsapp (strip https://wa.me/)
-    const phone = socialLinks.whatsapp.split('/').pop() || "919958476169"; 
-    const message = `Hi, I am interested in ${product.name} (${product.slug}). Could you please guide me?`;
+    const phone = socialLinks.whatsapp.split('/').pop() || "917073333202"; 
+    const message = `Hi, I am interested in ${product.name} (${product.slug}). Could you please guide me?\n\nI am currently looking at:\n${window.location.href}`;
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
