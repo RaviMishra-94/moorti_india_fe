@@ -80,6 +80,8 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   // Polling interval refs so we can clear them on unmount
   const pollTimers = useRef<Record<string, ReturnType<typeof setInterval>>>({});
 
+  const [aiDisabled, setAiDisabled] = useState(false);
+
   const [availableTags, setAvailableTags] = useState<string[]>([
     'Bestseller', 'New Arrival', 'Temple Grade', 'Premium', 'Limited Edition', 'Customizable'
   ]);
@@ -175,8 +177,13 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     }
   };
 
-  // ── Cleanup polling timers on unmount ─────────────────────────────────
+  // ── Cleanup polling timers on unmount & fetch config ─────────────────
   useEffect(() => {
+    fetch(`${apiUrl}/api/uploads/config`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => res.json())
+      .then(data => setAiDisabled(data.ai_disabled))
+      .catch(() => {});
+
     const timers = pollTimers.current;
     return () => { Object.values(timers).forEach(clearInterval); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -614,9 +621,22 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           {/* ── Product Images ──────────────────────────────────── */}
           <div className={`${styles.formGridFull}`}>
             <div className={styles.formSectionTitle} style={{ margin: '0 0 6px' }}>Product Images</div>
-            <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-              💡 Background can be changed anytime — even after saving — using the <strong style={{ color: '#d4a05a' }}>🎨 Change BG</strong> button on each image.
-            </div>
+            
+            {aiDisabled ? (
+              <div style={{ background: 'rgba(255, 60, 60, 0.1)', border: '1px solid rgba(255, 60, 60, 0.3)', padding: '12px 16px', borderRadius: 8, marginBottom: 16, display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+                <div>
+                  <div style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: 4 }}>AI Background Enhancement is Disabled</div>
+                  <div style={{ color: '#ccc', fontSize: '0.8rem', lineHeight: 1.4 }}>
+                    To change backgrounds on this server, you must upload a <strong>pre-processed transparent PNG</strong>. Uploading standard JPGs will not automatically remove the background.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+                💡 Background can be changed anytime — even after saving — using the <strong style={{ color: '#d4a05a' }}>🎨 Change BG</strong> button on each image.
+              </div>
+            )}
 
             {/* Background Selector Panel */}
             {bgSelectorTarget && (

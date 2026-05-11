@@ -75,8 +75,15 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
     }));
   };
 
-  // ── Cleanup polling timers on unmount ──────────────────────────────────
+  const [aiDisabled, setAiDisabled] = useState(false);
+
+  // ── Cleanup polling timers on unmount & fetch config ──────────────────
   useEffect(() => {
+    fetch(`${apiUrl}/api/uploads/config`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(res => res.json())
+      .then(data => setAiDisabled(data.ai_disabled))
+      .catch(() => {});
+
     const timers = pollTimers.current;
     return () => { Object.values(timers).forEach(clearInterval); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -396,6 +403,19 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
           {/* ── Image Upload ──────────────────────────────────── */}
           <div className={`${styles.formGridFull}`}>
             <div className={styles.formSectionTitle} style={{ margin: '0 0 12px' }}>Category Image</div>
+            
+            {aiDisabled && (
+              <div style={{ background: 'rgba(255, 60, 60, 0.1)', border: '1px solid rgba(255, 60, 60, 0.3)', padding: '12px 16px', borderRadius: 8, marginBottom: 16, display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                <span style={{ fontSize: '1.2rem' }}>⚠️</span>
+                <div>
+                  <div style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: 4 }}>AI Background Enhancement is Disabled</div>
+                  <div style={{ color: '#ccc', fontSize: '0.8rem', lineHeight: 1.4 }}>
+                    To change backgrounds on this server, you must upload a <strong>pre-processed transparent PNG</strong>. Uploading standard JPGs will not automatically remove the background.
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div
               className={`${styles.uploadZone} ${isDragging ? styles.uploadZoneDragging : ''}`}
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
