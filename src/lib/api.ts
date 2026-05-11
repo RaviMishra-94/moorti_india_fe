@@ -72,6 +72,7 @@ function normaliseProduct(raw: any): Product {
     tag: raw.tag ?? undefined,
     sizes: raw.sizes ?? undefined,
     finish: raw.finish ?? undefined,
+    keyFeatures: raw.key_features ?? undefined,
   };
 }
 

@@ -415,6 +415,17 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
           <h1 className={styles.title}>{product.name}</h1>
           <p className={styles.shortDesc}>{product.description || product.shortDesc}</p>
 
+          {product.keyFeatures && product.keyFeatures.length > 0 && (
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {product.keyFeatures.map((feat, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: '0.88rem', color: '#ddd', lineHeight: 1.5 }}>
+                  <span style={{ color: 'var(--gold, #d4a05a)', fontWeight: 'bold', flexShrink: 0, marginTop: 1 }}>•</span>
+                  <span>{feat}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <div className={styles.decisionCtaBox}>
             <h3 className={styles.decisionTitle}>Not sure what size fits your space?</h3>
             <p className={styles.decisionText}>Need Help Choosing the Right Idol? We’ll help you choose the perfect one.</p>

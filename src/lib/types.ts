@@ -22,6 +22,7 @@ export interface Product {
 
   description: string;
   shortDesc: string;
+  keyFeatures?: string[];
   
   // Review / Testimonial
   useDefaultTestimonial?: boolean;

@@ -26,6 +26,7 @@ interface ProductFormData {
   why_choose_us: string;
   description: string;
   short_desc: string;
+  key_features: string[];
   use_default_tab_content: boolean;
   use_default_testimonial: boolean;
   testimonial_stars: number;
@@ -98,7 +99,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     fg_image: '', fg_images: [],
     god_name: '', height: '', base_width_depth: '', weight: '',
     material: '', painting: '', shipping_info: '', product_care: '',
-    why_choose_us: '', description: '', short_desc: '', tag: '',
+    why_choose_us: '', description: '', short_desc: '', key_features: [], tag: '',
     use_default_tab_content: true,
     use_default_testimonial: true, testimonial_stars: 5, testimonial_text: '', testimonial_author: '',
     is_featured: false, is_trending: false,
@@ -114,6 +115,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
           if (k === 'images') return [k, []];
           if (k === 'fg_images') return [k, []];
           if (k === 'fg_image') return [k, ''];
+          if (k === 'key_features') return [k, []];
           if (k.startsWith('is_')) return [k, false];
           return [k, ''];
         }
@@ -616,6 +618,46 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
               onChange={handleChange} className={styles.formTextarea}
               placeholder="Detailed product description shown in the Product Details tab" required
               style={{ minHeight: 110 }} />
+          </div>
+
+          {/* ── Key Features ────────────────────────────────── */}
+          <div className={styles.formGridFull}>
+            <label className={styles.formLabel}>Key Features <span style={{ color: '#666', fontWeight: 400, fontSize: '0.78rem' }}>(optional — shown as bullet points)</span></label>
+            {(form.key_features || []).map((feat, idx) => (
+              <div key={idx} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+                <span style={{ color: '#d4a05a', flexShrink: 0 }}>•</span>
+                <input
+                  type="text"
+                  value={feat}
+                  onChange={e => {
+                    const updated = [...(form.key_features || [])];
+                    updated[idx] = e.target.value;
+                    setForm(prev => ({ ...prev, key_features: updated }));
+                  }}
+                  className={styles.formInput}
+                  placeholder={`Feature ${idx + 1}`}
+                  style={{ flex: 1 }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setForm(prev => ({ ...prev, key_features: (prev.key_features || []).filter((_, i) => i !== idx) }))}
+                  style={{ background: 'rgba(255,60,60,0.1)', border: '1px solid rgba(255,60,60,0.25)', color: '#ff6b6b', borderRadius: 6, padding: '6px 10px', cursor: 'pointer', fontSize: '0.85rem', flexShrink: 0, transition: 'background 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,60,60,0.2)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,60,60,0.1)')}
+                  title="Remove"
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setForm(prev => ({ ...prev, key_features: [...(prev.key_features || []), ''] }))}
+              className={styles.btnSecondary}
+              style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', width: 'fit-content', fontSize: '0.82rem' }}
+            >
+              + Add Feature
+            </button>
           </div>
 
           {/* ── Product Images ──────────────────────────────────── */}
