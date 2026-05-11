@@ -73,6 +73,9 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const [bgSelectorTarget, setBgSelectorTarget] = useState<{ imgUrl: string; fgUrl: string } | null>(null);
   const [bgOptions, setBgOptions] = useState<BgOption[]>([]);
   const [applyingBg, setApplyingBg] = useState(false);
+  const [uploadingCustomBg, setUploadingCustomBg] = useState(false);
+  const customBgInputRef = useRef<HTMLInputElement>(null);
+  const [customBgOptions, setCustomBgOptions] = useState<{ url: string; label: string }[]>([]);
 
   const [availableTags, setAvailableTags] = useState<string[]>([
     'Bestseller', 'New Arrival', 'Temple Grade', 'Premium', 'Limited Edition', 'Customizable'
@@ -268,13 +271,65 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   const openBgSelector = async (imgUrl: string) => {
     const fgUrl = fgMappings[imgUrl] || (form.image === imgUrl ? form.fg_image : '')
       || (form.fg_images || [])[(form.images || []).indexOf(imgUrl)] || '';
-    if (!fgUrl) return; // no fg PNG — button shouldn't have been visible anyway
+    if (!fgUrl) return;
     setBgSelectorTarget({ imgUrl, fgUrl });
+    // Fetch AI backgrounds (once)
     if (bgOptions.length === 0) {
       const res = await fetch(`${apiUrl}/api/uploads/backgrounds`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setBgOptions(await res.json());
+    }
+    // Always refresh custom backgrounds from server (persisted)
+    const customRes = await fetch(`${apiUrl}/api/uploads/custom-backgrounds`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (customRes.ok) setCustomBgOptions(await customRes.json());
+  };
+
+  const handleCustomBgUpload = async (file: File) => {
+    if (!bgSelectorTarget) return;
+    setUploadingCustomBg(true);
+    try {
+      // Step 1: upload bg image
+      const fd = new FormData();
+      fd.append('file', file);
+      const uploadRes = await fetch(`${apiUrl}/api/uploads/upload-bg`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!uploadRes.ok) throw new Error(await uploadRes.text());
+      const { bg_url, warning } = await uploadRes.json();
+      if (warning) showToast(`⚠️ ${warning}`, 'error');
+
+      // Step 2: composite with current fg
+      const applyRes = await fetch(`${apiUrl}/api/uploads/apply-bg`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ fg_url: bgSelectorTarget.fgUrl, bg_url }),
+      });
+      if (!applyRes.ok) throw new Error(await applyRes.text());
+      const data = await applyRes.json();
+      const newUrl = data.enhanced_url;
+      const oldUrl = bgSelectorTarget.imgUrl;
+      setForm(prev => ({
+        ...prev,
+        image: prev.image === oldUrl ? newUrl : prev.image,
+        images: (prev.images || []).map(u => u === oldUrl ? newUrl : u),
+      }));
+      setFgMappings(prev => ({ ...prev, [newUrl]: bgSelectorTarget.fgUrl }));
+      const originalUrl = enhancedMappings[oldUrl];
+      if (originalUrl) setEnhancedMappings(prev => ({ ...prev, [newUrl]: originalUrl }));
+      setBgSelectorTarget(prev => prev ? { ...prev, imgUrl: newUrl } : null);
+      // Add to custom bg grid
+      const label = file.name.replace(/\.[^.]+$/, '') || 'Custom';
+      setCustomBgOptions(prev => [...prev.filter(b => b.url !== bg_url), { url: bg_url, label }]);
+      showToast('Custom background applied!', 'success');
+    } catch (e) {
+      showToast(`Custom BG failed: ${e instanceof Error ? e.message : e}`, 'error');
+    } finally {
+      setUploadingCustomBg(false);
     }
   };
 
@@ -296,21 +351,59 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
         image: prev.image === oldUrl ? newUrl : prev.image,
         images: (prev.images || []).map(u => u === oldUrl ? newUrl : u),
       }));
-      // Carry the fg mapping to the new URL
       setFgMappings(prev => ({ ...prev, [newUrl]: bgSelectorTarget.fgUrl }));
-      // Carry the original-photo mapping to the new URL so "Use Original Photo" keeps working
-      // regardless of how many BG swaps happen without saving
       const originalUrl = enhancedMappings[oldUrl];
-      if (originalUrl) {
-        setEnhancedMappings(prev => ({ ...prev, [newUrl]: originalUrl }));
-      }
-      // Keep the selector open so the admin can try other backgrounds — just update the target URL
+      if (originalUrl) setEnhancedMappings(prev => ({ ...prev, [newUrl]: originalUrl }));
       setBgSelectorTarget(prev => prev ? { ...prev, imgUrl: newUrl } : null);
       showToast('Background applied! Pick another or close the panel.', 'success');
     } catch (e) {
       showToast(`Failed to apply background: ${e instanceof Error ? e.message : e}`, 'error');
     } finally {
       setApplyingBg(false);
+    }
+  };
+
+  const applyCustomBg = async (bgUrl: string) => {
+    if (!bgSelectorTarget || applyingBg || uploadingCustomBg) return;
+    setApplyingBg(true);
+    try {
+      const res = await fetch(`${apiUrl}/api/uploads/apply-bg`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ fg_url: bgSelectorTarget.fgUrl, bg_url: bgUrl }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const newUrl = data.enhanced_url;
+      const oldUrl = bgSelectorTarget.imgUrl;
+      setForm(prev => ({
+        ...prev,
+        image: prev.image === oldUrl ? newUrl : prev.image,
+        images: (prev.images || []).map(u => u === oldUrl ? newUrl : u),
+      }));
+      setFgMappings(prev => ({ ...prev, [newUrl]: bgSelectorTarget.fgUrl }));
+      const originalUrl = enhancedMappings[oldUrl];
+      if (originalUrl) setEnhancedMappings(prev => ({ ...prev, [newUrl]: originalUrl }));
+      setBgSelectorTarget(prev => prev ? { ...prev, imgUrl: newUrl } : null);
+      showToast('Custom background applied! Pick another or close the panel.', 'success');
+    } catch (e) {
+      showToast(`Custom BG failed: ${e instanceof Error ? e.message : e}`, 'error');
+    } finally {
+      setApplyingBg(false);
+    }
+  };
+
+  const deleteCustomBg = async (filename: string) => {
+    try {
+      const res = await fetch(`${apiUrl}/api/uploads/custom-bg/${filename}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      setCustomBgOptions(prev => prev.filter(b => b.filename !== filename));
+      showToast('Custom background deleted.', 'success');
+    } catch (e) {
+      showToast(`Delete failed: ${e instanceof Error ? e.message : e}`, 'error');
     }
   };
 
@@ -483,7 +576,71 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
                 )}
 
                 {/* ── BG Options ───────────────────────────── */}
-                <div style={{ fontSize: '0.72rem', color: '#888', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Backgrounds</div>
+                {/* ── BG Options header row ── */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <div style={{ fontSize: '0.72rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Backgrounds</div>
+                  <button
+                    type="button"
+                    disabled={applyingBg || uploadingCustomBg}
+                    onClick={() => customBgInputRef.current?.click()}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      background: 'rgba(255,255,255,0.07)', border: '1px solid #555',
+                      color: '#ccc', borderRadius: 6, padding: '5px 10px',
+                      cursor: (applyingBg || uploadingCustomBg) ? 'not-allowed' : 'pointer',
+                      fontSize: '0.73rem', fontWeight: 'bold',
+                      opacity: (applyingBg || uploadingCustomBg) ? 0.5 : 1,
+                    }}
+                    title="JPEG, PNG or WebP · max 20 MB · min 800×800px recommended"
+                  >
+                    {uploadingCustomBg ? '⏳ Uploading…' : '📁 Upload Custom BG'}
+                  </button>
+                  <input
+                    ref={customBgInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    style={{ display: 'none' }}
+                    onChange={e => { const f = e.target.files?.[0]; if (f) { handleCustomBgUpload(f); e.target.value = ''; } }}
+                  />
+                </div>
+                {/* ── Custom Uploaded BGs ──────────────────── */}
+                {customBgOptions.length > 0 && (
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontSize: '0.72rem', color: '#888', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Custom Backgrounds</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 10 }}>
+                      {customBgOptions.map(bg => (
+                        <div key={bg.url} style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', border: '2px solid transparent', transition: 'border-color 0.15s' }}
+                          onMouseEnter={e => (e.currentTarget.style.borderColor = '#d4a05a')}
+                          onMouseLeave={e => (e.currentTarget.style.borderColor = 'transparent')}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`${apiUrl}${bg.url}`}
+                            alt={bg.label}
+                            onClick={() => applyCustomBg(bg.url)}
+                            style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', display: 'block', cursor: (applyingBg || uploadingCustomBg) ? 'not-allowed' : 'pointer' }}
+                          />
+                          <div style={{ fontSize: '0.65rem', color: '#ccc', padding: '4px 2px', textAlign: 'center', lineHeight: 1.2, background: '#1a1511' }}>{bg.label}</div>
+                          {/* Delete button — only on custom BGs */}
+                          <button
+                            type="button"
+                            onClick={e => { e.stopPropagation(); deleteCustomBg(bg.filename); }}
+                            style={{
+                              position: 'absolute', top: 4, right: 4,
+                              background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,255,255,0.15)',
+                              borderRadius: '50%', width: 22, height: 22,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              cursor: 'pointer', color: '#ff6b6b', fontSize: '11px',
+                            }}
+                            title="Delete this custom background"
+                          >🗑</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── AI Backgrounds ───────────────────────── */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 10 }}>
                   {bgOptions.filter(b => b.available).map(bg => (
                     <button
