@@ -102,35 +102,41 @@
 }
 
 .tag {
-  background: var(--gold-dim);
+  background: var(--bg-surface);
   color: var(--gold);
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 1px solid rgba(200, 82, 28, 0.2);
+  letter-spacing: 0.08em;
+  border: 1px solid var(--gold);
+  box-shadow: 0 2px 8px rgba(200, 82, 28, 0.1);
 }
 
 .floatingBanner {
   position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #111;
-  color: white;
+  top: 100px;
+  z-index: 90;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--text-primary);
   display: flex;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-6);
-  border-radius: 8px;
-  margin-bottom: var(--space-8);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: var(--space-4) var(--space-8);
+  border-radius: 12px;
+  border: 1px solid var(--border-medium);
+  margin-bottom: var(--space-10);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
 }
 
 .bannerItem {
-  font-size: 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
 }
@@ -426,8 +432,8 @@
 
   .floatingBanner {
     flex-direction: column;
-    gap: 8px;
-    padding: var(--space-4);
+    gap: 12px;
+    padding: var(--space-5);
   }
 
   .productGrid {

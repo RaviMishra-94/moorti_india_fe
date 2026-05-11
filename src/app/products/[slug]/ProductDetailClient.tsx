@@ -38,6 +38,12 @@ const InstagramIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill
 const TwitterIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>;
 const YoutubeIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>;
 
+const DiamondIcon = () => (
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)" style={{marginRight: 8, flexShrink: 0}}>
+    <path d="M12 2L2 12l10 10 10-10L12 2z" />
+  </svg>
+);
+
 interface Props {
   product: Product;
   clientStories?: any[];
@@ -150,10 +156,10 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
       
       {/* Floating Banner */}
       <div className={styles.floatingBanner}>
-        <div className={styles.bannerItem}>✓ Premium Vietnam / Makrana marble</div>
-        <div className={styles.bannerItem}>✓ Handcrafted by artisans</div>
-        <div className={styles.bannerItem}>✓ Safe delivery across India</div>
-        <div className={styles.bannerItem}>✓ 5000+ happy homes</div>
+        <div className={styles.bannerItem}><DiamondIcon /> Premium Vietnam / Makrana marble</div>
+        <div className={styles.bannerItem}><DiamondIcon /> Handcrafted by artisans</div>
+        <div className={styles.bannerItem}><DiamondIcon /> Safe delivery across India</div>
+        <div className={styles.bannerItem}><DiamondIcon /> 5000+ happy homes</div>
       </div>
 
       <div className={styles.productGrid}>
@@ -287,46 +293,50 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
             </div>
           </div>
 
-          <h2 className={styles.detailsHeader}>Specifications</h2>
-          <div className={styles.detailsTable}>
-            {product.height && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Height :</span>
-                <span className={styles.detailsValue}>{product.height}</span>
+          {false && (
+            <>
+              <h2 className={styles.detailsHeader}>Specifications</h2>
+              <div className={styles.detailsTable}>
+                {product.height && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Height :</span>
+                    <span className={styles.detailsValue}>{product.height}</span>
+                  </div>
+                )}
+                {product.weight && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Weight :</span>
+                    <span className={styles.detailsValue}>{product.weight}</span>
+                  </div>
+                )}
+                {product.material && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Material :</span>
+                    <span className={styles.detailsValue}>{product.material}</span>
+                  </div>
+                )}
+                {product.finish && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Finish :</span>
+                    <span className={styles.detailsValue}>{product.finish}</span>
+                  </div>
+                )}
+                {product.color && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Color :</span>
+                    <span className={styles.detailsValue}>{product.color}</span>
+                  </div>
+                )}
+                {/* Fallbacks for older data structure */}
+                {product.painting && !product.finish && (
+                  <div className={styles.detailsRow}>
+                    <span className={styles.detailsLabel}>Painting :</span>
+                    <span className={styles.detailsValue}>{product.painting}</span>
+                  </div>
+                )}
               </div>
-            )}
-            {product.weight && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Weight :</span>
-                <span className={styles.detailsValue}>{product.weight}</span>
-              </div>
-            )}
-            {product.material && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Material :</span>
-                <span className={styles.detailsValue}>{product.material}</span>
-              </div>
-            )}
-            {product.finish && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Finish :</span>
-                <span className={styles.detailsValue}>{product.finish}</span>
-              </div>
-            )}
-            {product.color && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Color :</span>
-                <span className={styles.detailsValue}>{product.color}</span>
-              </div>
-            )}
-            {/* Fallbacks for older data structure */}
-            {product.painting && !product.finish && (
-              <div className={styles.detailsRow}>
-                <span className={styles.detailsLabel}>Painting :</span>
-                <span className={styles.detailsValue}>{product.painting}</span>
-              </div>
-            )}
-          </div>
+            </>
+          )}
 
           <div className={styles.socialRow}>
             <span className={styles.socialLabel}>Connect & Share:</span>
