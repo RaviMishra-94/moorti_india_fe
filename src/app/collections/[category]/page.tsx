@@ -8,12 +8,25 @@ interface Props {
   params: Promise<{ category: string }>;
 }
 
+const BASE_URL = 'https://moortiindia.com.au';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
   const cat = await getCategoryBySlug(category);
+  const title = cat ? `${cat.name} Marble Statues — Handcrafted in Jaipur` : 'Collection — Moorti India';
+  const description = cat?.description ?? `Shop our collection of handcrafted ${category} marble statues from Jaipur. Premium Makrana marble, custom sizes, worldwide shipping.`;
+  const imageUrl = cat?.image ? (cat.image.startsWith('http') ? cat.image : `${BASE_URL}${cat.image}`) : `${BASE_URL}/images/og-image.jpg`;
+
   return {
-    title: cat ? `${cat.name} — Moorti India` : 'Collection — Moorti India',
-    description: cat?.description ?? 'Handcrafted marble statues from Jaipur.',
+    title,
+    description,
+    alternates: { canonical: `${BASE_URL}/collections/${category}` },
+    openGraph: {
+      title,
+      description,
+      images: [{ url: imageUrl, alt: title }],
+      url: `${BASE_URL}/collections/${category}`,
+    },
   };
 }
 
