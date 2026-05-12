@@ -7,7 +7,7 @@ const API_URL = process.env.ADMIN_API_URL || process.env.NEXT_PUBLIC_API_URL || 
 export default async function EditClientStoryPage({ params }: { params: { id: string } }) {
   const { id } = await params;
   const cookieStore = await cookies();
-  const token = cookieStore.get('moorti_admin_token')?.value || '';
+  const token = cookieStore.get('admin_token')?.value || '';
   
   if (id === 'new') {
     return (

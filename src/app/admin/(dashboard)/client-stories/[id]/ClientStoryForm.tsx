@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from '../../../admin.module.css';
@@ -14,6 +14,8 @@ export default function ClientStoryForm({ initialData = null, token = '' }: { in
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!initialData;
 
   const [formData, setFormData] = useState({
@@ -109,36 +111,50 @@ export default function ClientStoryForm({ initialData = null, token = '' }: { in
             <label className={styles.formLabel}>Idol Image</label>
             <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
               {formData.image && (
-                <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 8, overflow: 'hidden', border: '1px solid #333' }}>
+                <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 8, overflow: 'hidden', border: '1px solid #333', flexShrink: 0 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`${API_URL}${formData.image}`} alt="Idol" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={formData.image.startsWith('http') ? formData.image : `${API_URL}${formData.image}`} alt="Idol" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <button
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, image: '' }))}
-                    style={{
-                      position: 'absolute', top: 4, right: 4,
-                      background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,255,255,0.15)',
-                      borderRadius: '50%', width: 22, height: 22,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'pointer', color: '#ff6b6b', fontSize: '11px',
-                    }}
+                    style={{ position: 'absolute', top: 4, right: 4, background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%', width: 22, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#ff6b6b', fontSize: '11px' }}
                     title="Remove image"
                   >🗑</button>
                 </div>
               )}
-              <div style={{ flex: 1 }}>
-                <input 
-                  type="file" 
+              <div
+                className={`${styles.uploadZone} ${isDragging ? styles.uploadZoneDragging : ''}`}
+                style={{ flex: 1, padding: '18px 14px', minHeight: 90 }}
+                onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
+                onDragLeave={() => setIsDragging(false)}
+                onDrop={e => {
+                  e.preventDefault();
+                  setIsDragging(false);
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) uploadFile(file);
+                }}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
                   accept="image/jpeg,image/png,image/webp"
+                  style={{ display: 'none' }}
                   onChange={e => {
                     const file = e.target.files?.[0];
                     if (file) uploadFile(file);
                     e.target.value = '';
                   }}
                   disabled={uploadingImage}
-                  style={{ display: 'block', marginBottom: 8, color: '#ccc', fontSize: '0.9rem' }}
                 />
-                {uploadingImage && <div style={{ fontSize: '0.85rem', color: '#888' }}>Uploading...</div>}
+                {uploadingImage ? (
+                  <div style={{ color: '#d4a05a', fontSize: '0.82rem' }}>⏳ Uploading…</div>
+                ) : (
+                  <div className={styles.uploadZoneText}>
+                    📷 Drag &amp; drop or <span style={{ color: '#d4a05a', textDecoration: 'underline' }}>click to browse</span>
+                    <div style={{ fontSize: '0.72rem', marginTop: 4, color: '#555' }}>JPEG, PNG, WebP</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
