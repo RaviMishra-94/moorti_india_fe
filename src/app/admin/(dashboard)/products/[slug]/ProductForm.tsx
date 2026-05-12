@@ -843,11 +843,13 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
                           ✕
                         </button>
 
-                        {/* Change BG — always visible for newly processed images */}
-                        <button type="button" onClick={() => openBgSelector(imgUrl)}
-                          style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.85)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.75rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
-                          🎨 Change BG
-                        </button>
+                        {/* Change BG — only visible when AI processing is enabled */}
+                        {!aiDisabled && (
+                          <button type="button" onClick={() => openBgSelector(imgUrl)}
+                            style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.85)', color: '#d4a05a', border: '1px solid #d4a05a', borderRadius: '5px', padding: '6px 12px', cursor: 'pointer', fontSize: '0.75rem', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
+                            🎨 Change BG
+                          </button>
+                        )}
 
                         {/* Set Main Button */}
                         {!isMain && (

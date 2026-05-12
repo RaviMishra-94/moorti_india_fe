@@ -439,7 +439,7 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
                           ✨ Toggle BG
                         </button>
                       )}
-                      {(fgMappings[imagePreviewSrc] || form.fg_image) && (
+                      {!aiDisabled && (fgMappings[imagePreviewSrc] || form.fg_image) && (
                         <button type="button" onClick={(e) => { e.stopPropagation(); openBgSelector(imagePreviewSrc); }}
                           style={{ background: 'rgba(212, 160, 90, 0.95)', color: '#111', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
                           🎨 Change BG
