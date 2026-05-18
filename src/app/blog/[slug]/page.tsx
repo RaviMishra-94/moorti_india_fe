@@ -26,9 +26,44 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return { title: 'Post Not Found | Moorti India' };
   }
 
+  const title = `${post.title} | Moorti India Journal`;
+  const description = post.excerpt || 'Read the full story on Moorti India.';
+  const baseUrl = 'https://moortiindia.com.au';
+  
+  // Construct absolute image URL if a cover image exists
+  let imageUrl = `${baseUrl}/images/og-image.jpg`; // Fallback image
+  if (post.cover_image) {
+    imageUrl = post.cover_image.startsWith('http') 
+      ? post.cover_image 
+      : `${baseUrl}${post.cover_image}`;
+  }
+
   return {
-    title: `${post.title} | Moorti India Journal`,
-    description: post.excerpt || 'Read the full story on Moorti India.',
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${baseUrl}/blog/${post.slug}`,
+      siteName: 'Moorti India',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      type: 'article',
+      publishedTime: post.published_at || post.created_at,
+      authors: [post.author || 'Moorti India'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [imageUrl],
+    },
   };
 }
 

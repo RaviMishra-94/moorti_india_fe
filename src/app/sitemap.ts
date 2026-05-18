@@ -19,8 +19,16 @@ async function getCategories() {
   } catch { return []; }
 }
 
+async function getBlogs() {
+  try {
+    const res = await fetch(`${API_URL}/api/blog?published=true`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    return await res.json();
+  } catch { return []; }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+  const [products, categories, blogs] = await Promise.all([getProducts(), getCategories(), getBlogs()]);
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
@@ -30,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${BASE_URL}/process`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE_URL}/search`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${BASE_URL}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
   ];
 
   const productPages: MetadataRoute.Sitemap = products.map((p: any) => ({
@@ -46,5 +55,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...categoryPages, ...productPages];
+  const blogPages: MetadataRoute.Sitemap = blogs.map((b: any) => ({
+    url: `${BASE_URL}/blog/${b.slug}`,
+    lastModified: new Date(b.updated_at || b.published_at || b.created_at || new Date()),
+    changeFrequency: 'monthly' as const,
+    priority: 0.75,
+  }));
+
+  return [...staticPages, ...categoryPages, ...productPages, ...blogPages];
 }

@@ -9,6 +9,8 @@ IMG_GODS = f"{ARTIFACT_DIR}/marble_gods_1779104599995.png"
 IMG_BUST = f"{ARTIFACT_DIR}/marble_bust_1779104625304.png"
 IMG_ARTISAN = f"{ARTIFACT_DIR}/artisan_crafting_1779104658101.png"
 IMG_MAKRANA = f"{ARTIFACT_DIR}/makrana_marble_1779104694591.png"
+IMG_MANDIR = f"{ARTIFACT_DIR}/home_mandir_vastu_1779107164220.png"
+IMG_BUST_NEW = f"{ARTIFACT_DIR}/custom_bust_artisan_1779107190733.png"
 
 API_BASE = "https://moortindia.api.azure.paisafintech.com"
 
@@ -142,6 +144,76 @@ def main():
 
     create_blog(token, blog1)
     create_blog(token, blog2)
+
+    # Blog 3: Home Mandir Vastu
+    blog3 = {
+        "title": "Choosing the Perfect Moorti for Your Home Mandir: Vastu Tips & Size Guide",
+        "slug": "choosing-moorti-home-mandir-vastu-guide",
+        "author": "Moorti India Artisans",
+        "excerpt": "Discover how to select the right marble moorti for your home altar. We cover Vastu Shastra placement rules, size recommendations, and why Makrana marble brings the best energy.",
+        "is_published": True,
+        "created_at": __import__('datetime').datetime.utcnow().isoformat(),
+        "tags": ["Vastu Shastra", "Home Mandir", "Ganesh Moorti", "Spiritual Decor"],
+        "content": f"""<h2>Bringing Divine Energy to Your Home</h2>
+<p>Setting up a home mandir (prayer altar) is a deeply personal and spiritual journey. The Moorti you choose becomes the energetic center of your home, radiating peace, prosperity, and protection. However, selecting the right idol involves more than just aesthetics; according to ancient Indian architectural science, Vastu Shastra, specific rules govern the placement and type of deities.</p>
+
+<h3>Vastu Shastra Tips for Placing Moortis</h3>
+<p>To maximize the positive energy in your home, keep these fundamental Vastu principles in mind:</p>
+<ul>
+    <li><strong>Direction of the Mandir:</strong> The ideal location for your home temple is the North-East corner (Ishan Kone). This direction is associated with spiritual growth and divine energy.</li>
+    <li><strong>Facing Direction:</strong> When you pray, you should ideally face East or North. Therefore, the Moorti should be placed so it faces the West or South.</li>
+    <li><strong>The Ganesha Rule:</strong> If you are installing a Lord Ganesha idol, ensure the trunk is turned to His left (Vamamukhi). A left-turning trunk represents a calm, peaceful energy ideal for a household, whereas a right-turning trunk requires strict, rigorous daily rituals usually reserved for large temples.</li>
+    <li><strong>Material Matters:</strong> Vastu heavily favors natural materials. Pure white Makrana marble is considered highly auspicious because its crystalline structure is believed to absorb and reflect positive vibrations.</li>
+</ul>
+
+<img src="{{img_mandir}}" alt="Beautiful Home Mandir with Marble Ganesha" style="max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; border: 1px solid #e0e0e0;" />
+
+<h3>Choosing the Right Size</h3>
+<p>Scale is crucial when selecting a Moorti for your home. An idol that is too large can overwhelm a small space, while one that is too small might get lost in a grand mandir.</p>
+<p>For standard home altars located in apartments or compact spaces, we recommend statues between <strong>9 inches and 15 inches</strong> in height. For dedicated pooja rooms in larger homes, <strong>18 inches to 24 inches</strong> creates a majestic, temple-like focal point.</p>
+
+<p>No matter the size, every Moorti carved at Moorti India is crafted to strict Shilpa Shastra proportions to ensure it carries the correct spiritual geometry for your home.</p>"""
+    }
+
+    # Blog 4: Custom Marble Busts
+    blog4 = {
+        "title": "The Significance of Custom Marble Busts: Honoring Loved Ones Forever",
+        "slug": "custom-marble-busts-honoring-loved-ones",
+        "author": "Moorti India Artisans",
+        "excerpt": "A photograph fades, but marble is eternal. Learn how our master artisans turn photographs into breathtaking, lifelike 3D marble busts to memorialize passed away relatives.",
+        "is_published": True,
+        "created_at": __import__('datetime').datetime.utcnow().isoformat(),
+        "tags": ["Custom Busts", "Memorial Statues", "Marble Portraits", "Family Heritage"],
+        "content": f"""<h2>A Timeless Tribute</h2>
+<p>Losing a loved one is an incredibly profound experience. While photographs and videos help preserve their memory, there is something deeply grounding about a physical, three-dimensional tribute. For centuries, kings and nobility commissioned marble busts to ensure their legacy endured. Today, we bring this timeless art form to families around the world.</p>
+
+<h3>The Journey from Photograph to Stone</h3>
+<p>Creating a highly realistic custom marble bust is the pinnacle of sculptural art. It requires not just technical skill, but the emotional intuition to capture a person's unique essence, expression, and spirit from a two-dimensional photograph.</p>
+
+<img src="{{img_bust_new}}" alt="Artisan carving a lifelike marble bust from a photograph" style="max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; border: 1px solid #e0e0e0;" />
+
+<p>Our process is highly collaborative and meticulous:</p>
+<ol>
+    <li><strong>Photographic Review:</strong> We begin by asking families for multiple photographs of the individual from various angles. The more references we have of their profile, smile, and natural posture, the better.</li>
+    <li><strong>The Clay Prototype:</strong> Before a single chisel touches stone, our master portrait sculptor creates a full-scale clay model. This allows us to share 360-degree photos and videos with the family, taking feedback and making adjustments to the jawline, eyes, or expression until it is a perfect likeness.</li>
+    <li><strong>Carving the Marble:</strong> Once the family approves the clay model, the true carving begins in premium white Makrana marble. This stone's dense, fine grain allows for the incredibly delicate carving required for realistic skin textures, hair, and clothing folds.</li>
+    <li><strong>The Final Polish:</strong> The bust is polished by hand to give the marble a soft, lifelike glow.</li>
+</ol>
+
+<h3>Why Choose Marble for a Memorial?</h3>
+<p>Unlike resin, plaster, or wood, marble is a natural stone that stands the test of time. It does not decay, warp, or fade. A marble bust is an heirloom—a permanent physical connection to an ancestor that will sit proudly in your home for generations to come, offering a serene, dignified presence.</p>"""
+    }
+
+    url_mandir = upload_image(token, IMG_MANDIR)
+    url_bust_new = upload_image(token, IMG_BUST_NEW)
+
+    blog3["cover_image"] = url_mandir
+    blog3["content"] = blog3["content"].format(img_mandir=url_mandir)
+    create_blog(token, blog3)
+
+    blog4["cover_image"] = url_bust_new
+    blog4["content"] = blog4["content"].format(img_bust_new=url_bust_new)
+    create_blog(token, blog4)
 
 if __name__ == "__main__":
     main()
