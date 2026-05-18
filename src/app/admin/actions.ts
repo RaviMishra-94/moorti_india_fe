@@ -49,3 +49,9 @@ export async function logoutAction() {
   cookieStore.delete('admin_token');
   redirect('/admin/login');
 }
+
+export async function getAdminToken() {
+  const cookieStore = await cookies();
+  return cookieStore.get('admin_token')?.value ?? '';
+}
+

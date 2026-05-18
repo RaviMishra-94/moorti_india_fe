@@ -423,6 +423,29 @@ form:has(.btnIcon) .btnIcon:hover {
   border-color: #d4a05a;
 }
 
+/* File input styling */
+.formInput[type="file"] {
+  padding: 7px 10px;
+}
+.formInput[type="file"]::file-selector-button {
+  background: #222;
+  color: #ccc;
+  border: 1px solid #333;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.formInput[type="file"]::file-selector-button:hover {
+  background: #2a2a2a;
+  border-color: #d4a05a;
+  color: #d4a05a;
+}
+
 /* Hide number input spin buttons */
 .formInput[type="number"]::-webkit-inner-spin-button,
 .formInput[type="number"]::-webkit-outer-spin-button {

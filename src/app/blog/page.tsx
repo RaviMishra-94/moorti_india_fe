@@ -74,7 +74,7 @@ export default async function BlogPage() {
                   <div className={styles.cardImgWrap}>
                     {post.cover_image ? (
                       <Image
-                        src={post.cover_image.startsWith('http') ? post.cover_image : `${API_URL}${post.cover_image}`}
+                        src={post.cover_image}
                         alt={post.title}
                         fill
                         className={styles.cardImg}
