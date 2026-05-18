@@ -1,6 +1,7 @@
+/* Page Layout */
 .page {
   min-height: 80vh;
-  padding-bottom: var(--space-16);
+  padding-bottom: 0;
   background: var(--bg-primary);
 }
 
@@ -125,4 +126,20 @@
   padding: var(--space-16) 0;
   color: var(--text-muted);
   font-style: italic;
+}
+
+.cardGlow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+  transform: scaleY(1.04) scaleX(1.02);
+  border-radius: 8px;
+  transition: opacity 0.5s ease;
+}
+
+div:hover > .cardGlow {
+  opacity: 1;
 }

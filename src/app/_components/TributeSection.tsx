@@ -37,13 +37,19 @@ const tributeFeatures = [
 
 export default function TributeSection() {
   return (
-    <section className={styles.section} id="tribute">
-      {/* Background */}
+    <section
+      className={`texture-section ${styles.section}`}
+      id="tribute"
+    >
+      {/* Original Backgrounds */}
       <div className={styles.bg} />
       <div className={styles.bgGradient} />
       <div className={styles.grain} />
 
-      <div className={`container ${styles.content}`}>
+      <div className="texture-overlay texture-lotus" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content ${styles.content}`}>
 
         {/* Header */}
         <div className={styles.header}>

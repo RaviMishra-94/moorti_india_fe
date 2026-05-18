@@ -38,19 +38,23 @@ export default async function CategoryPage({ params }: Props) {
   ]);
 
   return (
-    <div className={styles.page}>
-      {/* Breadcrumb */}
-      <div className={styles.breadcrumb}>
-        <div className="container">
-          <span className={styles.breadcrumbInner}>
-            <Link href="/">Home</Link>
-            <span>/</span>
-            <Link href="/collections">Collections</Link>
-            <span>/</span>
-            <span>{cat?.name ?? category}</span>
-          </span>
+    <div className={`texture-section ${styles.page}`}>
+      <div className="texture-overlay texture-greek-fresco" />
+      <div className="texture-vignette" />
+
+      <div className="texture-content">
+        {/* Breadcrumb */}
+        <div className={styles.breadcrumb}>
+          <div className="container">
+            <span className={styles.breadcrumbInner}>
+              <Link href="/">Home</Link>
+              <span>/</span>
+              <Link href="/collections">Collections</Link>
+              <span>/</span>
+              <span>{cat?.name ?? category}</span>
+            </span>
+          </div>
         </div>
-      </div>
 
       {/* Category Hero */}
       <div className={styles.catHero}>
@@ -119,6 +123,7 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

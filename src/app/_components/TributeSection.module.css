@@ -87,18 +87,18 @@
 }
 
 .heading {
-  color: var(--marble-white);
+  color: var(--text-primary);
   margin-top: var(--space-6);
   line-height: 1.1;
 }
 
 .headingEm {
   font-style: italic;
-  color: var(--gold-light);
+  color: var(--gold);
 }
 
 .subtitle {
-  color: rgba(253, 248, 240, 0.7);
+  color: var(--text-secondary);
   font-size: 1.05rem;
   line-height: 1.75;
   margin-top: var(--space-6);
@@ -119,11 +119,11 @@
 .card {
   border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid rgba(200, 82, 28, 0.2);
+  border: 1px solid var(--border-subtle);
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   display: flex;
   flex-direction: column;
-  background: rgba(28, 15, 5, 0.6);
+  background: var(--bg-card);
   position: relative;
 }
 
@@ -196,13 +196,13 @@
 }
 
 .cardTitle {
-  color: var(--marble-white);
+  color: var(--text-primary);
   margin-bottom: var(--space-3);
   font-size: 1.05rem;
 }
 
 .cardDesc {
-  color: rgba(253, 248, 240, 0.6);
+  color: var(--text-muted);
   font-size: 0.875rem;
   line-height: 1.7;
 }
@@ -224,8 +224,8 @@
 }
 
 .ctaSecondary {
-  color: rgba(253, 248, 240, 0.8) !important;
-  border-color: rgba(253, 248, 240, 0.25) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-medium) !important;
   font-size: 0.8rem;
 }
 
@@ -248,14 +248,14 @@
 .quoteLine {
   flex: 1;
   height: 1px;
-  background: rgba(200, 82, 28, 0.35);
+  background: var(--border-medium);
 }
 
 .quoteText {
   font-family: var(--font-display);
   font-size: 0.95rem;
   font-style: italic;
-  color: rgba(253, 248, 240, 0.45);
+  color: var(--text-muted);
   line-height: 1.6;
   text-align: center;
   flex: 3;

@@ -42,8 +42,11 @@ function AnimatedCounter({ target, suffix, duration = 2000 }: { target: number; 
 
 export default function StatsBar() {
   return (
-    <section className={styles.section}>
-      <div className="container">
+    <section className={`texture-section ${styles.section}`}>
+      <div className="texture-overlay texture-temple-mural" />
+      <div className="texture-vignette" />
+
+      <div className="container texture-content">
         <div className={styles.grid}>
           {stats.map((stat) => (
             <div key={stat.label} className={styles.stat}>

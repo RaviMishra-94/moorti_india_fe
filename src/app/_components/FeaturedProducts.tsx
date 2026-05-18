@@ -8,8 +8,11 @@ export default async function FeaturedProducts() {
   const products = allFeatured.slice(0, 6);
 
   return (
-    <section className={`section ${styles.section}`} id="featured">
-      <div className="container">
+    <section className={`texture-section section ${styles.section}`} id="featured">
+      <div className="texture-overlay texture-sandstone" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content`}>
         {/* Header */}
         <div className={styles.header}>
           <span className="label-sm section-label">Featured Works</span>

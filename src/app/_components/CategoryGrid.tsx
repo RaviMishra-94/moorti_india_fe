@@ -8,8 +8,11 @@ export default async function CategoryGrid() {
   const featured = categories.slice(0, 6);
 
   return (
-    <section className={`section ${styles.section}`} id="collections">
-      <div className="container">
+    <section className={`texture-section section ${styles.section}`} id="collections">
+      <div className="texture-overlay texture-greek-fresco" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content`}>
         {/* Header */}
         <div className={styles.header}>
           <span className="label-sm section-label">Our Collections</span>

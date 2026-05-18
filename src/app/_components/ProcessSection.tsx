@@ -4,8 +4,11 @@ import styles from './ProcessSection.module.css';
 
 export default function ProcessSection() {
   return (
-    <section className={`section-lg ${styles.section}`} id="process">
-      <div className="container">
+    <section className={`texture-section section-lg ${styles.section}`} id="process">
+      <div className="texture-overlay texture-greek-fresco" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content`}>
         <div className={styles.layout}>
 
           {/* Left — Image */}

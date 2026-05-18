@@ -113,14 +113,17 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
       </header>
 
-      <div className={styles.contentWrapper}>
+      <div className={`texture-section relative ${styles.contentWrapper}`}>
+        <div className="texture-overlay texture-lotus" />
+        <div className="texture-vignette" />
+
         <div 
-          className={styles.content}
+          className={`texture-content ${styles.content}`}
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
         
         {post.tags && post.tags.length > 0 && (
-          <div className={styles.tags}>
+          <div className={`relative z-10 ${styles.tags}`}>
             {post.tags.map((tag: string) => (
               <span key={tag} className={styles.tag}>{tag}</span>
             ))}

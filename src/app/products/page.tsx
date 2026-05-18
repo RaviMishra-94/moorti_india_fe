@@ -14,24 +14,28 @@ export default async function ProductsPage() {
   const products = await getProducts();
 
   return (
-    <div className={styles.page}>
-      {/* Page Header */}
-      <div className={styles.header}>
-        <div className="container">
-          <span className="label-sm section-label">All Sculptures</span>
-          <div className="gold-line gold-line-center" style={{ marginTop: 'var(--space-3)' }} />
-          <h1 className="display-lg" style={{ marginTop: 'var(--space-5)' }}>
-            Handcrafted Marble Sculptures
-          </h1>
-          <p className={styles.headerDesc}>
-            {products.length}+ pieces — each carved to order by master artisans in Jaipur, Rajasthan.
-          </p>
-        </div>
-      </div>
+    <div className={`texture-section ${styles.page}`}>
+      <div className="texture-overlay texture-temple-mural" />
+      <div className="texture-vignette" />
 
-      {/* Grid */}
-      <section className="section">
-        <div className="container">
+      <div className="texture-content">
+        {/* Page Header */}
+        <div className={styles.header}>
+          <div className="container">
+            <span className="label-sm section-label">All Sculptures</span>
+            <div className="gold-line gold-line-center" style={{ marginTop: 'var(--space-3)' }} />
+            <h1 className="display-lg" style={{ marginTop: 'var(--space-5)' }}>
+              Handcrafted Marble Sculptures
+            </h1>
+            <p className={styles.headerDesc}>
+              {products.length}+ pieces — each carved to order by master artisans in Jaipur, Rajasthan.
+            </p>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <section className="section">
+          <div className="container">
           <div className={styles.grid}>
             {products.map((product) => (
               <Link
@@ -79,6 +83,7 @@ export default async function ProductsPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

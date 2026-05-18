@@ -13,25 +13,29 @@ export const metadata: Metadata = {
 export default async function CollectionsPage() {
   const categories = await getCategories();
   return (
-    <div className={styles.page}>
-      {/* Page Header */}
-      <div className={styles.header}>
-        <div className="container">
-          <span className="label-sm section-label">All Collections</span>
-          <div className="gold-line" style={{ marginTop: 'var(--space-3)' }} />
-          <h1 className="display-lg" style={{ marginTop: 'var(--space-5)' }}>
-            Our Marble Sculptures
-          </h1>
-          <p className={styles.headerDesc}>
-            Over 200 handcrafted marble statues across {categories.length} collections — 
-            each piece carved to order in Jaipur, Rajasthan.
-          </p>
-        </div>
-      </div>
+    <div className={`texture-section ${styles.page}`}>
+      <div className="texture-overlay texture-greek-fresco" />
+      <div className="texture-vignette" />
 
-      {/* Grid */}
-      <section className="section">
-        <div className="container">
+      <div className="texture-content">
+        {/* Page Header */}
+        <div className={styles.header}>
+          <div className="container">
+            <span className="label-sm section-label">All Collections</span>
+            <div className="gold-line" style={{ marginTop: 'var(--space-3)' }} />
+            <h1 className="display-lg" style={{ marginTop: 'var(--space-5)' }}>
+              Our Marble Sculptures
+            </h1>
+            <p className={styles.headerDesc}>
+              Over 200 handcrafted marble statues across {categories.length} collections — 
+              each piece carved to order in Jaipur, Rajasthan.
+            </p>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <section className="section">
+          <div className="container">
           <div className={styles.grid}>
             {categories.map((cat) => (
               <Link
@@ -76,6 +80,7 @@ export default async function CollectionsPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

@@ -288,7 +288,11 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   };
 
   return (
-    <div className={styles.container}>
+    <div className="texture-section" style={{ minHeight: '100vh' }}>
+      <div className="texture-overlay texture-temple-mural" />
+      <div className="texture-vignette" />
+
+      <div className={`${styles.container} texture-content`}>
       
       {/* Toast Notification */}
       {statusMsg && (
@@ -588,6 +592,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

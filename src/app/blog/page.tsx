@@ -61,8 +61,11 @@ export default async function BlogPage() {
       </div>
 
       {/* Grid Section */}
-      <section className="section">
-        <div className="container">
+      <section className="texture-section section">
+        <div className="texture-overlay texture-lotus" />
+        <div className="texture-vignette" />
+
+        <div className="container texture-content">
           {posts.length === 0 ? (
             <div className={styles.emptyState}>
               <p>No stories published yet. Check back soon.</p>
@@ -70,37 +73,41 @@ export default async function BlogPage() {
           ) : (
             <div className={styles.grid}>
               {posts.map((post: any) => (
-                <Link key={post.id} href={`/blog/${post.slug}`} className={styles.card}>
-                  <div className={styles.cardImgWrap}>
-                    {post.cover_image ? (
-                      <Image
-                        src={post.cover_image}
-                        alt={post.title}
-                        fill
-                        className={styles.cardImg}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', background: 'var(--border-subtle)' }} />
-                    )}
-                  </div>
-                  <div className={styles.cardBody}>
-                    <div className={styles.cardMeta}>
-                      <span>{post.author}</span>
-                      {post.published_at && (
-                        <>
-                          <span>•</span>
-                          <span>{formatDate(post.published_at)}</span>
-                        </>
+                <div key={post.id} style={{ position: 'relative' }}>
+                  {/* Subtle column glow behind the card on hover */}
+                  <div className={styles.cardGlow} />
+                  <Link href={`/blog/${post.slug}`} className={styles.card}>
+                    <div className={styles.cardImgWrap}>
+                      {post.cover_image ? (
+                        <Image
+                          src={post.cover_image}
+                          alt={post.title}
+                          fill
+                          className={styles.cardImg}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', background: 'var(--border-subtle)' }} />
                       )}
                     </div>
-                    <h2 className={styles.cardTitle}>{post.title}</h2>
-                    {post.excerpt && <p className={styles.cardExcerpt}>{post.excerpt}</p>}
-                    <div className={styles.cardFooter}>
-                      Read Story <span aria-hidden="true">→</span>
+                    <div className={styles.cardBody}>
+                      <div className={styles.cardMeta}>
+                        <span>{post.author}</span>
+                        {post.published_at && (
+                          <>
+                            <span>•</span>
+                            <span>{formatDate(post.published_at)}</span>
+                          </>
+                        )}
+                      </div>
+                      <h2 className={styles.cardTitle}>{post.title}</h2>
+                      {post.excerpt && <p className={styles.cardExcerpt}>{post.excerpt}</p>}
+                      <div className={styles.cardFooter}>
+                        Read Story <span aria-hidden="true">→</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
           )}

@@ -5,9 +5,12 @@ import styles from './ContactCTA.module.css';
 
 export default function ContactCTA() {
   return (
-    <section className={styles.section} id="contact-cta">
+    <section className={`texture-section ${styles.section}`} id="contact-cta">
       <div className={styles.bg} />
-      <div className={`container ${styles.content}`}>
+      <div className="texture-overlay texture-greek-fresco" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content ${styles.content}`}>
         <div className={styles.inner}>
           <span className="label-sm section-label">Commission a Masterpiece</span>
           <div className="gold-line gold-line-center" style={{ marginTop: 'var(--space-3)' }} />

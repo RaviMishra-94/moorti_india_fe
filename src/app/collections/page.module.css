@@ -4,7 +4,7 @@
 
 /* Header */
 .header {
-  background: var(--bg-secondary);
+  background: transparent;
   border-bottom: 1px solid var(--border-subtle);
   padding: var(--space-16) 0 var(--space-12);
 }
@@ -101,7 +101,7 @@
 /* Bottom CTA */
 .ctaSection {
   padding: var(--space-16) 0;
-  background: var(--bg-surface);
+  background: transparent;
   border-top: 1px solid var(--border-subtle);
 }
 

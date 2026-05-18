@@ -21,8 +21,11 @@ export default async function TestimonialsSection() {
   const publishedStories = allStories.filter(s => s.is_published !== false); // fallback to true if undefined for legacy
 
   return (
-    <section className={`section ${styles.section}`} id="testimonials">
-      <div className="container">
+    <section className={`texture-section section ${styles.section}`} id="testimonials">
+      <div className="texture-overlay texture-lotus" />
+      <div className="texture-vignette" />
+
+      <div className={`container texture-content`}>
         {/* Header */}
         <div className={styles.header}>
           <span className="label-sm section-label">Client Stories</span>
