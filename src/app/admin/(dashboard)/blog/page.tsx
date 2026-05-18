@@ -7,6 +7,7 @@ import styles from '../../admin.module.css';
 import { IconPlus, IconEdit, IconTrash } from '../../icons';
 import { useToast } from '../../ToastProvider';
 import ConfirmModal from '../../ConfirmModal';
+import BlogListSkeleton from './loading';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -55,7 +56,7 @@ export default function BlogAdminPage() {
     }
   };
 
-  if (loading) return <div className={styles.page}>Loading...</div>;
+  if (loading) return <BlogListSkeleton />;
 
   return (
     <div>

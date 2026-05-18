@@ -10,7 +10,7 @@ IMG_BUST = f"{ARTIFACT_DIR}/marble_bust_1779104625304.png"
 IMG_ARTISAN = f"{ARTIFACT_DIR}/artisan_crafting_1779104658101.png"
 IMG_MAKRANA = f"{ARTIFACT_DIR}/makrana_marble_1779104694591.png"
 
-API_BASE = "http://localhost:8000"
+API_BASE = "https://moortindia.api.azure.paisafintech.com"
 
 def get_token():
     print("Getting admin token...")

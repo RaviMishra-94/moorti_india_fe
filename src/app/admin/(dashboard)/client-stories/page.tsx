@@ -9,6 +9,7 @@ import { IconPlus, IconEdit, IconTrash } from '../../icons';
 import { useToast } from '../../ToastProvider';
 import ConfirmModal from '../../ConfirmModal';
 import { deleteClientStoryAction, reorderClientStoriesAction } from './actions';
+import ClientStoriesListSkeleton from './loading';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -85,7 +86,7 @@ export default function ClientStoriesAdminPage() {
     }
   };
 
-  if (loading) return <div className={styles.page}>Loading...</div>;
+  if (loading) return <ClientStoriesListSkeleton />;
 
   return (
     <div>

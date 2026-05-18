@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { getAdminToken } from '../../../../actions';
 import styles from '../../../../admin.module.css';
 import { useToast } from '../../../../ToastProvider';
+import BlogFormSkeleton from './loading';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -169,7 +170,7 @@ export default function EditBlogPostPage({ params }: { params: { slug: string } 
     }
   };
 
-  if (loading) return <div className={styles.page}>Loading post...</div>;
+  if (loading) return <BlogFormSkeleton />;
 
   return (
     <div style={{ maxWidth: 900 }}>
