@@ -42,16 +42,32 @@ export default function ProcessPage() {
           <div className={styles.stepsGrid}>
             {processSteps.map((step, i) => (
               <div key={step.step} className={`${styles.stepCard} ${i % 2 === 0 ? styles.stepCardEven : ''}`}>
-                <div className={styles.stepCard__number}>
-                  <span>{String(step.step).padStart(2, '0')}</span>
+                {/* Step image */}
+                {step.image && (
+                  <div className={styles.stepCard__imgWrap}>
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      className={styles.stepCard__img}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className={styles.stepCard__imgOverlay} />
+                  </div>
+                )}
+                <div className={styles.stepCard__body}>
+                  <div className={styles.stepCard__number}>
+                    <span>{String(step.step).padStart(2, '0')}</span>
+                  </div>
+                  <div className={styles.stepCard__icon}>{step.icon}</div>
+                  <h2 className={styles.stepCard__title}>{step.title}</h2>
+                  <p className={styles.stepCard__desc}>{step.description}</p>
                 </div>
-                <div className={styles.stepCard__icon}>{step.icon}</div>
-                <h2 className={styles.stepCard__title}>{step.title}</h2>
-                <p className={styles.stepCard__desc}>{step.description}</p>
                 {i < processSteps.length - 1 && <div className={styles.stepCard__connector} />}
               </div>
             ))}
           </div>
+
         </div>
       </section>
 
@@ -98,22 +114,46 @@ export default function ProcessPage() {
           </div>
           <div className={styles.materialsGrid}>
             <div className={styles.materialCard}>
-              <div className={styles.materialIcon}>◆</div>
-              <h3 className={styles.materialName}>Makrana White Marble</h3>
-              <p className={styles.materialDesc}>
-                Quarried from Makrana, Rajasthan — the same source as the Taj Mahal. Known for its 
-                extraordinary purity, consistent white colour, and signature luminosity. The pinnacle 
-                of Indian marble.
-              </p>
+              <div className={styles.materialImgWrap}>
+                <Image
+                  src="/images/marble_makrana_white.png"
+                  alt="Makrana white marble block from Rajasthan"
+                  fill
+                  className={styles.materialImg}
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                />
+                <div className={styles.materialImgOverlay} />
+              </div>
+              <div className={styles.materialBody}>
+                <div className={styles.materialIcon}>◆</div>
+                <h3 className={styles.materialName}>Makrana White Marble</h3>
+                <p className={styles.materialDesc}>
+                  Quarried from Makrana, Rajasthan — the same source as the Taj Mahal. Known for its 
+                  extraordinary purity, consistent white colour, and signature luminosity. The pinnacle 
+                  of Indian marble.
+                </p>
+              </div>
             </div>
             <div className={styles.materialCard}>
-              <div className={styles.materialIcon}>✦</div>
-              <h3 className={styles.materialName}>Vietnam White Marble</h3>
-              <p className={styles.materialDesc}>
-                Premium Vietnam marble offers an ultra-fine grain and brilliant white finish. 
-                Excellent for smaller statues and pieces that require extremely fine detailing. 
-                Known for durability and smooth polishing qualities.
-              </p>
+              <div className={styles.materialImgWrap}>
+                <Image
+                  src="/images/marble_vietnam_white.png"
+                  alt="Polished Vietnam white marble slab with mirror finish"
+                  fill
+                  className={styles.materialImg}
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                />
+                <div className={styles.materialImgOverlay} />
+              </div>
+              <div className={styles.materialBody}>
+                <div className={styles.materialIcon}>✦</div>
+                <h3 className={styles.materialName}>Vietnam White Marble</h3>
+                <p className={styles.materialDesc}>
+                  Premium Vietnam marble offers an ultra-fine grain and brilliant white finish. 
+                  Excellent for smaller statues and pieces that require extremely fine detailing. 
+                  Known for durability and smooth polishing qualities.
+                </p>
+              </div>
             </div>
           </div>
         </div>

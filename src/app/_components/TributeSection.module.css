@@ -1,0 +1,299 @@
+/* ============================================
+   TRIBUTE SECTION — Create a Lasting Tribute
+   ============================================ */
+
+.section {
+  position: relative;
+  padding: var(--space-32) 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Deep warm saffron-to-dark background */
+.bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    #2A1305 0%,
+    #3D1C08 30%,
+    #1C0F05 65%,
+    #2E1408 100%
+  );
+  z-index: -3;
+}
+
+/* Saffron radial glow */
+.bgGradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200, 82, 28, 0.28) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 100%, rgba(200, 82, 28, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(200, 82, 28, 0.10) 0%, transparent 60%);
+  z-index: -2;
+}
+
+/* Subtle grain texture */
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  z-index: -1;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 40%, var(--gold) 60%, transparent 100%);
+  opacity: 0.5;
+}
+
+.section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 40%, var(--gold) 60%, transparent 100%);
+  opacity: 0.5;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---- Header ---- */
+.header {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  color: var(--gold) !important;
+  letter-spacing: 0.3em;
+  opacity: 0.9;
+}
+
+.heading {
+  color: var(--marble-white);
+  margin-top: var(--space-6);
+  line-height: 1.1;
+}
+
+.headingEm {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.subtitle {
+  color: rgba(253, 248, 240, 0.7);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-top: var(--space-6);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Feature Cards ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-16);
+  width: 100%;
+}
+
+.card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(200, 82, 28, 0.2);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  background: rgba(28, 15, 5, 0.6);
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(200, 82, 28, 0.55);
+  box-shadow: 0 16px 48px rgba(200, 82, 28, 0.2);
+}
+
+/* Image area */
+.cardImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.cardImage {
+  object-fit: cover;
+  object-position: center top;
+  transition: transform var(--transition-luxury);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.06);
+}
+
+.cardImageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(28, 15, 5, 0.05) 0%,
+    rgba(28, 15, 5, 0.25) 60%,
+    rgba(28, 15, 5, 0.65) 100%
+  );
+  pointer-events: none;
+}
+
+/* Gold top border on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 2;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Content below image */
+.cardContent {
+  padding: var(--space-6);
+  text-align: left;
+  flex: 1;
+}
+
+.cardIcon {
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin-bottom: var(--space-3);
+  display: block;
+}
+
+.cardTitle {
+  color: var(--marble-white);
+  margin-bottom: var(--space-3);
+  font-size: 1.05rem;
+}
+
+.cardDesc {
+  color: rgba(253, 248, 240, 0.6);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* ---- CTA Buttons ---- */
+.cta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-top: var(--space-12);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ctaBtn {
+  padding: var(--space-5) var(--space-12);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+}
+
+.ctaSecondary {
+  color: rgba(253, 248, 240, 0.8) !important;
+  border-color: rgba(253, 248, 240, 0.25) !important;
+  font-size: 0.8rem;
+}
+
+.ctaSecondary:hover {
+  color: var(--gold) !important;
+  border-color: var(--gold) !important;
+  background: transparent !important;
+}
+
+/* ---- Bottom Quote ---- */
+.quote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-16);
+  width: 100%;
+  max-width: 700px;
+}
+
+.quoteLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(200, 82, 28, 0.35);
+}
+
+.quoteText {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(253, 248, 240, 0.45);
+  line-height: 1.6;
+  text-align: center;
+  flex: 3;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: var(--space-20) 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .cta {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .quote {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .quoteLine {
+    width: 60px;
+    height: 1px;
+    flex: none;
+  }
+}

@@ -146,7 +146,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
                 <li><Link href="/about" className={styles.footerLink}>Our Story</Link></li>
                 <li><Link href="/process" className={styles.footerLink}>Craftsmanship</Link></li>
                 <li><Link href="/contact" className={styles.footerLink}>Contact Us</Link></li>
-                <li><a href="https://www.moortiindia.com.au/blogs" className={styles.footerLink}>Blog</a></li>
+                <li><Link href="/blog" className={styles.footerLink}>Blog</Link></li>
               </ul>
             </div>
 

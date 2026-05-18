@@ -41,10 +41,9 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: var(--space-8);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
   transition: all var(--transition-base);
   position: relative;
 }
@@ -53,6 +52,45 @@
   border-color: var(--border-medium);
   transform: translateY(-4px);
   box-shadow: var(--shadow-gold);
+}
+
+/* Image at top of card */
+.stepCard__imgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.stepCard__img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-luxury);
+}
+
+.stepCard:hover .stepCard__img {
+  transform: scale(1.06);
+}
+
+.stepCard__imgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(28, 15, 5, 0.0) 40%,
+    rgba(28, 15, 5, 0.45) 100%
+  );
+  pointer-events: none;
+}
+
+/* Text body below image */
+.stepCard__body {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
 }
 
 .stepCard__number {
@@ -119,13 +157,46 @@
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: var(--space-8);
+  overflow: hidden;
   transition: all var(--transition-base);
 }
 
 .materialCard:hover {
   border-color: var(--border-medium);
   box-shadow: var(--shadow-gold);
+  transform: translateY(-4px);
+}
+
+.materialImgWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+}
+
+.materialImg {
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-luxury);
+}
+
+.materialCard:hover .materialImg {
+  transform: scale(1.05);
+}
+
+.materialImgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(28, 15, 5, 0.0) 50%,
+    rgba(28, 15, 5, 0.35) 100%
+  );
+  pointer-events: none;
+}
+
+.materialBody {
+  padding: var(--space-8);
 }
 
 .materialIcon {
