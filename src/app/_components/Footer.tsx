@@ -40,15 +40,17 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
   const footerCategories = categories.slice(0, 8);
 
   return (
-    <footer className={styles.footer}>
+    <footer className={`texture-section ${styles.footer}`}>
+      <div className="texture-overlay texture-correspondence" style={{ opacity: 0.04, mixBlendMode: 'multiply' }} />
+      <div className="texture-vignette" />
       {/* Newsletter */}
-      <div className={styles.newsletter}>
+      <div className={`texture-content ${styles.newsletter}`}>
         <div className="container">
           <div className={styles.newsletterInner}>
             <div className={styles.newsletterText}>
-              <span className="label-sm section-label">Stay Connected</span>
+              <span className="label-sm section-label">Letters from the workshop</span>
               <h3 className="heading-lg" style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}>
-                Receive stories of divine craftsmanship
+                Stories of marble, devotion, and timeless craftsmanship.
               </h3>
             </div>
             <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
@@ -61,7 +63,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
                 required
                 disabled={subLoading}
               />
-              <button type="submit" className="btn btn-primary" disabled={subLoading}>
+              <button type="submit" className={`btn ${styles.newsletterBtn}`} disabled={subLoading}>
                 {subLoading ? '...' : subSuccess ? 'Subscribed!' : 'Subscribe'}
               </button>
             </form>
@@ -72,7 +74,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
       </div>
 
       {/* Main Footer */}
-      <div className={styles.footerMain}>
+      <div className={`texture-content ${styles.footerMain}`}>
         <div className="container">
           <div className={styles.footerGrid}>
 
@@ -201,8 +203,17 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
       </div>
 
       {/* Footer Bottom */}
-      <div className={styles.footerBottom}>
+      <div className={`texture-content ${styles.footerBottom}`}>
         <div className="container">
+          <div className={styles.workshopSignature}>
+            <div className={styles.signatureOrnament}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="currentColor" fillOpacity="0.3"/>
+              </svg>
+            </div>
+            <p>Handcrafted in Jaipur by master artisans preserving sacred marble traditions since 1985.</p>
+          </div>
+          
           <div className={styles.footerBottomInner}>
             <p className={styles.copyright}>
               © {year} Moorti India. All rights reserved. Marble Home Jaipur.

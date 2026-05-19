@@ -1,13 +1,15 @@
 .footer {
-  background: var(--bg-secondary);
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.4), transparent 60%),
+    linear-gradient(to bottom, var(--bg-primary) 0%, #E6DDD0 100%);
   border-top: 1px solid var(--border-subtle);
 }
 
 /* Newsletter */
 .newsletter {
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: var(--space-6) 0;
+  background: transparent;
+  padding: var(--space-6) 0 var(--space-5);
+  border-bottom: 1px solid rgba(120, 90, 60, 0.08);
 }
 
 .newsletterInner {
@@ -34,18 +36,44 @@
 
 .newsletterInput {
   width: 280px !important;
+  background: transparent !important;
+  border-color: rgba(120, 90, 60, 0.2) !important;
+}
+
+.newsletterInput:focus {
+  border-color: var(--gold) !important;
+}
+
+.newsletterBtn {
+  background: #A65A41;
+  color: #FDF8F0;
+  border: 1px solid #944830;
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-6);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(166, 90, 65, 0.15);
+  cursor: pointer;
+}
+
+.newsletterBtn:hover {
+  background: #8E4B35;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(166, 90, 65, 0.25);
 }
 
 /* Main Footer */
 .footerMain {
-  padding-top: var(--space-16);
-  padding-bottom: var(--space-8);
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-6);
 }
 
 .footerGrid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.4fr;
-  gap: var(--space-12);
+  gap: var(--space-16);
 }
 
 /* Brand */
@@ -165,8 +193,29 @@
 
 /* Bottom Bar */
 .footerBottom {
-  border-top: 1px solid var(--border-subtle);
   padding: var(--space-5) 0;
+}
+
+.workshopSignature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+.signatureOrnament {
+  color: var(--gold);
+}
+
+.workshopSignature p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 480px;
+  line-height: 1.6;
 }
 
 .footerBottomInner {

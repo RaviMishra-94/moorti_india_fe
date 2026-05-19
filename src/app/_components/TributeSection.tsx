@@ -41,10 +41,6 @@ export default function TributeSection() {
       className={`texture-section ${styles.section}`}
       id="tribute"
     >
-      {/* Original Backgrounds */}
-      <div className={styles.bg} />
-      <div className={styles.bgGradient} />
-      <div className={styles.grain} />
 
       <div className="texture-overlay texture-lotus" />
       <div className="texture-vignette" />

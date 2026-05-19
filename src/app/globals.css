@@ -639,22 +639,22 @@ select {
 /* Individual texture backgrounds */
 .texture-sandstone {
   background-image: url('/patterns/sandstone.png');
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 .texture-temple-mural {
   background-image: url('/patterns/temple-mural.png');
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 .texture-greek-fresco {
   background-image: url('/patterns/greek-fresco.png');
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .texture-lotus {
   background-image: url('/patterns/lotus-geometry.png');
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 .texture-correspondence {
