@@ -41,7 +41,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
 
   return (
     <footer className={`texture-section ${styles.footer}`}>
-      <div className="texture-overlay texture-correspondence" style={{ opacity: 0.04, mixBlendMode: 'multiply' }} />
+      <div className="texture-overlay texture-footer-geometry" />
       <div className="texture-vignette" />
       {/* Newsletter */}
       <div className={`texture-content ${styles.newsletter}`}>

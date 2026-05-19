@@ -662,6 +662,11 @@ select {
   opacity: 0.5;
 }
 
+.texture-footer-geometry {
+  background-image: url('/patterns/footer-sacred-geometry.png');
+  opacity: 0.5;
+}
+
 /* Content sits above all texture layers */
 .texture-content {
   position: relative;
