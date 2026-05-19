@@ -657,6 +657,11 @@ select {
   opacity: 0.9;
 }
 
+.texture-correspondence {
+  background-image: url('/patterns/artisan-correspondence.png');
+  opacity: 0.5;
+}
+
 /* Content sits above all texture layers */
 .texture-content {
   position: relative;

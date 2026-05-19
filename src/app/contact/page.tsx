@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import ContactForm from '../_components/ContactForm';
 import styles from './page.module.css';
@@ -13,23 +14,36 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div className="container">
+      {/* Hero Section */}
+      <div className={styles.hero}>
+        <div className={styles.heroBg}>
+          <Image
+            src="/images/hero_contact.png"
+            alt="Timeless artisan wooden correspondence desk in Jaipur marble workshop"
+            fill
+            priority
+            style={{ objectFit: 'cover', objectPosition: 'center 80%' }}
+          />
+          <div className={styles.heroOverlay} />
+        </div>
+        <div className={`container ${styles.heroContent}`}>
           <span className="label-sm section-label">Get In Touch</span>
           <div className="gold-line" style={{ marginTop: 'var(--space-3)' }} />
           <h1 className="display-md" style={{ marginTop: 'var(--space-5)' }}>
             Let&apos;s create something <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>beautiful</em>
           </h1>
-          <p className={styles.headerDesc}>
+          <p className={styles.headerDesc} style={{ color: 'var(--text-secondary)' }}>
             Whether you have a specific vision or need guidance — our team is here to help you 
             find or create the perfect marble sculpture.
           </p>
         </div>
       </div>
 
-      <section className="section">
-        <div className="container">
+      <section className="texture-section section">
+        <div className="texture-overlay texture-correspondence" />
+        <div className="texture-vignette" />
+
+        <div className="container texture-content">
           <div className={styles.layout}>
 
             {/* Form */}
@@ -116,7 +130,6 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
