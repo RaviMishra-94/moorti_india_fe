@@ -142,7 +142,7 @@ export default function SortableCategoryTable({ initialCategories, apiUrl, token
                       </td>
                       <td>
                         <Image
-                          src={cat.image || '/images/placeholder.png'}
+                          src={cat.image || '/images/placeholder.webp'}
                           alt={cat.name}
                           width={44}
                           height={44}

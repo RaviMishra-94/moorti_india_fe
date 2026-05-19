@@ -638,32 +638,32 @@ select {
 
 /* Individual texture backgrounds */
 .texture-sandstone {
-  background-image: url('/patterns/sandstone.png');
+  background-image: url('/patterns/sandstone.webp');
   opacity: 0.5;
 }
 
 .texture-temple-mural {
-  background-image: url('/patterns/temple-mural.png');
+  background-image: url('/patterns/temple-mural.webp');
   opacity: 0.5;
 }
 
 .texture-greek-fresco {
-  background-image: url('/patterns/greek-fresco.png');
+  background-image: url('/patterns/greek-fresco.webp');
   opacity: 0.5;
 }
 
 .texture-lotus {
-  background-image: url('/patterns/lotus-geometry.png');
+  background-image: url('/patterns/lotus-geometry.webp');
   opacity: 0.5;
 }
 
 .texture-correspondence {
-  background-image: url('/patterns/artisan-correspondence.png');
+  background-image: url('/patterns/artisan-correspondence.webp');
   opacity: 0.5;
 }
 
 .texture-footer-geometry {
-  background-image: url('/patterns/footer-sacred-geometry.png');
+  background-image: url('/patterns/footer-sacred-geometry.webp');
   opacity: 0.5;
 }
 

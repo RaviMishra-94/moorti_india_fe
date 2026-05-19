@@ -98,7 +98,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   const [mainImageIdx, setMainImageIdx] = useState(0);
   const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
 
-  const FALLBACK_IMAGE = '/images/placeholder.png';
+  const FALLBACK_IMAGE = '/images/placeholder.webp';
   
   const handleImageError = (imgUrl: string) => {
     if (!imgUrl || imgUrl === FALLBACK_IMAGE) return;

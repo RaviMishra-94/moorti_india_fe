@@ -16,7 +16,7 @@ export default function AboutPage() {
       <div className={styles.hero}>
         <div className={styles.heroBg}>
           <Image
-            src="/images/process_carving.png"
+            src="/images/process_carving.webp"
             alt="Jaipur marble artisan at work"
             fill
             priority
@@ -73,7 +73,7 @@ export default function AboutPage() {
             <div className={styles.storyImage}>
               <div className={styles.storyImgWrap}>
                 <Image
-                  src="/images/product_radha_krishna.png"
+                  src="/images/product_radha_krishna.webp"
                   alt="Exquisite marble Radha Krishna statue"
                   fill
                   style={{ objectFit: 'cover', objectPosition: 'center top' }}

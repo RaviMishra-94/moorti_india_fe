@@ -22,7 +22,7 @@ export default function HeroSection() {
       {/* Background Image */}
       <div className={styles.heroBg}>
         <Image
-          src="/images/hero_ganesh.png"
+          src="/images/hero_ganesh.webp"
           alt="Handcrafted marble Ganesh statue — Moorti India"
           fill
           priority

@@ -60,7 +60,7 @@ export default async function CategoryPage({ params }: Props) {
       <div className={styles.catHero}>
         <div className={styles.catHeroBg}>
           <Image
-            src={cat?.image ?? '/images/hero_ganesh.png'}
+            src={cat?.image ?? '/images/hero_ganesh.webp'}
             alt={cat?.name ?? category}
             fill
             priority

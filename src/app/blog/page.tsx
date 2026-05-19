@@ -41,7 +41,7 @@ export default async function BlogPage() {
       <div className={styles.hero}>
         <div className={styles.heroBg}>
           <Image
-            src="/images/hero_blog.png"
+            src="/images/hero_blog.webp"
             alt="Artisan hands resting on Makrana marble with a journal"
             fill
             priority

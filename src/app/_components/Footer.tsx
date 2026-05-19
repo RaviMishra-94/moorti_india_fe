@@ -82,7 +82,7 @@ export default function Footer({ categories = [] }: { categories?: { slug: strin
             <div className={styles.footerBrand}>
               <Link href="/" className={styles.footerLogo}>
                 <Image 
-                  src="/images/logo.png" 
+                  src="/images/logo.webp" 
                   alt="Moorti India Logo" 
                   width={220} 
                   height={66} 

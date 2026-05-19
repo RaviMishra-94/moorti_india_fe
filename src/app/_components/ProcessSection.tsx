@@ -15,13 +15,18 @@ export default function ProcessSection() {
           <div className={styles.imageCol}>
             <div className={styles.imageWrap}>
               <video
-                src="/videos/process_carving.mp4"
                 autoPlay
                 muted
                 loop
                 playsInline
+                poster="/images/process_carving_poster.webp"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
-              />
+              >
+                {/* WebM/VP9 served to modern browsers (smaller) */}
+                <source src="/videos/process_carving.webm" type="video/webm" />
+                {/* Optimised MP4 with +faststart for legacy / Safari */}
+                <source src="/videos/process_carving_opt.mp4" type="video/mp4" />
+              </video>
               <div className={styles.imageOverlay} />
               <div className={styles.imageBadge}>
                 <span className={styles.badgeValue}>40+</span>

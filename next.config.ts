@@ -4,6 +4,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.ADMIN_API_URL || 
 
 const nextConfig: NextConfig = {
   images: {
+    // Serve AVIF first (best compression), WebP as fallback — auto-negotiated
+    // by the /_next/image optimizer for all <Image> components.
+    formats: ['image/avif', 'image/webp'],
     qualities: [75, 90],
     remotePatterns: [
       {

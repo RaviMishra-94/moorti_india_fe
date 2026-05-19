@@ -17,7 +17,7 @@ export default function ProcessPage() {
       <div className={styles.hero}>
         <div className={styles.heroBg}>
           <Image
-            src="/images/process_carving.png"
+            src="/images/process_carving.webp"
             alt="Marble artisan at work"
             fill
             priority
@@ -77,7 +77,7 @@ export default function ProcessPage() {
           <div className={styles.artisanLayout}>
             <div className={styles.artisanImg}>
               <Image
-                src="/images/process_carving.png"
+                src="/images/process_carving.webp"
                 alt="Jaipur marble artisan"
                 fill
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -116,7 +116,7 @@ export default function ProcessPage() {
             <div className={styles.materialCard}>
               <div className={styles.materialImgWrap}>
                 <Image
-                  src="/images/marble_makrana_white.png"
+                  src="/images/marble_makrana_white.webp"
                   alt="Makrana white marble block from Rajasthan"
                   fill
                   className={styles.materialImg}
@@ -137,7 +137,7 @@ export default function ProcessPage() {
             <div className={styles.materialCard}>
               <div className={styles.materialImgWrap}>
                 <Image
-                  src="/images/marble_vietnam_white.png"
+                  src="/images/marble_vietnam_white.webp"
                   alt="Polished Vietnam white marble slab with mirror finish"
                   fill
                   className={styles.materialImg}

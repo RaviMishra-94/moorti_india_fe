@@ -100,7 +100,7 @@ export default function Navbar({ categories }: { categories: { slug: string; nam
           {/* Logo */}
           <Link href="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
             <Image
-              src="/images/logo.png"
+              src="/images/logo.webp"
               alt="Moorti India Logo"
               width={140}
               height={36}
@@ -190,7 +190,7 @@ export default function Navbar({ categories }: { categories: { slug: string; nam
         <div className={styles.mobileHeader}>
           <Link href="/" className={styles.logo} onClick={() => setMenuOpen(false)}>
             <Image
-              src="/images/logo.png"
+              src="/images/logo.webp"
               alt="Moorti India Logo"
               width={140}
               height={36}

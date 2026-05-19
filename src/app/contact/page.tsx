@@ -18,7 +18,7 @@ export default function ContactPage() {
       <div className={styles.hero}>
         <div className={styles.heroBg}>
           <Image
-            src="/images/hero_contact.png"
+            src="/images/hero_contact.webp"
             alt="Timeless artisan wooden correspondence desk in Jaipur marble workshop"
             fill
             priority
