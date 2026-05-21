@@ -112,6 +112,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
+  /* Push content below the fixed topBar (37px) + nav (80px) */
+  padding-top: calc(37px + var(--nav-height));
 }
 
 /* Custom Scrollbar */
@@ -576,6 +578,10 @@ select {
   }
 }
 
+/* Offset fixed topBar + nav on tablet/mobile (481px–1024px) */
+@media (max-width: 1024px) {
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 var(--space-5);
@@ -593,6 +599,10 @@ select {
 @media (max-width: 480px) {
   .container {
     padding: 0 var(--space-4);
+  }
+  /* topBar hidden — only nav height needed */
+  body {
+    padding-top: var(--nav-height);
   }
 }
 
