@@ -225,29 +225,65 @@ export default function Navbar({ categories }: { categories: { slug: string; nam
                 </svg>
               </button>
             </form>
-            {searchQuery && mobileSearchFocused && (
+            {mobileSearchFocused && (
               <div className={styles.mobileSearchResults}>
-                {isSearching ? (
-                  <div className={styles.searchLoading}>Searching...</div>
-                ) : searchResults.length > 0 ? (
-                  searchResults.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.slug}`}
-                      className={styles.searchResultItem}
-                      onClick={() => { setMenuOpen(false); setSearchQuery(''); }}
+                <div className={styles.searchChips} style={{ padding: '12px 12px 8px 12px', borderBottom: searchQuery ? '1px solid rgba(200, 82, 28, 0.15)' : 'none' }}>
+                  <button 
+                    type="button"
+                    className={`${styles.searchChip} ${!searchCategory ? styles.searchChipActive : ''}`}
+                    onClick={() => setSearchCategory(null)}
+                  >
+                    ALL
+                  </button>
+                  {categories.slice(0, 4).map(cat => (
+                    <button 
+                      type="button"
+                      key={cat.slug}
+                      className={`${styles.searchChip} ${searchCategory === cat.slug ? styles.searchChipActive : ''}`}
+                      onClick={() => setSearchCategory(cat.slug)}
                     >
-                      <div className={styles.searchResultImageWrap}>
-                        <Image src={product.image} alt={product.name} fill style={{ objectFit: 'cover' }} />
+                      {cat.name.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                {searchQuery && (
+                  isSearching ? (
+                    <div className={styles.searchLoading}>Searching...</div>
+                  ) : searchResults.length > 0 ? (
+                    <div className={styles.searchResultsList}>
+                      {searchResults.map((product) => (
+                        <Link
+                          key={product.id}
+                          href={`/products/${product.slug}`}
+                          className={styles.searchResultItem}
+                          onClick={() => { setMenuOpen(false); setSearchQuery(''); setSearchCategory(null); }}
+                        >
+                          <div className={styles.searchResultImageWrap}>
+                            <Image src={product.image} alt={product.name} fill style={{ objectFit: 'cover' }} />
+                          </div>
+                          <div className={styles.searchResultInfo}>
+                            <h4>{product.name}</h4>
+                            <span className="label-sm" style={{ color: 'var(--gold-dim)' }}>{product.material}</span>
+                          </div>
+                        </Link>
+                      ))}
+                      <div style={{ padding: 'var(--space-3)' }}>
+                        <Link href="/collections" className="btn btn-outline" style={{ display: 'block', textAlign: 'center', fontSize: '0.85rem', padding: '10px' }} onClick={() => { setMenuOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                          See All Products
+                        </Link>
                       </div>
-                      <div className={styles.searchResultInfo}>
-                        <h4>{product.name}</h4>
-                        <span className="label-sm" style={{ color: 'var(--gold-dim)' }}>{product.material}</span>
-                      </div>
-                    </Link>
-                  ))
-                ) : (
-                  <div className={styles.searchNoResults}>No sculptures found.</div>
+                    </div>
+                  ) : (
+                    <div className={styles.searchNoResults}>
+                      <p style={{ marginBottom: 'var(--space-4)' }}>No sculptures found.</p>
+                      <Link href="/collections" className="btn btn-outline" style={{ display: 'block', marginBottom: 'var(--space-3)', textAlign: 'center', fontSize: '0.85rem' }} onClick={() => { setMenuOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                        See Full Collection
+                      </Link>
+                      <Link href="/contact" className="btn btn-primary" style={{ display: 'block', textAlign: 'center', fontSize: '0.85rem' }} onClick={() => { setMenuOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                        Connect With Us
+                      </Link>
+                    </div>
+                  )
                 )}
               </div>
             )}
@@ -381,24 +417,39 @@ export default function Navbar({ categories }: { categories: { slug: string; nam
                 {isSearching ? (
                   <div className={styles.searchLoading}>Searching...</div>
                 ) : searchResults.length > 0 ? (
-                  searchResults.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.slug}`}
-                      className={styles.searchResultItem}
-                      onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchCategory(null); }}
-                    >
-                      <div className={styles.searchResultImageWrap}>
-                        <Image src={product.image} alt={product.name} fill style={{ objectFit: 'cover' }} />
-                      </div>
-                      <div className={styles.searchResultInfo}>
-                        <h4>{product.name}</h4>
-                        <span className="label-sm" style={{ color: 'var(--gold-dim)' }}>{product.material}</span>
-                      </div>
-                    </Link>
-                  ))
+                  <div className={styles.searchResultsList}>
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product.id}
+                        href={`/products/${product.slug}`}
+                        className={styles.searchResultItem}
+                        onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchCategory(null); }}
+                      >
+                        <div className={styles.searchResultImageWrap}>
+                          <Image src={product.image} alt={product.name} fill style={{ objectFit: 'cover' }} />
+                        </div>
+                        <div className={styles.searchResultInfo}>
+                          <h4>{product.name}</h4>
+                          <span className="label-sm" style={{ color: 'var(--gold-dim)' }}>{product.material}</span>
+                        </div>
+                      </Link>
+                    ))}
+                    <div style={{ padding: 'var(--space-3)' }}>
+                      <Link href="/collections" className="btn btn-outline" style={{ display: 'block', textAlign: 'center', fontSize: '0.85rem', padding: '10px' }} onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                        See All Products
+                      </Link>
+                    </div>
+                  </div>
                 ) : (
-                  <div className={styles.searchNoResults}>No sculptures found.</div>
+                  <div className={styles.searchNoResults}>
+                    <p style={{ marginBottom: 'var(--space-4)' }}>No sculptures found.</p>
+                    <Link href="/collections" className="btn btn-outline" style={{ display: 'block', marginBottom: 'var(--space-3)', textAlign: 'center', fontSize: '0.85rem' }} onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                      See Full Collection
+                    </Link>
+                    <Link href="/contact" className="btn btn-primary" style={{ display: 'block', textAlign: 'center', fontSize: '0.85rem' }} onClick={() => { setSearchOpen(false); setSearchQuery(''); setSearchCategory(null); }}>
+                      Connect With Us
+                    </Link>
+                  </div>
                 )}
               </div>
             )}
