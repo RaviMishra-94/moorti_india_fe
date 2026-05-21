@@ -91,8 +91,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className={styles.contactLabel}>Email</div>
-                    <a href="mailto:marblehouse.270@rediffmail.com" className={styles.contactValue}>
-                      marblehouse.270@rediffmail.com
+                    <a href="mailto:sales@moortiindia.com" className={styles.contactValue}>
+                      sales@moortiindia.com
                     </a>
                   </div>
                 </div>

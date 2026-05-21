@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
             <h2>7. Contact Us</h2>
             <p>For any questions or concerns regarding this Privacy Policy, please contact us at:</p>
             <p>
-              <strong>Email:</strong> <a href="mailto:marblehouse.270@rediffmail.com" style={{ color: 'var(--gold)' }}>marblehouse.270@rediffmail.com</a>
+              <strong>Email:</strong> <a href="mailto:sales@moortiindia.com" style={{ color: 'var(--gold)' }}>sales@moortiindia.com</a>
             </p>
           </div>
         </div>

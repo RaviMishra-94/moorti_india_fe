@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background-color: var(--gold);
+  background-color: #25D366;
   color: white;
   border-radius: 50%;
   width: 60px;
@@ -19,19 +19,19 @@
 .whatsappButton:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: var(--shadow-gold);
-  background-color: var(--gold-light);
+  background-color: #22BF5E;
   animation: none;
 }
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(200, 82, 28, 0.7);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 15px rgba(200, 82, 28, 0);
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(200, 82, 28, 0);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
   }
 }
 

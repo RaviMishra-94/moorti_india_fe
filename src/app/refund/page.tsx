@@ -52,7 +52,7 @@ export default function RefundPolicy() {
             </p>
             <ul>
               <li>Take clear photographs of the damaged packaging and the moorti itself immediately upon unboxing.</li>
-              <li>Email the photos and your order details to <a href="mailto:marblehouse.270@rediffmail.com" style={{ color: 'var(--gold)' }}>marblehouse.270@rediffmail.com</a> within 48 hours.</li>
+              <li>Email the photos and your order details to <a href="mailto:sales@moortiindia.com" style={{ color: 'var(--gold)' }}>sales@moortiindia.com</a> within 48 hours.</li>
               <li>We will work with the shipping insurance provider and our artisans to arrange for a replacement or repair.</li>
             </ul>
           </div>

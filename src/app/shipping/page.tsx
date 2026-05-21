@@ -50,7 +50,7 @@ export default function ShippingPolicy() {
             <h2>3. Order Tracking</h2>
             <p>
               Once your order is dispatched, you will receive tracking information via email. 
-              For any concerns regarding tracking or delivery, feel free to contact our customer support at <a href="mailto:marblehouse.270@rediffmail.com" style={{ color: 'var(--gold)' }}>marblehouse.270@rediffmail.com</a>.
+              For any concerns regarding tracking or delivery, feel free to contact our customer support at <a href="mailto:sales@moortiindia.com" style={{ color: 'var(--gold)' }}>sales@moortiindia.com</a>.
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function ShippingPolicy() {
             <h2>6. Damaged or Lost Items</h2>
             <p>
               In the rare event that your order arrives damaged or is lost in transit, please contact us 
-              immediately at <a href="mailto:marblehouse.270@rediffmail.com" style={{ color: 'var(--gold)' }}>marblehouse.270@rediffmail.com</a>. 
+              immediately at <a href="mailto:sales@moortiindia.com" style={{ color: 'var(--gold)' }}>sales@moortiindia.com</a>. 
               We will work swiftly to resolve the issue and ensure your satisfaction, including assisting with insurance claims.
             </p>
           </div>

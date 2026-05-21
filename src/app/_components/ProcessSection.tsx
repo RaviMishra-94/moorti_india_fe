@@ -45,7 +45,7 @@ export default function ProcessSection() {
               <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>to divine sculpture</em>
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: 'var(--space-10)' }}>
-              Every Moorti India sculpture passes through six stages of mastery — 
+              Every Moorti India sculpture passes through seven stages of mastery — 
               from the selection of the finest Makrana marble to the moment it reaches your home.
             </p>
 

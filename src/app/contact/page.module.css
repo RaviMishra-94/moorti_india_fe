@@ -156,3 +156,21 @@ a.contactValue:hover { color: var(--gold); }
     grid-template-columns: 1fr;
   }
 }
+
+/* Make inputs clearly visible over the textured background */
+.form :global(.form-input) {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(120, 90, 60, 0.35);
+  box-shadow: 0 1px 4px rgba(120, 90, 60, 0.08);
+}
+
+.form :global(.form-input:focus) {
+  background: #ffffff;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200, 82, 28, 0.12);
+}
+
+.form :global(.form-input::placeholder) {
+  color: #9A7055;
+  opacity: 0.75;
+}

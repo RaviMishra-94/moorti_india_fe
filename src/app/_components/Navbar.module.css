@@ -207,19 +207,19 @@
   gap: 8px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--text-primary);
-  background: var(--gold-glow);
+  color: #fff;
+  background: #25D366;
   padding: 8px 14px;
-  border-radius: 20px;
-  border: 1px solid var(--gold-light);
+  border-radius: 6px;
+  border: 1px solid #25D366;
   transition: all var(--transition-base);
   white-space: nowrap;
 }
 
 .phoneLink:hover {
-  background: var(--gold);
-  color: var(--bg-surface);
-  border-color: var(--gold);
+  background: #1ebe5d;
+  color: #fff;
+  border-color: #1ebe5d;
 }
 
 /* Hamburger */
@@ -430,18 +430,18 @@
   text-align: center;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-primary);
-  background: var(--gold-glow);
+  color: #fff;
+  background: #25D366;
   padding: 12px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--gold-light);
+  border: 1px solid #25D366;
   transition: all var(--transition-base);
 }
 
 .mobilePhone:hover { 
-  background: var(--gold);
-  color: var(--bg-surface);
-  border-color: var(--gold);
+  background: #1ebe5d;
+  color: #fff;
+  border-color: #1ebe5d;
 }
 
 /* Responsive */

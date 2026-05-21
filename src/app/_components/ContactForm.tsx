@@ -16,7 +16,7 @@ export default function ContactForm() {
     const payload = {
       name: formData.get('name'),
       email: formData.get('email'),
-      phone: formData.get('phone') || null,
+      phone: formData.get('phone'),
       country: formData.get('country'),
       statue: formData.get('statue') || null,
       message: formData.get('message'),
@@ -59,7 +59,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.row}>
         <div className="form-group">
-          <label htmlFor="contact-phone" className="form-label">Phone / WhatsApp</label>
+          <label htmlFor="contact-phone" className="form-label">Phone / WhatsApp *</label>
           <input 
             name="phone" 
             id="contact-phone" 
@@ -67,6 +67,7 @@ export default function ContactForm() {
             className="form-input" 
             placeholder="+1 234 567 8900" 
             pattern="[0-9\s\-\+\(\)]*"
+            required
             onInput={(e) => {
               e.currentTarget.value = e.currentTarget.value.replace(/[^0-9\s\-\+\(\)]/g, '');
             }}

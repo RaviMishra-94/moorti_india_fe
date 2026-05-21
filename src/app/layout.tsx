@@ -115,7 +115,7 @@ const localBusinessSchema = {
   '@id': `${BASE_URL}#business`,
   url: BASE_URL,
   telephone: '+91-7073333202',
-  email: 'marblehouse.270@rediffmail.com',
+  email: 'sales@moortiindia.com',
   priceRange: '₹₹₹',
   address: {
     '@type': 'PostalAddress',
