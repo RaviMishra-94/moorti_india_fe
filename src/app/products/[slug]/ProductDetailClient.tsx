@@ -372,16 +372,16 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
             <p className={styles.decisionText}>Need Help Choosing the Right Idol? We’ll help you choose the perfect one.</p>
             
             <div style={{ display: 'flex', gap: '10px', marginTop: '15px', flexDirection: 'column' }}>
-              <button onClick={handleWhatsappClick} className={`btn btn-primary ${styles.whatsappBtn}`} style={{ margin: 0 }}>
-                <WhatsappIcon /> Let us help you
+              <button onClick={handleWhatsappClick} className={`btn btn-primary ${styles.whatsappBtn}`} style={{ margin: 0, letterSpacing: '0.1em' }}>
+                <WhatsappIcon /> LET US HELP YOU
               </button>
               
-              <Link href={`/size-chart?image=${encodeURIComponent(displayImages[mainImageIdx] || product.image || '')}`} className="btn btn-ghost" style={{ margin: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', border: '1px solid var(--gold)', color: 'var(--gold)' }} target="_blank">
-                View Size Guide
+              <Link href={`/size-chart?image=${encodeURIComponent(displayImages[mainImageIdx] || product.image || '')}`} className="btn btn-ghost" style={{ margin: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', border: '1px solid var(--gold)', color: 'var(--gold)', padding: '10px 16px', fontSize: '1rem', fontWeight: 600, letterSpacing: '0.1em' }} target="_blank">
+                VIEW SIZE GUIDE
               </Link>
+              
+              <p className={styles.noObligation} style={{ textAlign: 'center', marginTop: '2px', marginBottom: '24px' }}>No obligation. Just guidance.</p>
             </div>
-            
-            <p className={styles.noObligation}>No obligation. Just guidance.</p>
             
               <div className={styles.audioRecordSection}>
                 <p className={styles.audioTitle}>Or describe your requirement using audio:</p>

@@ -49,8 +49,8 @@ export default async function SizeChartPage({
   const imageSrc = resolvedParams.image || '/uploads/product_laxmi.png';
 
   // Base height of the human is 480px.
-  // 5.8 FT = 69.6 inches.
-  // Pixels per inch = 480 / 69.6 = 6.896 px/inch.
+  // 5'8" = 68 inches.
+  // Pixels per inch = 480 / 68 = 7.0588 px/inch.
   
   const sizes = [
     { label: '12 INCH', heightInches: 12, desc: 'Ideal for compact mandirs and personal spaces.', imgWidth: 100 },
@@ -81,7 +81,7 @@ export default async function SizeChartPage({
         {/* Visual Scale Area */}
         <div className={styles.visualizationArea}>
           {sizes.map((size) => {
-            const pixelHeight = size.heightInches * 6.896; // convert inches to relative pixels
+            const pixelHeight = size.heightInches * 7.0588; // convert inches to relative pixels
             
             return (
               <div key={size.label} className={styles.sizeItem}>
@@ -108,7 +108,7 @@ export default async function SizeChartPage({
               style={{ objectFit: 'contain' }}
             />
             <div className={styles.heightLine}>
-              <span className={styles.heightText}>5.8 FT<br/>(176 CM)</span>
+              <span className={styles.heightText}>5&apos;8&quot;<br/>(68 INCH)<br/>(173 CM)</span>
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default async function SizeChartPage({
         {/* CTA Banner */}
         <div className={styles.ctaBanner}>
           <div className={styles.ctaText}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.5">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="1.5">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
             </svg>
             Need help choosing the right size? Our experts are here to guide you.
