@@ -6,6 +6,7 @@ import FeaturedProducts from './_components/FeaturedProducts';
 import ProcessSection from './_components/ProcessSection';
 import StatsBar from './_components/StatsBar';
 import TributeSection from './_components/TributeSection';
+import BespokePortraitSection from './_components/BespokePortraitSection';
 import TestimonialsSection from './_components/TestimonialsSection';
 import ContactCTA from './_components/ContactCTA';
 
@@ -22,6 +23,7 @@ export default function HomePage() {
       <MarqueeBar />
       <CategoryGrid />
       <FeaturedProducts />
+      <BespokePortraitSection />
       <TributeSection />
       <ProcessSection />
       <StatsBar />

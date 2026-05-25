@@ -649,32 +649,32 @@ select {
 /* Individual texture backgrounds */
 .texture-sandstone {
   background-image: url('/patterns/sandstone.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .texture-temple-mural {
   background-image: url('/patterns/temple-mural.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .texture-greek-fresco {
   background-image: url('/patterns/greek-fresco.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .texture-lotus {
   background-image: url('/patterns/lotus-geometry.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .texture-correspondence {
   background-image: url('/patterns/artisan-correspondence.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .texture-footer-geometry {
   background-image: url('/patterns/footer-sacred-geometry.webp');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 /* Content sits above all texture layers */
