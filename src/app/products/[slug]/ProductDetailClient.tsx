@@ -83,6 +83,7 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
   const [activeTab, setActiveTab] = useState<'details' | 'care' | 'why'>('details');
   const [mainImageIdx, setMainImageIdx] = useState(0);
   const [brokenImages, setBrokenImages] = useState<Record<string, boolean>>({});
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   const FALLBACK_IMAGE = '/images/placeholder.webp';
   
@@ -376,9 +377,9 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
                 <WhatsappIcon /> LET US HELP YOU
               </button>
               
-              <Link href={`/size-chart?image=${encodeURIComponent(displayImages[mainImageIdx] || product.image || '')}`} className="btn btn-ghost" style={{ margin: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', border: '1px solid var(--gold)', color: 'var(--gold)', padding: '10px 16px', fontSize: '1rem', fontWeight: 600, letterSpacing: '0.1em' }} target="_blank">
+              <button onClick={() => setIsSizeGuideOpen(true)} className="btn btn-ghost" style={{ margin: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', border: '1px solid var(--gold)', color: 'var(--gold)', padding: '10px 16px', fontSize: '1rem', fontWeight: 600, letterSpacing: '0.1em' }}>
                 VIEW SIZE GUIDE
-              </Link>
+              </button>
               
               <p className={styles.noObligation} style={{ textAlign: 'center', marginTop: '2px', marginBottom: '24px' }}>No obligation. Just guidance.</p>
             </div>
@@ -537,6 +538,26 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
         </div>
       </div>
     </div>
+
+    {/* Size Guide Modal */}
+    {isSizeGuideOpen && (
+      <div className={styles.modalOverlay} onClick={() => setIsSizeGuideOpen(false)}>
+        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+          <button className={styles.modalCloseBtn} onClick={() => setIsSizeGuideOpen(false)} aria-label="Close Size Guide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <iframe 
+            src={`/size-chart?image=${encodeURIComponent(displayImages[mainImageIdx] || product.image || '')}&modal=true`} 
+            className={styles.modalIframe}
+            title="Size Guide"
+          />
+        </div>
+      </div>
+    )}
+
     </div>
   );
 }

@@ -43,10 +43,11 @@ const ArchIcon = () => (
 export default async function SizeChartPage({
   searchParams,
 }: {
-  searchParams: Promise<{ image?: string }>;
+  searchParams: Promise<{ image?: string; modal?: string }>;
 }) {
   const resolvedParams = await searchParams;
   const imageSrc = resolvedParams.image || '/uploads/product_laxmi.png';
+  const isModal = resolvedParams.modal === 'true';
 
   // Base height of the human is 480px.
   // 5'8" = 68 inches.
@@ -60,8 +61,15 @@ export default async function SizeChartPage({
   ];
 
   return (
-    <div className={`texture-section ${styles.container}`}>
-      <div className="texture-overlay texture-greek-fresco" style={{ opacity: 0.2 }} />
+    <>
+      {isModal && (
+        <style dangerouslySetInnerHTML={{ __html: `
+          header, footer, nav, [class*="topBar"], [class*="whatsappButton"] { display: none !important; }
+          body { padding-top: 0 !important; }
+        `}} />
+      )}
+      <div className={`texture-section ${styles.container}`}>
+        <div className="texture-overlay texture-greek-fresco" style={{ opacity: 0.2 }} />
       <div className="texture-content">
         
         <div className={styles.header}>
@@ -170,6 +178,7 @@ export default async function SizeChartPage({
         </div>
 
       </div>
-    </div>
+      </div>
+    </>
   );
 }
