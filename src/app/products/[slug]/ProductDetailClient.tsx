@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Product } from '@/lib/types';
 import styles from './page.module.css';
 import DragCarousel from '../../_components/DragCarousel';
@@ -370,9 +371,16 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
             <h3 className={styles.decisionTitle}>Not sure what size fits your space?</h3>
             <p className={styles.decisionText}>Need Help Choosing the Right Idol? We’ll help you choose the perfect one.</p>
             
-            <button onClick={handleWhatsappClick} className={`btn btn-primary ${styles.whatsappBtn}`}>
-              <WhatsappIcon /> Let us help you
-            </button>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '15px', flexDirection: 'column' }}>
+              <button onClick={handleWhatsappClick} className={`btn btn-primary ${styles.whatsappBtn}`} style={{ margin: 0 }}>
+                <WhatsappIcon /> Let us help you
+              </button>
+              
+              <Link href={`/size-chart?image=${encodeURIComponent(displayImages[mainImageIdx] || product.image || '')}`} className="btn btn-ghost" style={{ margin: 0, justifyContent: 'center', display: 'flex', alignItems: 'center', border: '1px solid var(--gold)', color: 'var(--gold)' }} target="_blank">
+                View Size Guide
+              </Link>
+            </div>
+            
             <p className={styles.noObligation}>No obligation. Just guidance.</p>
             
               <div className={styles.audioRecordSection}>

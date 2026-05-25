@@ -1,0 +1,299 @@
+.container {
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-20);
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+.header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--space-16) auto;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin-top: var(--space-4);
+  color: var(--text-primary);
+  font-weight: 300;
+}
+
+.headingEm {
+  font-style: italic;
+  color: var(--gold);
+  font-family: var(--font-display);
+}
+
+.subtitle {
+  margin-top: var(--space-4);
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* Visualization Area */
+.visualizationArea {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+  border-bottom: 2px solid rgba(176, 125, 46, 0.2); /* floor line */
+  padding-bottom: var(--space-2);
+  position: relative;
+}
+
+.sizeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.sizeItem::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 10%;
+  bottom: 0;
+  width: 1px;
+  background-image: linear-gradient(to bottom, transparent, rgba(176, 125, 46, 0.3) 20%, transparent);
+}
+.sizeItem:last-child::after {
+  display: none;
+}
+
+.sizeLabel {
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+  letter-spacing: 0.05em;
+}
+
+.sizeDesc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 180px;
+  margin-bottom: var(--space-8);
+  min-height: 40px;
+}
+
+.imageWrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* Mix blend mode to help hide white backgrounds of product images */
+.productImage {
+  object-fit: contain;
+  object-position: bottom center;
+  mix-blend-mode: multiply;
+}
+
+/* Human Silhouette */
+.humanScale {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-left: var(--space-8);
+  position: relative;
+}
+
+.humanSvg {
+  height: 480px; /* Base height for 5.8 FT relative to statues */
+  width: auto;
+  fill: rgba(0, 0, 0, 0.15); /* light silhouette */
+}
+
+.heightLine {
+  position: absolute;
+  right: -30px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  border-right: 1px dashed rgba(0, 0, 0, 0.3);
+}
+.heightLine::before, .heightLine::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  width: 8px;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.heightLine::before { top: 0; }
+.heightLine::after { bottom: 0; }
+
+.heightText {
+  position: absolute;
+  right: -90px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+/* Details Grid Box */
+.detailsBox {
+  max-width: 1200px;
+  margin: var(--space-12) auto 0 auto;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(176, 125, 46, 0.15);
+  border-radius: 8px;
+  padding: var(--space-8);
+  backdrop-filter: blur(4px);
+}
+
+.detailsHeader {
+  text-align: center;
+  margin-bottom: var(--space-8);
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.detailsHeader::before, .detailsHeader::after {
+  content: '';
+  height: 1px;
+  width: 40px;
+  background-color: var(--gold);
+  opacity: 0.5;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+}
+
+.detailCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.detailIcon {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.detailTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.detailText {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* CTA Banner */
+.ctaBanner {
+  margin: var(--space-8) auto 0 auto;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(176, 125, 46, 0.15);
+  border-radius: 8px;
+  padding: var(--space-6) var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+.ctaText {
+  font-size: 1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ctaBtn {
+  background-color: #A65A31; /* Earthy artisan button color */
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.ctaBtn:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 1024px) {
+  .visualizationArea {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-8);
+    border-bottom: none;
+  }
+  
+  .sizeItem {
+    min-width: 45%;
+    border-bottom: 2px solid rgba(176, 125, 46, 0.2);
+  }
+  
+  .sizeItem::after {
+    display: none;
+  }
+  
+  .humanScale {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-8);
+    border-bottom: 2px solid rgba(176, 125, 46, 0.2);
+    padding-left: 0;
+  }
+  
+  .heightLine {
+    right: auto;
+    left: 50%;
+    transform: translateX(120px);
+  }
+  
+  .heightText {
+    right: auto;
+    left: 50%;
+    transform: translate(140px, -50%);
+  }
+
+  .detailsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ctaBanner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+}
