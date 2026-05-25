@@ -751,11 +751,11 @@
 
 @media (max-width: 768px) {
   .modalOverlay {
-    padding: 0;
+    padding: 48px 12px;
   }
   .modalContent {
-    height: 100dvh;
-    border-radius: 0;
+    height: 100%;
+    border-radius: 12px;
     border: none;
   }
   .modalCloseBtn {

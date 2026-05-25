@@ -104,10 +104,12 @@
 /* Human Silhouette */
 .humanScale {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   justify-content: flex-end;
   padding-left: var(--space-8);
   position: relative;
+  flex: 1;
 }
 
 .humanSvg {

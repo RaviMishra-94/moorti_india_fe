@@ -109,15 +109,14 @@ export default async function SizeChartPage({
 
           {/* Human Silhouette */}
           <div className={styles.humanScale}>
+            <div className={styles.sizeLabel} style={{ marginBottom: '8px' }}>HUMAN REF</div>
+            <div className={styles.sizeDesc} style={{ marginBottom: '8px' }}>5&apos;8&quot; &nbsp;|&nbsp; 68 IN &nbsp;|&nbsp; 173 CM</div>
             <img 
               src="/images/human-silhouette.svg" 
               alt="Human Scale Reference" 
               className={styles.humanSvg}
               style={{ objectFit: 'contain' }}
             />
-            <div className={styles.heightLine}>
-              <span className={styles.heightText}>5&apos;8&quot;<br/>(68 INCH)<br/>(173 CM)</span>
-            </div>
           </div>
         </div>
 
