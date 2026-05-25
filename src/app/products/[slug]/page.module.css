@@ -215,8 +215,8 @@
 }
 
 .whatsappBtn {
-  background-color: #25D366;
-  border-color: #25D366;
+  background-color: var(--gold);
+  border-color: var(--gold);
   color: white;
   width: 100%;
   justify-content: center;
@@ -226,8 +226,8 @@
 }
 
 .whatsappBtn:hover {
-  background-color: #128C7E;
-  border-color: #128C7E;
+  background-color: var(--gold-light);
+  border-color: var(--gold-light);
   color: white;
 }
 
@@ -383,7 +383,7 @@
   justify-content: center;
   gap: 8px;
   padding: 14px;
-  background: #25D366;
+  background: var(--gold);
   color: white;
   border: none;
   border-radius: 8px;
@@ -395,9 +395,9 @@
 }
 
 .sendAudioBtn:hover:not(:disabled) {
-  background: #128C7E;
+  background: var(--gold-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 4px 12px rgba(200, 82, 28, 0.3);
 }
 
 .sendAudioBtn:disabled {

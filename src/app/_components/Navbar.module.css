@@ -213,18 +213,18 @@
   font-size: 0.82rem;
   font-weight: 600;
   color: #fff;
-  background: #25D366;
+  background: var(--gold);
   padding: 8px 14px;
   border-radius: 6px;
-  border: 1px solid #25D366;
+  border: 1px solid var(--gold);
   transition: all var(--transition-base);
   white-space: nowrap;
 }
 
 .phoneLink:hover {
-  background: #1ebe5d;
+  background: var(--gold-light);
   color: #fff;
-  border-color: #1ebe5d;
+  border-color: var(--gold-light);
 }
 
 /* Hamburger */
@@ -434,17 +434,17 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: #fff;
-  background: #25D366;
+  background: var(--gold);
   padding: 12px;
   border-radius: var(--radius-md);
-  border: 1px solid #25D366;
+  border: 1px solid var(--gold);
   transition: all var(--transition-base);
 }
 
 .mobilePhone:hover { 
-  background: #1ebe5d;
+  background: var(--gold-light);
   color: #fff;
-  border-color: #1ebe5d;
+  border-color: var(--gold-light);
 }
 
 /* Responsive */

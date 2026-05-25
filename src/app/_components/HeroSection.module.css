@@ -4,7 +4,7 @@
   min-height: 650px;
   max-height: 750px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -18,64 +18,122 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(to right,
-      rgba(253, 248, 240, 0.97) 0%,
-      rgba(248, 236, 218, 0.88) 30%,
-      rgba(245, 228, 205, 0.45) 58%,
-      rgba(240, 220, 190, 0.05) 100%);
+  /* Transparent left (Ganesha area) → opaque right (text area) */
+  background: linear-gradient(to left,
+      rgba(30, 20, 10, 0.80) 0%,
+      rgba(30, 20, 10, 0.55) 45%,
+      rgba(30, 20, 10, 0.20) 65%,
+      transparent 100%);
 }
 
 .overlayPattern {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background-image: radial-gradient(circle at 20% 60%, rgba(200, 82, 28, 0.06) 0%, transparent 50%);
+  background-image: radial-gradient(circle at 75% 50%, rgba(200, 82, 28, 0.08) 0%, transparent 50%);
 }
 
-/* Divine glow orb — pulsates behind the statue */
+/* Divine glow orb — behind the Ganesha statue on left */
 .divineGlow {
   position: absolute;
-  /* sits roughly behind the Ganesh figure — right-center */
   top: 5%;
-  right: 22%;
-  width: 55vw;
-  height: 90%;
-  z-index: 1;
+  left: 2%;
+  width: 52vw;
+  height: 95%;
+  z-index: 2;
   border-radius: 50%;
   background: radial-gradient(ellipse at center,
-      rgba(255, 210, 120, 0.55) 0%,
-      rgba(220, 140, 60, 0.32) 30%,
-      rgba(200, 82, 28, 0.14) 55%,
+      rgba(255, 210, 120, 0.35) 0%,
+      rgba(220, 140, 60, 0.18) 30%,
+      rgba(200, 82, 28, 0.08) 55%,
       transparent 75%);
   animation: divinePulse 4s ease-in-out infinite;
   pointer-events: none;
-  mix-blend-mode: multiply;
+  mix-blend-mode: screen;
 }
-
 
 /* Soft shimmer sweep */
 .divineShimmer {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   background: linear-gradient(105deg,
       transparent 30%,
-      rgba(255, 220, 140, 0.08) 48%,
-      rgba(255, 240, 180, 0.15) 52%,
+      rgba(255, 220, 140, 0.06) 48%,
+      rgba(255, 240, 180, 0.10) 52%,
       transparent 70%);
   background-size: 200% 100%;
   animation: divineShimmer 6s ease-in-out infinite;
   pointer-events: none;
 }
 
+/* ===========================
+   GANESHA — transparent PNG
+   =========================== */
+.ganeshaWrap {
+  position: absolute;
+  left: 0;
+  bottom: -5%;
+  width: 50%;
+  height: 120%;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-left: 3vw;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+/* Warm ambient overlay to blend Ganesha's lighting with temple */
+.ganeshaWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 55% 40%,
+    rgba(210, 130, 40, 0.18) 0%,
+    rgba(180, 90, 20, 0.10) 40%,
+    transparent 70%
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ganeshaImg {
+  width: auto !important;
+  height: 100% !important;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  /* Warm up lighting: sepia adds amber tone, brightness darkens slightly to match temple */
+  filter:
+    drop-shadow(0 0 40px rgba(210, 140, 50, 0.50))
+    sepia(0.30)
+    saturate(1.25)
+    brightness(0.82)
+    contrast(1.05)
+    hue-rotate(-8deg);
+  position: relative;
+  z-index: 2;
+}
+
+/* ===========================
+   CONTENT — right side
+   =========================== */
 .heroContent {
   position: relative;
-  z-index: 3;
-  padding-bottom: var(--space-16);
+  z-index: 4;
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-bottom: var(--space-16);
+  align-self: flex-end;
 }
 
 .heroContent.visible {
@@ -84,7 +142,8 @@
 }
 
 .heroInner {
-  max-width: 1100px;
+  max-width: 560px;
+  width: 100%;
 }
 
 .heroLabel {
@@ -105,15 +164,15 @@
 }
 
 .heroTitleLine1 {
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
-  color: var(--text-primary);
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  color: #FDF8F0;
   letter-spacing: -0.02em;
   animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
   white-space: nowrap;
 }
 
 .heroTitleLine2 {
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
   font-style: italic;
   letter-spacing: -0.02em;
   background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dim) 100%);
@@ -126,7 +185,7 @@
 
 .heroSubtitle {
   font-size: clamp(0.95rem, 2vw, 1.1rem);
-  color: var(--text-secondary);
+  color: rgba(253, 248, 240, 0.85);
   line-height: 1.7;
   margin-bottom: var(--space-8);
   font-weight: 400;
@@ -158,7 +217,7 @@
   font-family: var(--font-display);
   font-size: 1.6rem;
   font-weight: 300;
-  color: var(--text-primary);
+  color: #FDF8F0;
   line-height: 1;
 }
 
@@ -166,21 +225,21 @@
   font-size: 0.68rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: rgba(253, 248, 240, 0.6);
 }
 
 .heroStatDivider {
   width: 1px;
   height: 40px;
-  background: var(--border-subtle);
+  background: rgba(253, 248, 240, 0.15);
 }
 
 /* Scroll Hint */
 .scrollHint {
   position: absolute;
   bottom: var(--space-8);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 50px;
+  transform: none;
   z-index: 4;
   display: flex;
   flex-direction: column;
@@ -196,71 +255,27 @@
 }
 
 @keyframes divinePulse {
-
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
-@keyframes divineRaysPulse {
-
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: translate(50%, -50%) scale(0.97);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translate(50%, -50%) scale(1.03);
-  }
-}
-
-@keyframes divineRotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 
 @keyframes divineShimmer {
-  0% {
-    background-position: 200% 0;
-    opacity: 0.4;
-  }
-
-  50% {
-    background-position: -50% 0;
-    opacity: 1;
-  }
-
-  100% {
-    background-position: 200% 0;
-    opacity: 0.4;
-  }
+  0% { background-position: 200% 0; opacity: 0.4; }
+  50% { background-position: -50% 0; opacity: 1; }
+  100% { background-position: 200% 0; opacity: 0.4; }
 }
 
 .heroSubtitle1 {
   font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  color: #FDF8F0;
 }
 
 .heroSubtitle2 {
   font-size: 1.1rem;
-  color: #000000;
-  font-weight: 500;
+  color: rgba(253, 248, 240, 0.75);
+  font-weight: 400;
 }
 
 .heroBtn {
@@ -268,35 +283,61 @@
   font-size: 1.1rem;
 }
 
+/* ===========================
+   MOBILE
+   =========================== */
 @media (max-width: 768px) {
   .hero {
-    align-items: flex-start;
+    align-items: flex-end;
+    min-height: 100svh;
+    max-height: none;
+    height: 100svh;
+  }
+
+  .ganeshaWrap {
+    width: 85%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-left: 0;
+    justify-content: center;
+    opacity: 0.35;
+  }
+
+  .ganeshaImg {
+    height: 75% !important;
+  }
+
+  .overlayGradient {
+    background: linear-gradient(to top,
+        rgba(20, 12, 5, 0.95) 0%,
+        rgba(20, 12, 5, 0.80) 40%,
+        rgba(20, 12, 5, 0.30) 70%,
+        transparent 100%);
   }
 
   .heroContent {
-    height: 100%;
-    width: 100%;
-    padding-top: 5vh;
+    justify-content: center;
     padding-bottom: var(--space-8);
+    align-self: flex-end;
   }
 
   .heroInner {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    max-width: 100%;
+    text-align: center;
   }
 
-  .heroBottom {
-    margin-top: auto;
+  .heroLabel {
+    justify-content: center;
   }
 
-  .heroSubtitle1 {
-    font-size: 1.15rem;
+  .heroTitleLine1,
+  .heroTitleLine2 {
+    white-space: normal;
+    font-size: clamp(2rem, 8vw, 3.5rem);
   }
 
-  .heroSubtitle2 {
-    font-size: 0.95rem;
-  }
+  .heroSubtitle1 { font-size: 1.15rem; }
+  .heroSubtitle2 { font-size: 0.95rem; }
 
   .heroBtn {
     padding: 0.8rem 1.5rem;
@@ -313,9 +354,7 @@
     justify-content: center;
   }
 
-  .scrollHint {
-    display: none;
-  }
+  .scrollHint { display: none; }
 
   .heroStats {
     justify-content: space-between;
@@ -329,20 +368,7 @@
     flex: 1;
   }
 
-  .heroStatValue {
-    font-size: 1.3rem;
-  }
-
-  .heroStatLabel {
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-  }
-
-  .heroStatDivider {
-    height: 32px;
-  }
-
-  .heroTitleLine1, .heroTitleLine2 {
-    white-space: normal;
-  }
+  .heroStatValue { font-size: 1.3rem; }
+  .heroStatLabel { font-size: 0.6rem; letter-spacing: 0.1em; }
+  .heroStatDivider { height: 32px; }
 }

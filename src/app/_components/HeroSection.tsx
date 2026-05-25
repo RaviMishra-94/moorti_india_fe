@@ -19,28 +19,40 @@ export default function HeroSection() {
 
   return (
     <section className={styles.hero} id="hero">
-      {/* Background Image */}
+      {/* Temple Background — full bleed */}
       <div className={styles.heroBg}>
         <Image
-          src="/images/hero_ganesh.webp"
-          alt="Handcrafted marble Ganesh statue — Moorti India"
+          src="/images/hero_temple.png"
+          alt="Ancient Indian temple background"
           fill
           priority
           quality={90}
-          style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
+          style={{ objectFit: 'cover', objectPosition: 'center center' }}
         />
       </div>
 
-      {/* Overlays */}
+      {/* Gradient overlays for text readability */}
       <div className={styles.overlayGradient} />
       <div className={styles.overlayPattern} />
 
-      {/* Animated divine glow behind the statue */}
+      {/* Divine glow behind statue */}
       <div className={styles.divineGlow} />
-      <div className={styles.divineRays} />
       <div className={styles.divineShimmer} />
 
-      {/* Content */}
+      {/* Ganesha PNG — transparent bg, positioned on left */}
+      <div className={styles.ganeshaWrap}>
+        <Image
+          src="/images/ganesha_nobg.png"
+          alt="Handcrafted marble Ganesha statue — Moorti India"
+          width={600}
+          height={600}
+          priority
+          quality={95}
+          className={styles.ganeshaImg}
+        />
+      </div>
+
+      {/* Content — right side */}
       <div className={`container ${styles.heroContent}`} ref={textRef}>
         <div className={styles.heroInner}>
           <div className={styles.heroTop}>
@@ -56,7 +68,7 @@ export default function HeroSection() {
 
           <div className={styles.heroCenter}>
             <p className={`${styles.heroSubtitle} ${styles.heroSubtitle1}`}>
-              Marble Idols That Elevate Your Space & Spirit
+              Marble Idols That Elevate Your Space &amp; Spirit
             </p>
             <p className={`${styles.heroSubtitle} ${styles.heroSubtitle2}`}>
               Handcrafted from premium marble by skilled artisans. Designed for homes and sacred spaces.
@@ -93,7 +105,7 @@ export default function HeroSection() {
       {/* Scroll hint */}
       <div className={styles.scrollHint}>
         <div className={styles.scrollLine} />
-        <span className="label-sm" style={{ color: 'var(--text-muted)' }}>Scroll</span>
+        <span className="label-sm" style={{ color: 'rgba(253, 248, 240, 0.6)' }}>Scroll</span>
       </div>
     </section>
   );
