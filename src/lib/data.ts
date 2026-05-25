@@ -276,7 +276,7 @@ export const processSteps: ProcessStep[] = [
 
 export const stats = [
   { value: 40, suffix: '+', label: 'Years of Craft' },
-  { value: 10000, suffix: '+', label: 'Statues Created' },
+  { value: 10000, suffix: '+', label: 'Statues Handcrafted' },
   { value: 50, suffix: '+', label: 'Countries Reached' },
   { value: 100, suffix: '%', label: 'Handcrafted' },
 ];

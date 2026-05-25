@@ -50,7 +50,7 @@ export default function TributeSection() {
         {/* Header */}
         <div className={styles.header}>
           <span className={`label-sm section-label ${styles.eyebrow}`}>
-            ✦ &nbsp; In Loving Memory &nbsp; ✦
+            ✦ &nbsp; Legacy Sculpted In Marble &nbsp; ✦
           </span>
           <div className="gold-line gold-line-center" style={{ marginTop: 'var(--space-4)' }} />
           <h2 className={`display-lg ${styles.heading}`}>
@@ -58,8 +58,7 @@ export default function TributeSection() {
             <em className={styles.headingEm}>To Your Loved Ones</em>
           </h2>
           <p className={styles.subtitle}>
-            Honour the memory of those who shaped your life with a hand-carved marble sculpture —
-            crafted with reverence, precision, and the timeless artistry of Jaipur's finest stonecutters.
+            Each sculpture is handcrafted by Jaipur artisans using premium marble, preserving expression, emotion, and identity for generations.
           </p>
         </div>
 
