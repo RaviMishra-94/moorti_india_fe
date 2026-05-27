@@ -139,7 +139,7 @@ const localBusinessSchema = {
   hasMap: 'https://maps.app.goo.gl/QRZ3r1Hjg6r45M4x6',
 };
 
-import { getCategories } from '@/lib/api';
+import { getCategories, fetchSiteSettings, getActiveCertificates, Certificate } from '@/lib/api';
 
 export default async function RootLayout({
   children,
@@ -147,7 +147,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = await getCategories();
-  
+
+  let siteSettings = null;
+  let activeCertificates: Certificate[] = [];
+  try {
+    siteSettings = await fetchSiteSettings();
+    activeCertificates = await getActiveCertificates();
+  } catch (e) {
+    console.error('Failed to load settings or certificates:', e);
+  }
+
   return (
     <html lang="en">
       <head>
@@ -169,7 +178,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
-        <NavigationWrapper categories={categories}>
+        <NavigationWrapper categories={categories} siteSettings={siteSettings} certificates={activeCertificates}>
           {children}
         </NavigationWrapper>
         <WhatsAppWidget />

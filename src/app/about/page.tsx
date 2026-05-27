@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { fetchSiteSettings, getActiveCertificates, Certificate } from '@/lib/api';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -9,7 +10,16 @@ export const metadata: Metadata = {
     'Learn the story of Moorti India — a family-led marble statue manufacturer in Jaipur since 1985, crafting divine sculptures for devotees worldwide.',
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let siteSettings = null;
+  let activeCertificates: Certificate[] = [];
+  try {
+    siteSettings = await fetchSiteSettings();
+    activeCertificates = await getActiveCertificates();
+  } catch (err) {
+    console.error('Failed to fetch site settings', err);
+  }
+  
   return (
     <div className={styles.page}>
       {/* Hero */}
@@ -79,6 +89,29 @@ export default function AboutPage() {
                   style={{ objectFit: 'cover', objectPosition: 'center top' }}
                 />
               </div>
+
+              {activeCertificates.length > 0 && (
+                <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', background: 'var(--bg-card)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-subtle)' }}>
+                  <span style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📜</span>
+                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Certificates of Authenticity</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', maxWidth: '300px' }}>
+                    Moorti India is a certified manufacturer of authentic handcrafted marble idols.
+                  </p>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {activeCertificates.map(cert => (
+                      <a 
+                        key={cert.id}
+                        href={cert.file_url.startsWith('http') ? cert.file_url : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${cert.file_url}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="btn btn-primary"
+                        style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+                      >
+                        {cert.name || 'View Certificate'}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

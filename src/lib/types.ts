@@ -43,12 +43,6 @@ export interface Product {
   isTrending?: boolean;
   tag?: string; // legacy
   tags?: string[]; // e.g. Best seller, Premium, New
-
-  // Certificate of Authenticity
-  // certificate_mode: 'default' | 'custom' | 'none'
-  certificateMode?: string;
-  certificate?: string;     // custom URL (only used when mode='custom')
-  certificateUrl?: string;  // computed by backend — use this in UI
 }
 
 export interface Category {
@@ -77,4 +71,11 @@ export interface ProcessStep {
   description: string;
   icon: string;
   image?: string;
+}
+
+// ─── Site Settings Types ────────────────────────────────────────────────────
+
+export interface SiteSettings {
+  id: number;
+  certificateUrl?: string;
 }

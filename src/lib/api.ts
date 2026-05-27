@@ -73,9 +73,6 @@ function normaliseProduct(raw: any): Product {
     sizes: raw.sizes ?? undefined,
     finish: raw.finish ?? undefined,
     keyFeatures: raw.key_features ?? undefined,
-    certificateMode: raw.certificate_mode ?? 'default',
-    certificate: raw.certificate ?? undefined,
-    certificateUrl: raw.certificate_url ?? undefined,
   };
 }
 
@@ -160,4 +157,98 @@ export async function getClientStories(): Promise<any[]> {
   const data = await apiFetch<any[]>('/api/client-stories', { cache: 'no-store' });
   if (data) return data;
   return [];
+}
+
+// ─── Site Settings APIs ─────────────────────────────────────────────────────
+
+import { SiteSettings } from './types';
+
+export async function fetchSiteSettings(): Promise<SiteSettings> {
+  const res = await fetch(`${API_URL}/api/settings/`, {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) throw new Error('Failed to fetch site settings');
+  const data = await res.json();
+  return {
+    id: data.id,
+    certificateUrl: data.certificate_url,
+  };
+}
+
+export async function updateSiteSettings(data: { certificate_url?: string }, token: string): Promise<SiteSettings> {
+  const res = await fetch(`${API_URL}/api/settings/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update site settings');
+  const responseData = await res.json();
+  return {
+    id: responseData.id,
+    certificateUrl: responseData.certificate_url,
+  };
+}
+
+// ─── Certificates ────────────────────────────────────────────────────────────
+
+export interface Certificate {
+  id: number;
+  name: string | null;
+  file_url: string;
+  is_active: boolean;
+  display_order: number;
+}
+
+export async function getCertificates(token: string): Promise<Certificate[]> {
+  const res = await fetch(`${API_URL}/api/certificates/`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: 'no-store'
+  });
+  if (!res.ok) throw new Error('Failed to fetch certificates');
+  return res.json();
+}
+
+export async function getActiveCertificates(): Promise<Certificate[]> {
+  const res = await fetch(`${API_URL}/api/certificates/active`, {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) throw new Error('Failed to fetch active certificates');
+  return res.json();
+}
+
+export async function createCertificate(data: { name: string, file_url: string, is_active: boolean }, token: string): Promise<Certificate> {
+  const res = await fetch(`${API_URL}/api/certificates/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to create certificate');
+  return res.json();
+}
+
+export async function updateCertificate(id: number, data: any, token: string): Promise<Certificate> {
+  const res = await fetch(`${API_URL}/api/certificates/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error('Failed to update certificate');
+  return res.json();
+}
+
+export async function deleteCertificate(id: number, token: string): Promise<void> {
+  const res = await fetch(`${API_URL}/api/certificates/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error('Failed to delete certificate');
 }
