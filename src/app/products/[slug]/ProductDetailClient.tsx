@@ -355,6 +355,20 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
           </div>
 
           <h1 className={styles.title}>{product.name}</h1>
+          {/* Certified Authentic badge — only shown when backend provides a certificate URL */}
+          {product.certificateUrl && (
+
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'rgba(212,160,90,0.12)', border: '1px solid rgba(212,160,90,0.4)',
+              borderRadius: 20, padding: '4px 12px', marginBottom: 12,
+              fontSize: '0.75rem', fontWeight: 700, color: 'var(--gold, #b07d2e)',
+              letterSpacing: '0.04em',
+            }}>
+              <span style={{ fontSize: '0.85rem' }}>✓</span> CERTIFIED AUTHENTIC
+            </div>
+          )}
+
           <p className={styles.shortDesc}>{product.description || product.shortDesc}</p>
 
           {product.keyFeatures && product.keyFeatures.length > 0 && (
@@ -539,7 +553,101 @@ export default function ProductDetailClient({ product, clientStories = [] }: Pro
       </div>
     </div>
 
+    {/* ── Certificate of Authenticity — only rendered when backend provides a URL ── */}
+    {product.certificateUrl && (() => {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const certUrl = product.certificateUrl.startsWith('http')
+        ? product.certificateUrl
+        : `${API_BASE}${product.certificateUrl}`;
+      const isPdf = certUrl.toLowerCase().endsWith('.pdf');
+
+      return (
+        <div style={{ maxWidth: 960, margin: '48px auto 64px', padding: '0 16px' }}>
+          <div style={{
+            background: 'rgba(255,251,240,0.97)',
+            border: '1px solid rgba(212,160,90,0.35)',
+            borderRadius: 16, padding: '28px 32px',
+            display: 'flex', gap: 32, alignItems: 'center',
+            boxShadow: '0 4px 24px rgba(180,140,60,0.10)',
+          }}>
+            {/* Certificate thumbnail / icon */}
+            <div style={{ flexShrink: 0 }}>
+              {isPdf ? (
+                <div style={{
+                  width: 100, height: 100,
+                  background: 'rgba(212,160,90,0.15)', borderRadius: 12,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  justifyContent: 'center', gap: 4,
+                  border: '1px solid rgba(212,160,90,0.3)',
+                }}>
+                  <span style={{ fontSize: '2.2rem' }}>📄</span>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#b07d2e', letterSpacing: '0.05em' }}>PDF</span>
+                </div>
+              ) : (
+                <a href={certUrl} target="_blank" rel="noopener noreferrer" title="View full certificate">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={certUrl}
+                    alt="Certificate of Authenticity"
+                    style={{
+                      width: 140, height: 108, objectFit: 'cover',
+                      borderRadius: 10, border: '2px solid rgba(212,160,90,0.4)',
+                      boxShadow: '0 2px 12px rgba(180,140,60,0.15)',
+                      cursor: 'pointer', transition: 'transform 0.2s', display: 'block',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.03)')}
+                    onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                  />
+                </a>
+              )}
+            </div>
+
+            {/* Text + action */}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.1em', color: '#b07d2e', textTransform: 'uppercase', marginBottom: 6 }}>
+                ✓ Certificate of Authenticity
+              </div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#3a2a0a', margin: '0 0 8px', lineHeight: 1.3 }}>
+                Genuine Handcrafted Marble Idol
+              </h3>
+              <p style={{ fontSize: '0.85rem', color: '#5a4010', lineHeight: 1.6, margin: '0 0 16px' }}>
+                This moorti is certified to be a genuine, handcrafted marble idol crafted by skilled artisans in Jaipur, India. Each piece is individually created using traditional techniques passed down through generations.
+              </p>
+              <a
+                href={certUrl} target="_blank" rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: isPdf ? '#b07d2e' : 'transparent',
+                  color: isPdf ? '#fff' : '#b07d2e',
+                  border: isPdf ? 'none' : '1.5px solid #b07d2e',
+                  borderRadius: 8, padding: '8px 18px', fontSize: '0.82rem',
+                  fontWeight: 700, letterSpacing: '0.05em', textDecoration: 'none',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#b07d2e'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = isPdf ? '#b07d2e' : 'transparent'; e.currentTarget.style.color = isPdf ? '#fff' : '#b07d2e'; }}
+              >
+                {isPdf ? '📄 View Certificate PDF' : '🔍 View Full Certificate'}
+              </a>
+            </div>
+
+            {/* Decorative seal */}
+            <div style={{
+              flexShrink: 0, width: 80, height: 80,
+              background: 'radial-gradient(circle, rgba(212,160,90,0.2) 0%, rgba(212,160,90,0.05) 100%)',
+              border: '2px solid rgba(212,160,90,0.35)', borderRadius: '50%',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2,
+            }}>
+              <span style={{ fontSize: '1.4rem' }}>🏛️</span>
+              <span style={{ fontSize: '0.55rem', fontWeight: 700, color: '#b07d2e', letterSpacing: '0.04em', textAlign: 'center', lineHeight: 1.2 }}>MOORTI INDIA</span>
+            </div>
+          </div>
+        </div>
+      );
+    })()}
+
     {/* Size Guide Modal */}
+
     {isSizeGuideOpen && (
       <div className={styles.modalOverlay} onClick={() => setIsSizeGuideOpen(false)}>
         <div className={styles.modalContent} onClick={e => e.stopPropagation()}>

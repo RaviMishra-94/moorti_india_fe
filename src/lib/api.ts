@@ -73,6 +73,9 @@ function normaliseProduct(raw: any): Product {
     sizes: raw.sizes ?? undefined,
     finish: raw.finish ?? undefined,
     keyFeatures: raw.key_features ?? undefined,
+    certificateMode: raw.certificate_mode ?? 'default',
+    certificate: raw.certificate ?? undefined,
+    certificateUrl: raw.certificate_url ?? undefined,
   };
 }
 

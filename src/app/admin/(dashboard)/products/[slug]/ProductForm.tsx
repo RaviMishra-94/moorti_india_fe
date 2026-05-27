@@ -39,6 +39,9 @@ interface ProductFormData {
   meta_title: string;
   meta_description: string;
   image_alt_text: string;
+  // Certificate — 3 states: 'default' | 'custom' | 'none'
+  certificate_mode: string;
+  certificate: string;
 }
 
 interface BgOption {
@@ -88,6 +91,12 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
   ]);
   const [newTagInput, setNewTagInput] = useState('');
 
+  // ── Certificate state ─────────────────────────────────────────────────
+  const [uploadingCertificate, setUploadingCertificate] = useState(false);
+  const [isDraggingCert, setIsDraggingCert] = useState(false);
+  const certFileInputRef = useRef<HTMLInputElement>(null);
+
+
   useEffect(() => {
     if (initialData?.tag && !availableTags.includes(initialData.tag)) {
       setAvailableTags(prev => [...prev, initialData.tag as string]);
@@ -104,6 +113,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     use_default_testimonial: true, testimonial_stars: 5, testimonial_text: '', testimonial_author: '',
     is_featured: false, is_trending: false,
     use_default_seo: true, meta_title: '', meta_description: '', image_alt_text: '',
+    certificate_mode: 'default', certificate: '',
   };
 
   const safeInitialData = initialData
@@ -111,6 +121,7 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
         if (v === null) {
           if (k === 'use_default_testimonial') return [k, true];
           if (k === 'use_default_seo') return [k, true];
+          if (k === 'certificate_mode') return [k, 'default'];
           if (k === 'testimonial_stars') return [k, 5];
           if (k === 'images') return [k, []];
           if (k === 'fg_images') return [k, []];
@@ -471,7 +482,33 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
     }
   };
 
+  // ── Certificate Upload ─────────────────────────────────────────────────────
+  const uploadCertificateFile = async (file: File) => {
+    setUploadingCertificate(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`${apiUrl}/api/uploads/certificate`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg);
+      }
+      const data = await res.json();
+      setForm(prev => ({ ...prev, certificate: data.url }));
+      showToast('Certificate uploaded successfully!', 'success');
+    } catch (err) {
+      showToast(`Certificate upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`, 'error');
+    } finally {
+      setUploadingCertificate(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
+
     e.preventDefault();
 
     startTransition(async () => {
@@ -1155,8 +1192,157 @@ export default function ProductForm({ initialData, isNew, token, apiUrl, existin
             </>
           )}
 
+          {/* ── Certificate of Authenticity ──────────────────────── */}
+          <div className={styles.formSectionTitle}>Certificate of Authenticity</div>
+
+          {/* 3-state radio selector */}
+          <div className={styles.formGridFull}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+              {([
+                { value: 'default', label: '🏛️ Use Moorti India default certificate', desc: 'Shared across all products. Client can update later.' },
+                { value: 'custom',  label: '📤 Upload custom certificate', desc: 'Upload a specific image or PDF for this product.' },
+                { value: 'none',    label: '✕ No certificate', desc: 'Hide certificate section on the product page.' },
+              ] as const).map(opt => (
+                <label key={opt.value} style={{
+                  display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer',
+                  background: form.certificate_mode === opt.value ? 'rgba(212,160,90,0.1)' : 'rgba(255,255,255,0.02)',
+                  border: `1px solid ${form.certificate_mode === opt.value ? 'rgba(212,160,90,0.5)' : '#333'}`,
+                  borderRadius: 8, padding: '10px 14px', transition: 'all 0.15s',
+                }}>
+                  <input
+                    type="radio"
+                    name="certificate_mode"
+                    value={opt.value}
+                    checked={form.certificate_mode === opt.value}
+                    onChange={() => setForm(prev => ({
+                      ...prev,
+                      certificate_mode: opt.value,
+                      ...(opt.value !== 'custom' ? { certificate: '' } : {}),
+                    }))}
+                    style={{ marginTop: 2, accentColor: '#d4a05a', flexShrink: 0 }}
+                  />
+                  <div>
+                    <div style={{ fontSize: '0.88rem', color: '#ddd', fontWeight: 600 }}>{opt.label}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 2 }}>{opt.desc}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            {/* Mode: default — show preview */}
+            {form.certificate_mode === 'default' && (
+              <div style={{ background: '#1a1511', padding: '12px 16px', borderRadius: 8, border: '1px solid #332a21', display: 'flex', gap: 14, alignItems: 'center' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${apiUrl}/assets/default_certificate.png`}
+                  alt="Default Certificate"
+                  style={{ width: 120, height: 90, objectFit: 'cover', borderRadius: 6, border: '1px solid #554433', flexShrink: 0 }}
+                />
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#d4a05a', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>Default Certificate</div>
+                  <div style={{ fontSize: '0.85rem', color: '#ddd' }}>Moorti India — Certificate of Authenticity</div>
+                  <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 4 }}>This will be shown on the product page.</div>
+                </div>
+              </div>
+            )}
+
+            {/* Mode: custom — upload zone + preview */}
+            {form.certificate_mode === 'custom' && (
+              <div>
+                {/* Current certificate preview */}
+                {form.certificate && (
+                  <div style={{ marginBottom: 14, background: '#1a1511', border: '1px solid #332a21', borderRadius: 8, padding: 14, display: 'flex', gap: 14, alignItems: 'center' }}>
+                    {form.certificate.toLowerCase().endsWith('.pdf') ? (
+                      <>
+                        <div style={{ width: 60, height: 60, background: 'rgba(212,160,90,0.15)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', flexShrink: 0 }}>📄</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.8rem', color: '#d4a05a', fontWeight: 'bold', marginBottom: 4 }}>PDF CERTIFICATE</div>
+                          <div style={{ fontSize: '0.75rem', color: '#999', wordBreak: 'break-all', marginBottom: 6 }}>{form.certificate.split('/').pop()}</div>
+                          <a href={`${apiUrl}${form.certificate}`} target="_blank" rel="noopener noreferrer"
+                            style={{ fontSize: '0.75rem', color: '#d4a05a', textDecoration: 'underline' }}>
+                            Open PDF ↗
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={`${apiUrl}${form.certificate}`} alt="Certificate" style={{ width: 120, height: 90, objectFit: 'cover', borderRadius: 6, border: '1px solid #554433', flexShrink: 0 }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.8rem', color: '#d4a05a', fontWeight: 'bold', marginBottom: 4 }}>CUSTOM CERTIFICATE</div>
+                          <div style={{ fontSize: '0.75rem', color: '#999', wordBreak: 'break-all' }}>{form.certificate.split('/').pop()}</div>
+                        </div>
+                      </>
+                    )}
+                    <button type="button"
+                      onClick={() => setForm(prev => ({ ...prev, certificate: '' }))}
+                      style={{ background: 'rgba(255,60,60,0.1)', border: '1px solid rgba(255,60,60,0.3)', color: '#ff6b6b', borderRadius: 6, padding: '6px 10px', cursor: 'pointer', fontSize: '0.8rem', flexShrink: 0 }}
+                    >Remove</button>
+                  </div>
+                )}
+
+                {/* Upload zone */}
+                <div
+                  style={{
+                    border: `2px dashed ${isDraggingCert ? '#d4a05a' : '#444'}`,
+                    borderRadius: 10, padding: '24px 20px', textAlign: 'center',
+                    background: isDraggingCert ? 'rgba(212,160,90,0.07)' : 'rgba(255,255,255,0.02)',
+                    cursor: uploadingCertificate ? 'not-allowed' : 'pointer',
+                    opacity: uploadingCertificate ? 0.6 : 1, transition: 'all 0.2s',
+                  }}
+                  onDragOver={(e) => { e.preventDefault(); setIsDraggingCert(true); }}
+                  onDragLeave={() => setIsDraggingCert(false)}
+                  onDrop={(e) => {
+                    e.preventDefault(); setIsDraggingCert(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) uploadCertificateFile(file);
+                  }}
+                  onClick={() => !uploadingCertificate && certFileInputRef.current?.click()}
+                >
+                  <div style={{ fontSize: '2rem', marginBottom: 8 }}>{uploadingCertificate ? '⏳' : '📜'}</div>
+                  <div style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: 4 }}>
+                    {uploadingCertificate ? 'Uploading…' : <>Drag & drop, or <span style={{ color: '#d4a05a', fontWeight: 'bold' }}>click to browse</span></>}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: '#666' }}>JPEG, PNG, WebP or PDF — max 20 MB</div>
+                </div>
+
+                <input ref={certFileInputRef} type="file" accept="image/jpeg,image/png,image/webp,application/pdf"
+                  style={{ display: 'none' }} id="prod-certificate-file"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) { uploadCertificateFile(f); e.target.value = ''; } }}
+                />
+
+                <div style={{ marginTop: 12 }}>
+                  <label className={styles.formLabel} htmlFor="prod-certificate-url">Or paste a certificate URL</label>
+                  <input id="prod-certificate-url" type="text" className={styles.formInput}
+                    placeholder="/uploads/my-certificate.pdf or https://…"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const val = e.currentTarget.value.trim();
+                        if (val) { setForm(prev => ({ ...prev, certificate: val })); e.currentTarget.value = ''; }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Mode: none — info message */}
+            {form.certificate_mode === 'none' && (
+              <div style={{ background: 'rgba(255,60,60,0.07)', border: '1px solid rgba(255,60,60,0.2)', borderRadius: 8, padding: '12px 16px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>ℹ️</span>
+                <div style={{ fontSize: '0.82rem', color: '#ccc', lineHeight: 1.5 }}>
+                  The certificate section will be <strong style={{ color: '#ff6b6b' }}>hidden</strong> on the product page for this product.
+                </div>
+              </div>
+            )}
+          </div>
+
+
           {/* ── Actions ───────────────────────────────────────── */}
           <div className={styles.formActions}>
+
+
             <button type="button" className={styles.btnSecondary}
               onClick={() => router.push('/admin/products')}>
               Cancel
