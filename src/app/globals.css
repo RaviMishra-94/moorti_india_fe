@@ -112,7 +112,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100%;
-  /* Push content below the fixed topBar (37px) + nav (80px) */
+  /* Push content below fixed topBar/nav handled in NavigationWrapper now */
+}
+
+.main-offset {
   padding-top: calc(37px + var(--nav-height));
 }
 
@@ -600,8 +603,8 @@ select {
   .container {
     padding: 0 var(--space-4);
   }
-  /* topBar hidden — only nav height needed */
-  body {
+  /* topBar hidden — only nav height needed, handled in NavigationWrapper */
+  .main-offset {
     padding-top: var(--nav-height);
   }
 }
