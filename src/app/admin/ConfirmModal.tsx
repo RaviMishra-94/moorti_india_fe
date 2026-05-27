@@ -73,7 +73,7 @@ export default function ConfirmModal({
             className={styles.btnSecondary}
             onClick={onCancel}
             disabled={loading}
-            style={{ flex: 1 }}
+            style={{ flex: 1, justifyContent: 'center' }}
           >
             {cancelLabel}
           </button>

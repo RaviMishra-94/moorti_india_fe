@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { Certificate, createCertificate, updateCertificate, deleteCertificate } from '@/lib/api';
 import { useToast } from '../../ToastProvider';
+import ConfirmModal from '../../ConfirmModal';
 import styles from '../../admin.module.css';
 
 export default function CertificateManager({ 
@@ -18,6 +19,7 @@ export default function CertificateManager({
   const [isDraggingCert, setIsDraggingCert] = useState(false);
   const [uploadingCert, setUploadingCert] = useState(false);
   const certFileInputRef = useRef<HTMLInputElement>(null);
+  const [deletingCertId, setDeletingCertId] = useState<number | null>(null);
   
   const { showToast } = useToast();
 
@@ -64,15 +66,21 @@ export default function CertificateManager({
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this certificate?")) return;
+  const handleDeleteClick = (id: number) => {
+    setDeletingCertId(id);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deletingCertId === null) return;
     try {
-      await deleteCertificate(id, token);
-      setCertificates(prev => prev.filter(c => c.id !== id));
+      await deleteCertificate(deletingCertId, token);
+      setCertificates(prev => prev.filter(c => c.id !== deletingCertId));
       showToast('Certificate deleted', 'info');
     } catch (err) {
       console.error(err);
       showToast('Failed to delete certificate', 'error');
+    } finally {
+      setDeletingCertId(null);
     }
   };
 
@@ -177,7 +185,7 @@ export default function CertificateManager({
                       />
                     </td>
                     <td style={{ textAlign: 'right' }}>
-                      <button onClick={() => handleDelete(cert.id)} className={styles.actionBtnDanger} title="Delete">
+                      <button onClick={() => handleDeleteClick(cert.id)} className={styles.actionBtnDanger} title="Delete">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                       </button>
                     </td>
@@ -188,6 +196,16 @@ export default function CertificateManager({
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={deletingCertId !== null}
+        title="Delete Certificate"
+        message="Are you sure you want to delete this certificate? This cannot be undone."
+        confirmLabel="Delete"
+        danger={true}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeletingCertId(null)}
+      />
     </div>
   );
 }
