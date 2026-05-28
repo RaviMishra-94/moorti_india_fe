@@ -15,6 +15,22 @@
   z-index: 0;
 }
 
+.desktopBg {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mobileBg {
+  display: none !important;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .overlayGradient {
   position: absolute;
   inset: 0;
@@ -298,9 +314,18 @@
 @media (max-width: 768px) {
   .hero {
     align-items: flex-end;
-    min-height: 100svh;
+    /* Adjust these height values to change the mobile container height */
+    min-height: 85svh;
     max-height: none;
-    height: 100svh;
+    height: 85svh;
+  }
+
+  .desktopBg {
+    display: none !important;
+  }
+
+  .mobileBg {
+    display: block !important;
   }
 
   .ganeshaWrap {
@@ -331,12 +356,22 @@
   .heroContent {
     justify-content: center;
     padding-bottom: var(--space-8);
-    align-self: flex-end;
+    align-self: stretch;
+    height: 100%;
+    padding-top: 3vh;
+    /* pushes the top text down a bit from the very edge */
   }
 
   .heroInner {
     max-width: 100%;
     text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heroCenter {
+    margin-top: auto;
   }
 
   .heroLabel {

@@ -21,14 +21,26 @@ export default function HeroSection() {
     <section className={styles.hero} id="hero">
       {/* Temple Background — full bleed */}
       <div className={styles.heroBg}>
-        <Image
-          src="/images/hero_streched.png"
-          alt="Handcrafted marble Ganesha statue background"
-          fill
-          priority
-          quality={100}
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-        />
+        <div className={styles.desktopBg}>
+          <Image
+            src="/images/hero_streched.png"
+            alt="Handcrafted marble Ganesha statue background"
+            fill
+            priority
+            quality={100}
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+        </div>
+        <div className={styles.mobileBg}>
+          <Image
+            src="/images/hero_mobile.png"
+            alt="Handcrafted marble Ganesha statue background"
+            fill
+            priority
+            quality={100}
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+        </div>
       </div>
 
       {/* Gradient overlays for text readability */}
