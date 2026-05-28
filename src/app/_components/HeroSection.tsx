@@ -23,7 +23,7 @@ export default function HeroSection() {
       <div className={styles.heroBg}>
         <div className={styles.desktopBg}>
           <Image
-            src="/images/hero_streched.png"
+            src="/images/hero_streched.webp"
             alt="Handcrafted marble Ganesha statue background"
             fill
             priority
@@ -33,7 +33,7 @@ export default function HeroSection() {
         </div>
         <div className={styles.mobileBg}>
           <Image
-            src="/images/hero_mobile.png"
+            src="/images/hero_mobile.webp"
             alt="Handcrafted marble Ganesha statue background"
             fill
             priority
