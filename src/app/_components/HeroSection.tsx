@@ -22,12 +22,12 @@ export default function HeroSection() {
       {/* Temple Background — full bleed */}
       <div className={styles.heroBg}>
         <Image
-          src="/images/hero_temple.png"
-          alt="Ancient Indian temple background"
+          src="/images/hero_streched.png"
+          alt="Handcrafted marble Ganesha statue background"
           fill
           priority
-          quality={90}
-          style={{ objectFit: 'cover', objectPosition: 'center center' }}
+          quality={100}
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
         />
       </div>
 
@@ -39,18 +39,6 @@ export default function HeroSection() {
       <div className={styles.divineGlow} />
       <div className={styles.divineShimmer} />
 
-      {/* Ganesha PNG — transparent bg, positioned on left */}
-      <div className={styles.ganeshaWrap}>
-        <Image
-          src="/images/ganesha_nobg.png"
-          alt="Handcrafted marble Ganesha statue — Moorti India"
-          width={600}
-          height={600}
-          priority
-          quality={95}
-          className={styles.ganeshaImg}
-        />
-      </div>
 
       {/* Content — right side */}
       <div className={`container ${styles.heroContent}`} ref={textRef}>
