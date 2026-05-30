@@ -378,10 +378,27 @@
     justify-content: center;
   }
 
+  .heroLabel span {
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    color: #F5C080;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
   .heroTitleLine1,
   .heroTitleLine2 {
     white-space: normal;
     font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
+  .heroTitleLine2 {
+    /* Gradient-clipped text can be invisible on mobile photo backgrounds.
+       Override to solid bright gold for guaranteed readability. */
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: #F5C080;
+    color: #F5C080;
   }
 
   .heroSubtitle1 {
