@@ -24,7 +24,7 @@ export default function HomePage() {
       <CategoryGrid />
       <FeaturedProducts />
       <BespokePortraitSection />
-      <TributeSection />
+      {/* <TributeSection /> */}
       <ProcessSection />
       <StatsBar />
       <TestimonialsSection />

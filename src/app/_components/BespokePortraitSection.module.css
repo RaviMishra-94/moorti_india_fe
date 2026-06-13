@@ -1,5 +1,5 @@
 .section {
-  padding: var(--space-20) 0 var(--space-24) 0;
+  padding: var(--space-20) 0 0 0;
   background-color: var(--bg-primary);
   position: relative;
   overflow: hidden;
@@ -58,7 +58,6 @@
   /* The layout creates a full width split effect */
   margin: 0 calc(-50vw + 50%);
   width: 100vw;
-  background-color: var(--bg-primary);
 }
 
 /* ================= Left: Image ================= */
@@ -85,7 +84,9 @@
 .imageOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to left, var(--bg-primary) 0%, transparent 20%);
+  background: 
+    linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%),
+    linear-gradient(to left, var(--bg-primary) 0%, transparent 20%);
   z-index: 1;
 }
 
@@ -197,7 +198,9 @@
   }
 
   .imageOverlay {
-    background: linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
+    background: 
+      linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%),
+      linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
   }
 
   .textCol {
