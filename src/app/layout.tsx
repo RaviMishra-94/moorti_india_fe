@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     siteName: 'Moorti India',
     images: [
       {
-        url: '/images/og-image.jpg',
-        width: 1200,
-        height: 630,
+        url: '/images/og-image.png',
+        width: 832,
+        height: 415,
         alt: 'Moorti India — Handcrafted Marble Statues from Jaipur',
       },
     ],
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Moorti India — Handcrafted Marble Statues from Jaipur',
     description: 'Premium marble statues & murtis handcrafted in Jaipur since 1985. Worldwide shipping.',
-    images: ['/images/og-image.jpg'],
+    images: ['/images/og-image.png'],
   },
   robots: {
     index: true,
