@@ -8,7 +8,7 @@ interface Props {
   params: Promise<{ category: string }>;
 }
 
-const BASE_URL = 'https://moortiindia.com.au';
+const BASE_URL = 'https://www.moortiindia.com';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;

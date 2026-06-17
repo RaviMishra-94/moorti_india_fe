@@ -4,7 +4,7 @@ import NavigationWrapper from './NavigationWrapper';
 import WhatsAppWidget from './_components/WhatsAppWidget';
 import Script from 'next/script';
 
-const BASE_URL = 'https://moortiindia.com.au';
+const BASE_URL = 'https://www.moortiindia.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: BASE_URL,
+    canonical: '/',
   },
   verification: {
     // Add your Google Search Console verification code here once you set it up

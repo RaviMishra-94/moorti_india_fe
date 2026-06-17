@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://moortiindia.com.au/sitemap.xml',
+    sitemap: 'https://www.moortiindia.com/sitemap.xml',
   };
 }

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://moortiindia.com.au';
+const BASE_URL = 'https://www.moortiindia.com';
 const API_URL = process.env.ADMIN_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 async function getProducts() {

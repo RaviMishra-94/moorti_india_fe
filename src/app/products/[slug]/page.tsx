@@ -8,7 +8,7 @@ import { getProductBySlug } from '@/lib/api';
 import ProductDetailClient from './ProductDetailClient';
 import Script from 'next/script';
 
-const BASE_URL = 'https://moortiindia.com.au';
+const BASE_URL = 'https://www.moortiindia.com';
 
 interface Props {
   params: Promise<{ slug: string }>;

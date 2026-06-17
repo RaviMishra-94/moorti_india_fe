@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const title = `${post.title} | Moorti India Journal`;
   const description = post.excerpt || 'Read the full story on Moorti India.';
-  const baseUrl = 'https://moortiindia.com.au';
+  const baseUrl = 'https://www.moortiindia.com';
   
   // Construct absolute image URL if a cover image exists
   let imageUrl = `${baseUrl}/images/og-image.jpg`; // Fallback image
