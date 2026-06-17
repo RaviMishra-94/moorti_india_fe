@@ -163,16 +163,20 @@ export async function getClientStories(): Promise<any[]> {
 
 import { SiteSettings } from './types';
 
-export async function fetchSiteSettings(): Promise<SiteSettings> {
-  const res = await fetch(`${API_URL}/api/settings/`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error('Failed to fetch site settings');
-  const data = await res.json();
-  return {
-    id: data.id,
-    certificateUrl: data.certificate_url,
-  };
+export async function fetchSiteSettings(): Promise<SiteSettings | null> {
+  try {
+    const res = await fetch(`${API_URL}/api/settings/`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return {
+      id: data.id,
+      certificateUrl: data.certificate_url,
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function updateSiteSettings(data: { certificate_url?: string }, token: string): Promise<SiteSettings> {
@@ -212,11 +216,15 @@ export async function getCertificates(token: string): Promise<Certificate[]> {
 }
 
 export async function getActiveCertificates(): Promise<Certificate[]> {
-  const res = await fetch(`${API_URL}/api/certificates/active`, {
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) throw new Error('Failed to fetch active certificates');
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/api/certificates/active`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
 }
 
 export async function createCertificate(data: { name: string, file_url: string, is_active: boolean }, token: string): Promise<Certificate> {

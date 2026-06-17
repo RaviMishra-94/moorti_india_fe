@@ -11,14 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  let siteSettings = null;
-  let activeCertificates: Certificate[] = [];
-  try {
-    siteSettings = await fetchSiteSettings();
-    activeCertificates = await getActiveCertificates();
-  } catch (err) {
-    console.error('Failed to fetch site settings', err);
-  }
+  const siteSettings = await fetchSiteSettings();
+  const activeCertificates = await getActiveCertificates();
   
   return (
     <div className={styles.page}>

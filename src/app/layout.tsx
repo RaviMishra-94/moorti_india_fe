@@ -148,14 +148,8 @@ export default async function RootLayout({
 }>) {
   const categories = await getCategories();
 
-  let siteSettings = null;
-  let activeCertificates: Certificate[] = [];
-  try {
-    siteSettings = await fetchSiteSettings();
-    activeCertificates = await getActiveCertificates();
-  } catch (e) {
-    console.error('Failed to load settings or certificates:', e);
-  }
+  const siteSettings = await fetchSiteSettings();
+  const activeCertificates = await getActiveCertificates();
 
   return (
     <html lang="en">

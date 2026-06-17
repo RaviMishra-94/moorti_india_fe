@@ -20,7 +20,6 @@ export default function NavigationWrapper({
 }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
-  console.log("NAVIGATION WRAPPER GOT SETTINGS:", siteSettings);
 
   return (
     <div style={{ display: 'contents' }}>
