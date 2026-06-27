@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { getAdminToken } from '../../../actions';
 import styles from '../../../admin.module.css';
 import { useToast } from '../../../ToastProvider';
+import { apiUpload } from '@/lib/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -49,13 +50,7 @@ export default function NewBlogPostPage() {
       const token = await getAdminToken();
       const imgData = new FormData();
       imgData.append('file', file);
-      const res = await fetch(`${API_URL}/api/uploads/image`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: imgData,
-      });
-      if (!res.ok) throw new Error('Failed to upload image');
-      const json = await res.json();
+      const json = await apiUpload(`${API_URL}/api/uploads/image`, imgData, token);
       const imageUrl = json.url;
 
       const imgTag = `\n<img src="${imageUrl}" alt="Blog Image" style="max-width: 100%; height: auto; border-radius: 8px;" />\n`;

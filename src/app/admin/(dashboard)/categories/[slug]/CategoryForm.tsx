@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../../../admin.module.css';
 import { useToast } from '../../../ToastProvider';
+import { apiUpload } from '@/lib/api';
 
 interface CategoryFormData {
   slug: string;
@@ -132,16 +133,7 @@ export default function CategoryForm({ initialData, isNew, token, apiUrl, existi
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch(`${apiUrl}/api/uploads/image`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        throw new Error(msg);
-      }
-      const data = await res.json();
+      const data = await apiUpload(`${apiUrl}/api/uploads/image`, fd, token);
       const rawUrl: string = data.url;
 
       // Show the raw image immediately — no blocking

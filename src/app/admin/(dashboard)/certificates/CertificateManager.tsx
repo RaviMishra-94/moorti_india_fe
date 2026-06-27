@@ -5,6 +5,7 @@ import { Certificate, createCertificate, updateCertificate, deleteCertificate } 
 import { useToast } from '../../ToastProvider';
 import ConfirmModal from '../../ConfirmModal';
 import styles from '../../admin.module.css';
+import { apiUpload } from '@/lib/api';
 
 export default function CertificateManager({ 
   initialCertificates, 
@@ -29,14 +30,7 @@ export default function CertificateManager({
     formData.append('file', file);
     
     try {
-      const res = await fetch(`${apiUrl}/api/uploads/certificate`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-      
-      if (!res.ok) throw new Error('Upload failed');
-      const data = await res.json();
+      const data = await apiUpload(`${apiUrl}/api/uploads/certificate`, formData, token);
       
       // Create new certificate record
       const newCert = await createCertificate({

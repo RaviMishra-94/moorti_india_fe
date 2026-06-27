@@ -6,6 +6,7 @@ import Link from 'next/link';
 import styles from '../../../admin.module.css';
 import { useToast } from '../../../ToastProvider';
 import { saveClientStoryAction } from '../actions';
+import { apiUpload } from '@/lib/api';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -52,16 +53,7 @@ export default function ClientStoryForm({ initialData = null, token = '' }: { in
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch(`${API_URL}/api/uploads/image`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      });
-      if (!res.ok) {
-        const msg = await res.text();
-        throw new Error(msg);
-      }
-      const data = await res.json();
+      const data = await apiUpload(`${API_URL}/api/uploads/image`, fd, token);
       // data.url contains the uploaded image path
       setFormData(prev => ({ ...prev, image: data.url }));
       showToast('Image uploaded successfully', 'success');

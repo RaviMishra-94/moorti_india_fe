@@ -14,6 +14,24 @@ import {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+// ─── Shared Upload Helper ───────────────────────────────────────────────────
+
+export async function apiUpload(url: string, body: FormData, token: string) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body,
+  });
+  if (!res.ok) {
+    if (res.status === 413) {
+      throw new Error('File is too large. Please upload a file smaller than 10MB.');
+    }
+    const msg = await res.text();
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
 // ─── Internal fetch helper ────────────────────────────────────────────────────
 
 async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T | null> {
