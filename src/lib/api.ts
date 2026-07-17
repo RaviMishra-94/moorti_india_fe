@@ -188,16 +188,23 @@ export async function fetchSiteSettings(): Promise<SiteSettings | null> {
     });
     if (!res.ok) return null;
     const data = await res.json();
-    return {
-      id: data.id,
-      certificateUrl: data.certificate_url,
-    };
+    return mapSiteSettings(data);
   } catch {
     return null;
   }
 }
 
-export async function updateSiteSettings(data: { certificate_url?: string }, token: string): Promise<SiteSettings> {
+export interface SiteSettingsUpdate {
+  certificate_url?: string;
+  hero_image_url?: string;
+  hero_image_mobile_url?: string;
+  hero_title_line1?: string;
+  hero_title_line2?: string;
+  hero_tagline?: string;
+  hero_description?: string;
+}
+
+export async function updateSiteSettings(data: SiteSettingsUpdate, token: string): Promise<SiteSettings> {
   const res = await fetch(`${API_URL}/api/settings/`, {
     method: 'PATCH',
     headers: {
@@ -208,9 +215,20 @@ export async function updateSiteSettings(data: { certificate_url?: string }, tok
   });
   if (!res.ok) throw new Error('Failed to update site settings');
   const responseData = await res.json();
+  return mapSiteSettings(responseData);
+}
+
+// Normalise the snake_case API payload into the camelCase SiteSettings type.
+function mapSiteSettings(data: Record<string, unknown>): SiteSettings {
   return {
-    id: responseData.id,
-    certificateUrl: responseData.certificate_url,
+    id: data.id as number,
+    certificateUrl: (data.certificate_url as string) ?? undefined,
+    heroImageUrl: (data.hero_image_url as string) ?? undefined,
+    heroImageMobileUrl: (data.hero_image_mobile_url as string) ?? undefined,
+    heroTitleLine1: (data.hero_title_line1 as string) ?? undefined,
+    heroTitleLine2: (data.hero_title_line2 as string) ?? undefined,
+    heroTagline: (data.hero_tagline as string) ?? undefined,
+    heroDescription: (data.hero_description as string) ?? undefined,
   };
 }
 

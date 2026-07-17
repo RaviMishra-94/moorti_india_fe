@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { fetchSiteSettings } from '@/lib/api';
 import HeroSection from './_components/HeroSection';
 import MarqueeBar from './_components/MarqueeBar';
 import CategoryGrid from './_components/CategoryGrid';
@@ -16,10 +17,18 @@ export const metadata: Metadata = {
     'Shop handcrafted marble statues of Ganesh, Radha Krishna, Durga, Hanuman, Buddha and more. Premium Handcrafted Marble Sculptures for Home/temples manufactured in Jaipur since 1985. Custom orders. Worldwide shipping.',
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await fetchSiteSettings();
   return (
     <>
-      <HeroSection />
+      <HeroSection
+        imageUrl={settings?.heroImageUrl}
+        imageMobileUrl={settings?.heroImageMobileUrl}
+        titleLine1={settings?.heroTitleLine1}
+        titleLine2={settings?.heroTitleLine2}
+        tagline={settings?.heroTagline}
+        description={settings?.heroDescription}
+      />
       <MarqueeBar />
       <CategoryGrid />
       <FeaturedProducts />

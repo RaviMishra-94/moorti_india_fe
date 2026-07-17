@@ -5,7 +5,41 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import styles from './HeroSection.module.css';
 
-export default function HeroSection() {
+// Fallbacks used when a field has not been set by the admin (or the API is
+// unreachable). These mirror the values seeded by migrate_hero_settings.py.
+const DEFAULTS = {
+  imageUrl: '/images/hero_streched.webp',
+  imageMobileUrl: '/images/hero_mobile.webp',
+  titleLine1: 'Bring Home Timeless',
+  titleLine2: 'Divine Craftsmanship',
+  tagline: 'Marble Idols That Elevate Your Space & Spirit',
+  description: 'Handcrafted from premium marble by skilled artisans. Designed for homes and sacred spaces.',
+};
+
+export interface HeroSectionProps {
+  imageUrl?: string;
+  imageMobileUrl?: string;
+  titleLine1?: string;
+  titleLine2?: string;
+  tagline?: string;
+  description?: string;
+}
+
+export default function HeroSection({
+  imageUrl,
+  imageMobileUrl,
+  titleLine1,
+  titleLine2,
+  tagline,
+  description,
+}: HeroSectionProps) {
+  const desktopSrc = imageUrl || DEFAULTS.imageUrl;
+  const mobileSrc = imageMobileUrl || imageUrl || DEFAULTS.imageMobileUrl;
+  const line1 = titleLine1 || DEFAULTS.titleLine1;
+  const line2 = titleLine2 || DEFAULTS.titleLine2;
+  const heroTagline = tagline || DEFAULTS.tagline;
+  const heroDescription = description || DEFAULTS.description;
+
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,8 +57,8 @@ export default function HeroSection() {
       <div className={styles.heroBg}>
         <div className={styles.desktopBg}>
           <Image
-            src="/images/hero_streched.webp"
-            alt="Handcrafted marble Ganesha statue background"
+            src={desktopSrc}
+            alt="Handcrafted marble statue background"
             fill
             priority
             quality={100}
@@ -33,8 +67,8 @@ export default function HeroSection() {
         </div>
         <div className={styles.mobileBg}>
           <Image
-            src="/images/hero_mobile.webp"
-            alt="Handcrafted marble Ganesha statue background"
+            src={mobileSrc}
+            alt="Handcrafted marble statue background"
             fill
             priority
             quality={100}
@@ -61,17 +95,17 @@ export default function HeroSection() {
             </div>
 
             <h1 className={styles.heroTitle}>
-              <span className={styles.heroTitleLine1}>Bring Home Timeless</span>
-              <span className={styles.heroTitleLine2}>Divine Craftsmanship</span>
+              <span className={styles.heroTitleLine1}>{line1}</span>
+              <span className={styles.heroTitleLine2}>{line2}</span>
             </h1>
           </div>
 
           <div className={styles.heroCenter}>
             <p className={`${styles.heroSubtitle} ${styles.heroSubtitle1}`}>
-              Marble Idols That Elevate Your Space &amp; Spirit
+              {heroTagline}
             </p>
             <p className={`${styles.heroSubtitle} ${styles.heroSubtitle2}`}>
-              Handcrafted from premium marble by skilled artisans. Designed for homes and sacred spaces.
+              {heroDescription}
             </p>
           </div>
 

@@ -78,4 +78,11 @@ export interface ProcessStep {
 export interface SiteSettings {
   id: number;
   certificateUrl?: string;
+  // Home hero (admin-controlled)
+  heroImageUrl?: string;
+  heroImageMobileUrl?: string;
+  heroTitleLine1?: string;
+  heroTitleLine2?: string;
+  heroTagline?: string;
+  heroDescription?: string;
 }
