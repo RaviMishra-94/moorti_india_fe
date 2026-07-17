@@ -1,5 +1,5 @@
 .section {
-  padding: var(--space-20) 0 0 0;
+  padding: var(--space-24) 0;
   background-color: var(--bg-primary);
   position: relative;
   overflow: hidden;
@@ -49,135 +49,111 @@
   margin: 0 auto;
 }
 
-/* ================= Layout ================= */
-.layout {
+/* ================= Tiles ================= */
+.grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: var(--space-12);
-  /* The layout creates a full width split effect */
-  margin: 0 calc(-50vw + 50%);
-  width: 100vw;
-}
-
-/* ================= Left: Image ================= */
-.imageCol {
-  position: relative;
-  height: 600px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
   width: 100%;
 }
 
-.imageWrap {
+.card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(200, 82, 28, 0.55);
+  box-shadow: 0 16px 48px rgba(200, 82, 28, 0.18);
+}
+
+/* Gold top border on hover */
+.card::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  z-index: 2;
 }
 
-.image {
+.card:hover::before {
+  opacity: 1;
+}
+
+.cardImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.cardImage {
   object-fit: cover;
   object-position: center;
+  transition: transform var(--transition-luxury);
 }
 
-/* Fade mask on the right side of the image to blend into right column */
-.imageOverlay {
+.card:hover .cardImage {
+  transform: scale(1.06);
+}
+
+.cardImageOverlay {
   position: absolute;
   inset: 0;
-  background: 
-    linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%),
-    linear-gradient(to left, var(--bg-primary) 0%, transparent 20%);
-  z-index: 1;
+  background: linear-gradient(to bottom, rgba(28, 15, 5, 0) 55%, rgba(28, 15, 5, 0.35) 100%);
+  pointer-events: none;
 }
 
-/* ================= Right: Text ================= */
-.textCol {
-  padding: var(--space-12) var(--space-8);
-  max-width: 600px;
-}
-
-.rightHeading {
-  font-weight: 300;
-  color: var(--text-primary);
-  margin-bottom: var(--space-4);
-  line-height: 1.1;
-}
-
-.headingEm {
-  font-style: italic;
-  color: var(--gold);
-}
-
-.rightDesc {
-  font-size: 1.05rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--space-10);
-}
-
-/* ================= Features Grid ================= */
-.featuresGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
-  margin-bottom: var(--space-12);
-}
-
-.featureItem {
+.cardContent {
+  padding: var(--space-6);
+  text-align: left;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.featureIcon {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+.cardIcon {
+  font-size: 0.85rem;
+  color: var(--gold);
+  display: block;
+}
+
+.cardTitle {
   color: var(--text-primary);
+  font-size: 1.15rem;
+  margin: 0;
 }
 
-.featureIcon svg {
-  width: 28px;
-  height: 28px;
-  opacity: 0.8;
-}
-
-.featureLabel {
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.cardDesc {
   color: var(--text-muted);
-  line-height: 1.4;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
 }
 
 /* ================= CTA ================= */
 .ctaWrap {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
 }
 
 .ctaBtn {
-  background-color: var(--gold);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 1.2rem 2rem;
-  font-weight: 500;
   letter-spacing: 0.1em;
-  font-size: 0.95rem;
-  transition: opacity 0.3s ease;
-}
-
-.ctaBtn:hover {
-  background-color: var(--gold-dark);
 }
 
 .ctaSubtext {
@@ -185,46 +161,16 @@
   color: var(--text-muted);
 }
 
-/* ================= Mobile ================= */
+/* ================= Responsive ================= */
 @media (max-width: 1024px) {
-  .layout {
-    grid-template-columns: 1fr;
-    margin: 0;
-    width: 100%;
-  }
-
-  .imageCol {
-    height: 400px;
-  }
-
-  .imageOverlay {
-    background: 
-      linear-gradient(to bottom, var(--bg-primary) 0%, transparent 20%),
-      linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
-  }
-
-  .textCol {
-    padding: 0;
-    margin-top: -20px;
-    z-index: 2;
-    position: relative;
-    max-width: 100%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .rightHeading {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-
-  .featuresGrid {
+  .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
   }
-  
-  .ctaWrap {
-    align-items: center;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
   }
 }
